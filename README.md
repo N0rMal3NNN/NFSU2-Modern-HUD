@@ -60,3 +60,32 @@ The HUD does not provide extra grip, speed, power, or a competitive performance 
 The extension has been technically tested with simulated game telemetry. Full compatibility and functionality across every supported browser have not yet been verified through live gameplay testing.
 
 This project is offered as a free NFSU2.xyz community HUD extension.
+
+
+---
+
+## HUD Screenshots
+
+Below are screenshots showcasing the NFSU2 Modern HUD extension, its dashboard styles, customization settings, and visual features.
+
+### Screenshot Gallery
+
+![HUD Screenshot 1](./Screenshot%202026-11-19%20173411.png)
+
+![HUD Screenshot 2](./Screenshot%202026-11-19%20173444.png)
+
+![HUD Screenshot 3](./Screenshot%202026-11-19%20173602.png)
+
+![HUD Screenshot 4](./Screenshot%202026-11-19%20173753.png)
+
+![HUD Screenshot 5](./Screenshot%202026-11-19%20174300.png)
+
+![HUD Screenshot 6](./Screenshot%202026-11-19%20174319.png)
+
+![HUD Screenshot 7](./Screenshot%202026-11-19%20175904.png)
+
+![HUD Screenshot 8](./Screenshot%202026-11-19%20193537.png)
+
+![HUD Screenshot 9](./Screenshot%202026-11-19%20211307.png)
+
+![HUD Screenshot 10](./Screenshot%202026-11-19%20211808.png)
