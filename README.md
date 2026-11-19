@@ -1,6 +1,38 @@
 # NFSU2.XYZ MODERN HUD — PROJECT PURPOSE
 **Version: v0.9.9 — Multi-Browser Edition**
 
+
+---
+
+## Project Navigation
+
+- 📖 [Project Overview](#what-is-the-modern-hud)
+- 🖼️ [HUD Screenshots](#hud-screenshots)
+- 🌐 [Supported Browsers](#supported-web-browsers)
+- ⚙️ [Installation Guide](INSTALLATION.md)
+- 📋 [Version History & Changelog](CHANGELOG.md)
+
+## Current Version
+
+**NFSU2 Modern HUD v0.9.9 — Multi-Browser Edition**
+
+A free, unofficial community project for NFSU2.xyz.
+
+### Available HUD Styles
+- Modern Digital HUD
+- GT-R Analog HUD
+
+### Browser Compatibility
+Chrome | Firefox | Edge | Brave | Opera | Opera GX | Vivaldi | Arc
+
+### Project Status
+Active development — additional HUD styles and visual effects are planned.
+
+**Extension availability:** Currently shared on request. Contact the project creator if you would like to try it.
+
+---
+
+
 ## WHAT IS THE MODERN HUD?
 
 NFSU2 Modern HUD is a free, unofficial browser extension created to give players an alternative, customizable dashboard while playing NFSU2.xyz.
