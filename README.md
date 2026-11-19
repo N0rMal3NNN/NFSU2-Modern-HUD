@@ -32,6 +32,18 @@ Active development — additional HUD styles and visual effects are planned.
 
 ---
 
+## Download NFSU2 Modern HUD
+
+**Latest Public Release: v0.9.9 — Multi-Browser Edition**
+
+[Download NFSU2 Modern HUD v0.9.9](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/releases/tag/v0.9.9)
+
+Free, unofficial community-made browser extension.
+
+Compatible with Chrome, Firefox, Edge, Brave, Opera and other supported browsers.
+
+See [Installation Guide](INSTALLATION.md) for setup instructions.
+
 
 ## WHAT IS THE MODERN HUD?
 
