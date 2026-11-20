@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "NFSU2.xyz Modern HUD",
+  "version": "0.9.31",
+  "description": "Modern + GT-R Analog HUD, 31 per-car odometers, Numpad * quick save, Speed Sensation, Impact Feedback, saved profiles.",
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_title": "NFSU2 Modern HUD — settings",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://nfsu2.xyz/*",
+        "https://www.nfsu2.xyz/*"
+      ],
+      "js": [
+        "input-guard.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://nfsu2.xyz/*",
+        "https://www.nfsu2.xyz/*"
+      ],
+      "js": [
+        "storage-adapter.js",
+        "shift-logic.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
