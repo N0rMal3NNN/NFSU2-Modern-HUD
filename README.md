@@ -24,13 +24,13 @@ For the detailed change-by-version history, see [CHANGELOG.md](CHANGELOG.md). Fo
 ## Screenshots
 
 ### GT-R Analog HUD in-game
-![GT-R Analog HUD in-game](assets/gameplay-gtr-analog-v0.9.31.jpg)
+![GT-R Analog HUD in-game](https://raw.githubusercontent.com/N0rMal3NNN/NFSU2-Modern-HUD/2459ad602b11c51cb1960c7c36a20a8911b96d67/assets/gameplay-gtr-analog-v0.9.31.jpg)
 
 ### Resizable multi-column settings menu
-![Resizable settings menu](assets/settings-multicolumn-v0.9.31.jpg)
+![Resizable settings menu](https://raw.githubusercontent.com/N0rMal3NNN/NFSU2-Modern-HUD/2459ad602b11c51cb1960c7c36a20a8911b96d67/assets/settings-multicolumn-v0.9.31.jpg)
 
 ### Modern Digital HUD in-game
-![Modern Digital HUD](assets/modern-hud-gameplay-v0.9.31.jpg)
+![Modern Digital HUD](https://raw.githubusercontent.com/N0rMal3NNN/NFSU2-Modern-HUD/2459ad602b11c51cb1960c7c36a20a8911b96d67/assets/modern-hud-gameplay-v0.9.31.jpg)
 
 *These are real screenshots supplied by the project owner. The settings screenshot shows the v0.9.29 menu; v0.9.31 retains the responsive multi-column feature.*
 
