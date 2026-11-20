@@ -46,8 +46,8 @@ See [INSTALLATION.md](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/blob/main/I
 
 ## Screenshots
 
-![GT-R Analog HUD gameplay](assets/gameplay-gtr-analog-v0.9.31.jpg)
+![GT-R Analog HUD gameplay](https://raw.githubusercontent.com/N0rMal3NNN/NFSU2-Modern-HUD/2459ad602b11c51cb1960c7c36a20a8911b96d67/assets/gameplay-gtr-analog-v0.9.31.jpg)
 
-![Multi-column settings](assets/settings-multicolumn-v0.9.31.jpg)
+![Multi-column settings](https://raw.githubusercontent.com/N0rMal3NNN/NFSU2-Modern-HUD/2459ad602b11c51cb1960c7c36a20a8911b96d67/assets/settings-multicolumn-v0.9.31.jpg)
 
-![Modern HUD gameplay](assets/modern-hud-gameplay-v0.9.31.jpg)
+![Modern HUD gameplay](https://raw.githubusercontent.com/N0rMal3NNN/NFSU2-Modern-HUD/2459ad602b11c51cb1960c7c36a20a8911b96d67/assets/modern-hud-gameplay-v0.9.31.jpg)
