@@ -1,79 +1,178 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable updates to the unofficial NFSU2.xyz Modern HUD browser extension are documented here.
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.9.31.**
 
-## v0.9.9 — Multi-Browser Edition
+This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
 
-### Added
-- Support packages for Google Chrome, Microsoft Edge, Brave, Opera, Opera GX, Vivaldi, and compatible Chromium-based browsers.
-- Separate Mozilla Firefox extension package.
-- Browser compatibility improvements.
-- Cross-browser settings storage compatibility.
+## v0.9.31 — Modern HUD Layout & ODO Spacing
 
 ### Improved
-- Profile Save, Import, and Export compatibility.
-- Extension installation structure.
-- Browser-specific configuration.
+- Reduced Modern HUD internal width from 520 px to 500 px to reduce unnecessary empty space on the right.
+- Raised the RPM group 6 px; lowered ODO 8 px and SHIFT 16 px for clearer vertical separation; speed readout remains in place.
+- Added subtle **1 px spacing between ODO digits** in Modern and GT-R Analog styles.
+- Preserved GT-R Analog circle sizes/positions, compact/cockpit dimensions, 31-model mileage and 100 m autosaves.
 
-**Note:** Live compatibility testing is still required across all supported browsers.
-
----
-
-## v0.9.8 — GT-R Analog Fix
+## v0.9.30 — Odometer Persistence & Autosave Fixes
 
 ### Fixed
-- Improved sharpness of ABS and warning labels.
-- Adjusted ENGINE icon positioning.
-- Adjusted SUSPENSION icon positioning.
-- Reduced overlap between the RPM and Speed circles.
+- Added automatic mileage checkpoints at **every 100 metres** (instead of every 100 km), with periodic and exit saves retained.
+- Fixed menu/HUD mismatch caused by rounding versus truncating tenths of a kilometre.
+- Stored last selected car model separately and recovered it along with per-car mileage after browser restart.
+- Added canonical V3 ODO storage, migration from older V2 records and a backward-compatible V2 copy.
+- Kept the `Numpad *` save with browser-storage read-back verification.
+
+## v0.9.29 — Responsive Multi-Column Menu & Save Verification
+
+### Added / Improved
+- Widened settings panel automatically flows whole sections into **1–4 columns**; individual sliders, inputs and controls do not stretch.
+- Increased maximum odometer reading to **9,999,999.9 km** (0.1 km resolution).
+
+### Fixed
+- Fixed the **false “Save incomplete — retry”** message when driving caused mileage to change during a save.
+- Verified the saved snapshot instead of comparing it to a continuously updating in-memory reading; improved asynchronous save retry behavior.
+
+## v0.9.28 — 31 Car Odometers & Numpad Quick Save
 
 ### Added
-- Individual horizontal positioning for each analog circle.
-- Individual vertical positioning for each analog circle.
-- Default circle alignment improvements.
-- New positioning settings included in saved profiles.
+- **Odometer — Mileage by Car** menu, manually selecting one of 31 game models (including Peugeot 106 and Vauxhall Corsa).
+- Separate total for each selected **model**; switching models restores that model's mileage.
+- **Modern Digital HUD odometer LCD** below speed and above SHIFT; GT-R Analog ODO remains inside the speed dial.
+- **Numpad `*`** shortcut to save both active settings and all car mileage without entering the menu.
+- Per-model reset with double confirmation; legacy v0.9.27 standalone mileage preserved as “Previous ODO (unassigned)”.
 
----
+### Notes
+- Two different physical vehicles of the same model share mileage. Odometer is estimated by the extension and is not part of the game's own save or exported settings JSON.
 
-## v0.9.7 — GT-R Analog Update
+## v0.9.27 — GT-R Analog Customization & First Odometer
 
 ### Added
-- GT-R-inspired analog dashboard.
-- Three analog gauges: Turbo Load, RPM, and Speed.
-- Analog speedometer up to 360 KM/H.
-- MPH display support.
-- Gear and warning indicators inside the speedometer.
+- Repositioned TYRES/ENGINE/SUSP around the analog speed-dial center; added a compact ODO LCD below gear.
+- Introduced local mileage estimation from Car Feed speed and elapsed time, with reset and periodic/checkpoint saves.
+- Added customizable needle/numbers/tick colors, illumination and optional analog dial depth; original colors remain defaults.
+
+### Fixed
+- Menu resize no longer stretches section contents, inputs or sliders.
+
+## v0.9.24 — Tyre Symbol & Adjustable Blue Fog
 
 ### Improved
-- Analog gauge layout.
-- Dashboard readability.
-- Removal of the additional digital speed counter from the analog style.
+- Restored the **tire/wheel with tread** for TYRES in both HUD styles.
+- Moved TYRES and SUSP labels down 3 SVG pixels in GT-R Analog; ENGINE placement unchanged.
+
+### Added
+- Separate **Blue Fog opacity 0–100%** slider, default **12%**, and retained independent Fog ON/OFF.
+- Fog percentage saved in active settings and JSON profiles.
+
+## v0.9.23 — Dashboard Warning Symbols
+
+### Improved
+- Redesigned original lightweight SVG warning symbols for TYRES, ENGINE (check engine) and SUSP (coilover/shock absorber) across both HUD styles.
+- Preserved warning colors and states; fixed analog warning strokes to remain crisp instead of filling whole icon shapes.
+
+## v0.9.22 — Severe-Crash Detection, SUSP Fix & Full-Screen Dials
+
+### Fixed
+- Changed **minimum collision speed default to 130 km/h**.
+- Processes suspension-impact events on **every Car Feed update** rather than solely on periodic icon repaint, reducing missed short events.
+- Added conservative **rapid full-stop detection** for severe crashes (e.g. 220→0 km/h) if `impactDv` or impact counts are missing.
+- Improved discrimination of nudges and significant impacts; editable thresholds.
+
+### Added / Changed
+- **Limp Mode Repair Timer** default **30 s**; independent **No Impact Timer** default **60 s**.
+- Independent Turbo/RPM/Speed X/Y positioning across the visible screen and precise pixel inputs; reset button restores the original circle offsets.
+- Existing saved custom settings preserved on default migration where possible.
+
+## v0.9.21 — Collision Threshold Tuning
+
+### Improved
+- Unified impact speed/strength gates to reduce false feedback from minor multiplayer bumps.
+- Introduced adjustable collision minimum velocity-change threshold (**3.5 m/s**), Medium Impact (**8 m/s**) and Heavy Impact (**24 m/s**) defaults; SUSP warning defaults **4.5 / 9 m/s**.
+- Improved handling of pre-impact speed to detect hard stops after speed drops to zero.
+- This version briefly used a 60 s repair default; **v0.9.22 restored it to 30 s**.
+
+## v0.9.20 — Impact Severity & HUD Shake Fixes
+
+### Fixed
+- Corrected overly sensitive red/Heavy Impact alerts due to shared thresholds.
+- Fixed HUD Shake by animating the outer HUD container rather than a barely noticeable inner element.
+
+### Added
+- Independent Light/Medium/Heavy classification controls, collision diagnostics and adjusted visual response.
+
+## v0.9.19 — Impact Feedback, Adjustable Speed Threshold & Menu Resize
+
+### Added
+- **Impact Feedback:** white/orange/red edge flash by severity; optional HUD-only shake, independent toggles, intensity slider and Light/Medium/Heavy preview buttons.
+- **Speed Sensation start speed** adjustable **140–300 km/h**, default **190 km/h**.
+- Resizable settings panel with saved size and position.
+
+## v0.9.18 — GT-R 400 km/h Scale & Earlier Speed Sensation Curve
+
+### Improved
+- Extended analog speedometer from **360 to 400 km/h** (and to **250 mph**); corrected needle mapping without moving the dials.
+- Tuned the Speed Sensation progression to be noticeably visible earlier, preserving a strong higher-speed effect: at 200/220/240/260/280/300+ km/h, representative target strengths of 0/25/45/65/85/100% (under the then-current 200 km/h threshold).
+- Digital speed is not limited to 360 km/h.
+
+## v0.9.16 — Cylindrical / Tunnel-Style Speed Sensation
+
+### Changed
+- Replaced flat left/right-only streaks with subtler radial, perspective-style streaks converging toward screen center while keeping the focal area mostly clear.
+- Added independent **Blue Fog ON/OFF** toggle; default fog 12%.
+
+## v0.9.15 — Longer Streaks & 12% Blue Fog
+- Lengthened Speed Sensation streaks another 25% relative to v0.9.14.
+- Raised subtle edge fog to **12%**.
+
+## v0.9.14 — Longer Streaks & Blue Fog
+- Extended streaks 50% relative to v0.9.13 and increased visibility.
+- Introduced low-opacity blue peripheral fog (initially 10%).
+
+## v0.9.13 — Performance Fix
+- Removed expensive blur/shadow filters and reduced animated lines from 48 to 16 to address FPS regression.
+
+## v0.9.12 — Realism & Strength Tuning
+- Tuned Speed Sensation diagonal movement, contrast and responsiveness; default intensity set to 100%.
+
+## v0.9.11 — Overlay Visibility & Preview
+- Fixed overlay stacking/visibility and strengthened peripheral speed streaks.
+- Added a **five-second Speed Sensation preview**, plus reduced-motion behavior.
+
+## v0.9.10 — Initial Speed Sensation
+- Added optional animated peripheral streaks above 200 km/h, automatically scaled by speed, with independent intensity, visibility and persisted settings.
 
 ---
 
-## Planned — v1.0
+## v0.9.9 — First Public Release (Multi-Browser)
 
-### New HUD Styles
-- Old Style HUD.
-- 2000s Street Racing HUD.
-- Additional customization options.
+### Added
+- Browser-specific packages for Chrome/Edge/Brave/Opera/Opera GX/Vivaldi and Mozilla Firefox.
+- Cross-browser local settings storage adapter, and improved profile import/export compatibility.
+- Multi-browser extension installation structure.
 
-### Future Visual Effects
-- Rain and Water Drops for Cockpit View.
-- Speed Sensation at high speeds.
-- Impact Feedback during collisions.
-- Drift Feedback during wheel slip.
+### Note
+- Complete live gameplay/browsers testing remained in progress.
 
-All future effects are planned to be optional and performance-conscious.
+## v0.9.8 — GT-R Analog Layout Fix
+
+### Fixed
+- Sharper warnings and label alignment for ABS/ENGINE/SUSP.
+- Reduced RPM/Speed dial overlap.
+
+### Added
+- Individual X/Y dial fine positioning with original defaults.
+
+## v0.9.7 — First GT-R Analog HUD
+
+### Added
+- Three-dial GT-R Analog HUD (Turbo / RPM / Speed), initial 360 km/h scale, MPH support, gear and warning indicators inside speed dial.
 
 ---
 
-## Project Information
+## Roadmap (not yet implemented)
 
-NFSU2 Modern HUD is an unofficial, free community project.
+- v1.0: **Old Style HUD**, **2000s HUD**, additional dashboards/customization.
+- Drift Feedback and Rain / Water Drops effects have been removed from the active roadmap.
 
-The extension focuses on dashboard customization and visual presentation without modifying the original game physics.
+## Disclaimer
 
-Some indicators use simulated or estimated values because additional game telemetry is not currently available to the extension.
-
-The project is not officially affiliated with or endorsed by NFSU2.xyz.
+Unofficial and independent NFSU2.xyz community project. Game files and physics are not modified. Some warning/damage indicators and odometer values are estimated from incomplete Car Feed telemetry, and performance/accuracy vary by browser and game circumstances.
