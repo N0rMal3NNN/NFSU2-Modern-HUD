@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.9.31 — Chromium + Firefox**
+**Release: v0.9.73 — Chromium + Firefox**
 
 NFSU2 Modern HUD is an unofficial browser extension for [NFSU2.xyz](https://nfsu2.xyz).
 
@@ -12,7 +12,7 @@ The release ZIP includes separate folders for Chromium (`NFSU2-HUD-Chromium`) an
 
 ## First installation — Chrome / Edge / Brave / Opera / Chromium
 
-1. Download the latest extension ZIP from [Releases](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/releases).
+1. Download the latest extension ZIP from [direct ZIP download](downloads/NFSU2_Modern_HUD_v0.9.73_MultiBrowser.zip).
 2. Extract the archive to a **permanent** folder that you will keep for future updates.
 3. Open your browser's extension manager (for example `chrome://extensions` or `edge://extensions`).
 4. Turn on **Developer mode**.
@@ -26,7 +26,7 @@ The release ZIP includes separate folders for Chromium (`NFSU2-HUD-Chromium`) an
 
 1. Open HUD Settings and **export your settings profile** as a backup. Note the current mileage for any cars you care about; profile JSON does **not** include mileage.
 2. Close or stop the game tab and your driving session.
-3. Extract the new v0.9.31 ZIP to a temporary location.
+3. Extract the new v0.9.73 ZIP to a temporary location.
 4. **Copy the updated files from `NFSU2-HUD-Chromium` into the exact previously installed `NFSU2-HUD-Chromium` directory**, replacing the old files in place. Keep the folder path unchanged.
 5. Open the extension manager and press **Reload** on the existing extension.
 6. Refresh the NFSU2.xyz game page. Check that your previous settings, selected car and mileage return.
@@ -44,6 +44,9 @@ If a different extension ID was assigned previously, a new install cannot automa
 **Firefox temporary add-ons are removed when Firefox restarts**. Re-adding one is not equivalent to a stable, signed installation and may not preserve extension-local mileage across sessions. A Mozilla-signed installation is needed for stable permanent distribution. Export settings and keep independent mileage notes if testing in Firefox temporarily.
 
 ## Keyboard shortcuts
+
+**New in v0.9.73:** TKL keyboard support lets you rebind Menu / Toggle HUD / SAVE ALL from the HUD settings or the browser extension popup. **Ctrl + Alt + M** is an always-available menu shortcut, even without a Numpad. Use Reset Shortcuts to Defaults to restore the Numpad assignments without changing HUD layouts or odometer mileage.
+
 
 | Key | Action |
 |---|---|

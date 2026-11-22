@@ -9,10 +9,24 @@
  label{display:flex;align-items:center;gap:9px;margin:9px 0;cursor:pointer}input{accent-color:#6fd7db}
  fieldset{border:1px solid #31434c;border-radius:10px;margin:0 0 10px;padding:9px 12px}
  legend{color:#b5c9d2;padding:0 4px}select{background:#213540;border:1px solid #47616d;border-radius:7px;color:#f3f7f9;padding:7px;width:100%}
+ .shortcut-editor{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0}
+ .shortcut-editor button,#shortcutResetDefaults{background:#244350;color:#edfafb;border:1px solid #5d9da8;border-radius:7px;padding:6px 10px;cursor:pointer;font:inherit}
+ .shortcut-editor button:focus-visible,#shortcutResetDefaults:focus-visible{outline:2px solid #71d7dc}
+ #shortcutStatus{margin:8px 0 0;color:#bbd5df}
  small{display:block;color:#9ab0b8;margin:10px 0 0;line-height:1.5}
 </style></head><body>
-<h1>NFSU2 Modern HUD <span style="color:#72d3d7">v0.9.31</span></h1>
-<div class="keys"><strong>IN-GAME SETTINGS</strong><div><kbd>Numpad +</kbd> Open / close menu</div><div><kbd>Numpad −</kbd> Toggle entire Modern HUD</div><p>Customize HUD live: performance modes, KM/H or MPH, 3D digits, profile save/download/import, colors, warnings and sizing. Changes auto-save.</p></div>
+<h1>NFSU2 Modern HUD <span style="color:#72d3d7">v0.9.48</span></h1>
+<div class="keys"><strong>KEYBOARD SHORTCUTS</strong>
+  <div><kbd id="shortcutMenuDisplay">Numpad +</kbd> Open / close HUD menu</div>
+  <div><kbd id="shortcutToggleHudDisplay">Numpad −</kbd> Toggle HUD ON / OFF</div>
+  <div><kbd id="shortcutSaveAllDisplay">Numpad *</kbd> SAVE ALL: HUD + ODO</div>
+  <p>TKL backup: <kbd>Ctrl + Alt + M</kbd> opens the HUD menu. Click Change below to bind your own keys. Changes sync to the in-game menu.</p>
+  <div class="shortcut-editor"><span>Open menu</span><button type="button" data-bind="shortcutMenu">Change</button></div>
+  <div class="shortcut-editor"><span>Toggle HUD</span><button type="button" data-bind="shortcutToggleHud">Change</button></div>
+  <div class="shortcut-editor"><span>SAVE ALL</span><button type="button" data-bind="shortcutSaveAll">Change</button></div>
+  <button type="button" id="shortcutResetDefaults" style="width:100%;margin-top:8px">Reset Shortcuts to Defaults</button>
+  <p role="status" id="shortcutStatus" aria-live="polite">Choose a shortcut not used by the game. Escape cancels recording.</p>
+  </div>
 <label><input type="checkbox" id="enabled"> Enable Modern HUD</label>
 <fieldset><legend>Display mode</legend>
 <label><input type="radio" name="mode" value="full"> Full</label>
@@ -23,7 +37,8 @@
 <label><input type="radio" name="shiftMode" value="manual"> Manual — choose green lead</label>
 <select id="manualLead"><option value="0">At Redline (0 RPM)</option><option value="100">100 RPM before Redline</option><option value="250">250 RPM before Redline</option></select>
 </fieldset>
-<small>Profiles can be saved and exported from Numpad + in-game settings. With the optional Damage System on, this extension may suppress driving key presses while LIMP MODE is active; it does not change game physics. Settings are stored locally in your browser.</small>
+<small>Profiles can be saved and exported from the in-game HUD settings menu. With the optional Damage System on, this extension may suppress driving key presses while LIMP MODE is active; it does not change game physics. Settings are stored locally in your browser.</small>
 <script src="storage-adapter.js"></script>
+<script src="hotkeys.js"></script>
 <script src="popup.js"></script>
 </body></html>

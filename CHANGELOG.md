@@ -1,8 +1,28 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.9.31.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.9.73.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.9.73 — Three New Analog HUDs, TKL Shortcuts & Compatibility
+
+Compared with the previous public release **v0.9.31**.
+
+### New HUD styles
+- **Toyota Corolla Retro (AE86-inspired):** classic connected instrument cluster, mechanical rolling GEAR and ODO displays, integrated TYRES/ENGINE/SUSP indicators.
+- **Honda Civic Si (EM1-inspired):** white analog dials, a dual Nitro/Turbo instrument, RPM-based VTEC simulation (ON at 5,600 RPM), green shift LEDs, rolling GEAR and ODO.
+- **Mazda RX-7 FD:** asymmetric carbon cluster, independent Turbo/Nitro/RPM/Speed gauges, KM/H or MPH selection and integrated status lights.
+
+### New controls
+- **User-configurable keyboard shortcuts** for Menu, HUD Toggle and SAVE ALL, including tenkeyless (TKL) keyboards, managed in the HUD settings and extension popup.
+- **Ctrl + Alt + M** always opens/closes the menu as a backup binding.
+- Wider HUD scaling range, new independent per-skin layout controls, calibrated **X/Y = 0 px** defaults with migration of older profiles, and automatic car-to-HUD assignment support.
+- Rolling GEAR digits added to GT-R Analog; rolling ODO animation added to the new Honda and Corolla styles.
+
+### Improvements and fixes to previously public features
+- Corrected the Modern HUD final RPM label ('10') overlapping the COILOVER indicator.
+- Fixed Firefox settings menu rendering in strict CSP environments and improved cross-browser styling compatibility.
+- Preserved per-model ODO storage, keyboard default bindings, saved profiles, Car Feed integration and previously shipped effects.
 
 ## v0.9.31 — Modern HUD Layout & ODO Spacing
 

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "NFSU2.xyz Modern HUD",
-  "version": "0.9.31",
-  "description": "Modern + GT-R Analog HUD, 31 per-car odometers, Numpad * quick save, Speed Sensation, Impact Feedback, saved profiles.",
+  "version": "0.9.73",
+  "description": "Five HUD skins; owner-approved Honda zero-based layout, zero X/Y factory origins for all analog skins, saved-profile migration.",
   "permissions": [
     "storage"
   ],
@@ -29,6 +29,7 @@
       "js": [
         "storage-adapter.js",
         "shift-logic.js",
+        "hotkeys.js",
         "content.js"
       ],
       "run_at": "document_idle"
