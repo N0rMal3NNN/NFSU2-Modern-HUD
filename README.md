@@ -1,12 +1,12 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.9.73 — Modern & GT-R Analog HUD (Multi-Browser Edition)**
+**Current version: v0.9.73 — Five HUD Styles (Chromium + Firefox)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Customize your dashboard and see live driving data using the game's read-only Car Feed without modifying game files, game physics, or 3D rendering.
 
 > **Independent fan project.** Not affiliated with, approved by, or endorsed by NFSU2.xyz. The extension is designed for desktop browsers; some indicators and collision effects are estimates from limited telemetry. Full live-play testing on every browser and hardware configuration is still ongoing.
 
-## What's new since v0.9.73?
+## What's new since v0.9.31?
 
 **Three brand-new analog HUD styles** join the existing Modern and GT-R dashboards: **Toyota Corolla Retro (AE86-inspired)**, **Honda Civic Si (EM1-inspired)** and **Mazda RX-7 FD**.
 
