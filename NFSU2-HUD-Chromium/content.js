@@ -1,4 +1,4 @@
-/* NFSU2 Modern HUD v0.9.31 — tyre wheel restoration and adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
+/* NFSU2 Modern HUD v0.9.50 — Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
  * Numpad + opens/closes an in-game settings panel.
  * Numpad - toggles the ENTIRE custom Modern HUD (not the game's own HUD).
  * No modification to NFSU2's game code, rendering buffers, or physics.
@@ -12,8 +12,11 @@
   // Initialized by storage-adapter.js in the extension's isolated world.
   const hudStorage = globalThis.__nfsu2HudStorage;
   if (!hudStorage) return;
+  const Hotkeys = globalThis.__nfsu2HudHotkeys;
+  if (!Hotkeys) return;
   const NITRO_CAPACITY = 2;
   const PROFILE_STORE_KEY = "nfsu2HudProfilesV1";
+  const CAR_HUD_STYLE_STORE_KEY = "nfsu2HudCarStyleLinksV1";
   const ACTIVE_SETTINGS_KEY = "nfsu2HudActiveSettingsV2"; // complete, atomic snapshot for recovery
   // Odometer is independent of HUD profiles and game saves. Resetting visual settings does not reset distance.
   const ODOMETER_STORE_KEY = "nfsu2HudOdometersV2"; // backward-compatible copy
@@ -64,6 +67,9 @@
   const HUD_STYLES = Object.freeze({
     modern: { name: "Modern HUD", implemented: true },
     analog: { name: "GT-R Analog HUD", implemented: true },
+    corolla: { name: "Toyota Corolla Retro (1986)", implemented: true },
+    civic: { name: "Honda Civic Si EM1 (2000)", implemented: true },
+    rx7: { name: "Mazda RX-7 FD — Rotary Analog", implemented: true },
     old: { name: "Old Style HUD", implemented: false },
     retro2000: { name: "2000s HUD", implemented: false }
   });
@@ -116,7 +122,8 @@
   const DEFAULTS = Object.freeze({
     hudEnabled: true, hudMode: "full", hudStyle: "modern", speedUnit: "kmh", speedDepth: "subtle",
     hudPerformanceMode: "balanced", shiftMode: "auto", manualGreenLead: 100,
-    hudPosition: "bottom-right", hudScale: 100, hudBackgroundOpacity: 90, hudTextOpacity: 100, hudUpdateFps: 20,
+    shortcutMenu: Hotkeys.DEFAULTS.shortcutMenu, shortcutToggleHud: Hotkeys.DEFAULTS.shortcutToggleHud, shortcutSaveAll: Hotkeys.DEFAULTS.shortcutSaveAll,
+    hudPosition: "bottom-right", hudScale: 100, analogHudScalePct: 100, hudBackgroundOpacity: 90, hudTextOpacity: 100, hudUpdateFps: 20,
     showSpeed: true, showRpm: true, showGear: true, showNitro: true, showShift: true,
     showIcons: true, showTyreIcon: true, showEngineIcon: true, showSuspIcon: true,
     showTurbo: true, showTelemetryWarnings: true,
@@ -130,17 +137,129 @@
     damageMinImpact: 5.0, menuLeftPx: -1, menuTopPx: -1, menuWidthPx: 360, menuHeightPx: 640,
     analogTurboOffsetX: 0, analogTurboOffsetY: 0,
     analogRpmOffsetX: 0, analogRpmOffsetY: 0,
-    analogSpeedOffsetX: 8, analogSpeedOffsetY: 0,
+    analogSpeedOffsetX: 0, analogSpeedOffsetY: 0,
+    // Individual analog gauge diameters. 100% matches the original geometry.
+    analogTurboSizePct: 100, analogRpmSizePct: 100, analogSpeedSizePct: 100,
+    // The physical dial positions are in ZERO_POSITION_BASELINE (below).
+    // Resetting X/Y now always gives zero, without changing the dial geometry.
+    corollaTurboOffsetX: 0, corollaTurboOffsetY: 0,
+    corollaRpmOffsetX: 0, corollaRpmOffsetY: 0,
+    corollaSpeedOffsetX: 0, corollaSpeedOffsetY: 0,
+    corollaTurboSizePct: 100, corollaRpmSizePct: 100, corollaSpeedSizePct: 100,
+    corollaHudScalePct: 85,
+    // Shared Corolla shell transforms the COMPLETE assembly. Local circles
+    // remain independently configurable but are limited to the integrated body.
+    corollaFrameScalePct: 100, corollaFrameOffsetX: 0, corollaFrameOffsetY: 0,
+    // Owner-approved 2026-11-22 Honda layout is baked into the zero baseline:
+    // Turbo 13/15 size 85%; RPM 12/10 size 95%; Speed 18/22 size 95%.
+    civicTurboOffsetX: 0, civicTurboOffsetY: 0,
+    civicRpmOffsetX: 0, civicRpmOffsetY: 0,
+    civicSpeedOffsetX: 0, civicSpeedOffsetY: 0,
+    civicTurboSizePct: 85, civicRpmSizePct: 95, civicSpeedSizePct: 95,
+    civicHudScalePct: 60, civicFrameScalePct: 100, civicFrameOffsetX: 0, civicFrameOffsetY: 0,
+    rx7TurboOffsetX: 0, rx7TurboOffsetY: 0,
+    rx7RpmOffsetX: 0, rx7RpmOffsetY: 0,
+    rx7SpeedOffsetX: 0, rx7SpeedOffsetY: 0,
+    rx7TurboSizePct: 100, rx7RpmSizePct: 100, rx7SpeedSizePct: 100,
+    rx7NitroOffsetX: 0, rx7NitroOffsetY: 0, rx7NitroSizePct: 100,
+    rx7HudScalePct: 85,
     analogOdometerEnabled: true,
     analogNeedleColor: "#F4F2EF", analogNumbersColor: "#FFA334", analogTickColor: "#F49B31",
     analogGlowPercent: 0, analogDepthEnabled: false,
     tyreSlipThreshold: 3.4, tyreSlipHoldMs: 550, absBrakeThreshold: 0.80, impactYellowThreshold: 4.5, impactRedThreshold: 9.0,
-    turboStartMode: "default", turboStartRpm: 1000, turboResponseMs: 300,
+    turboStartMode: "default", turboStartRpm: 1000, turboResponseMs: 1000, turboReleaseMs: 200,
     ...DEFAULT_COLORS
   });
+  const SHORTCUT_KEYS = Object.keys(Hotkeys.DEFAULTS);
   const allowedPositions = new Set(["bottom-right", "bottom-left", "top-right", "top-left"]);
   const boolKeys = ["hudEnabled", "showSpeed", "showRpm", "showGear", "showNitro", "showShift", "showIcons", "showTurbo", "showTyreIcon", "showEngineIcon", "showSuspIcon", "damageEnabled", "damageInputCut", "damageImpactIdleReset", "showTelemetryWarnings", "speedSensationEnabled", "speedSensationFogEnabled", "impactFeedbackEnabled", "impactFeedbackFlash", "impactFeedbackShake", "analogOdometerEnabled", "analogDepthEnabled"];
   const ANALOG_POSITION_KEYS = ["analogTurboOffsetX","analogTurboOffsetY","analogRpmOffsetX","analogRpmOffsetY","analogSpeedOffsetX","analogSpeedOffsetY"];
+  const ANALOG_SIZE_KEYS = ["analogTurboSizePct","analogRpmSizePct","analogSpeedSizePct"];
+  const COROLLA_POSITION_KEYS=ANALOG_POSITION_KEYS.map(key=>"corolla"+key.slice(6));
+  const COROLLA_SIZE_KEYS=ANALOG_SIZE_KEYS.map(key=>"corolla"+key.slice(6));
+  const COROLLA_FRAME_KEYS=["corollaFrameScalePct","corollaFrameOffsetX","corollaFrameOffsetY"];
+  const CIVIC_POSITION_KEYS=ANALOG_POSITION_KEYS.map(key=>"civic"+key.slice(6));
+  const CIVIC_SIZE_KEYS=ANALOG_SIZE_KEYS.map(key=>"civic"+key.slice(6));
+  const CIVIC_FRAME_KEYS=["civicFrameScalePct","civicFrameOffsetX","civicFrameOffsetY"];
+  const RX7_POSITION_KEYS=ANALOG_POSITION_KEYS.map(key=>"rx7"+key.slice(6));
+  const RX7_SIZE_KEYS=ANALOG_SIZE_KEYS.map(key=>"rx7"+key.slice(6));
+  // V0.9.73: all styles expose relative X/Y coordinates with a true zero
+  // factory starting point. Physical origins include the owner's last Honda
+  // layout and keep the existing GT-R, Corolla and RX-7 placements intact.
+  const ZERO_POSITION_BASELINE=Object.freeze({
+    analogTurboOffsetX:5, analogTurboOffsetY:9,
+    analogRpmOffsetX:4, analogRpmOffsetY:7,
+    analogSpeedOffsetX:9, analogSpeedOffsetY:-3,
+    corollaTurboOffsetX:5, corollaTurboOffsetY:9,
+    corollaRpmOffsetX:4, corollaRpmOffsetY:7,
+    corollaSpeedOffsetX:9, corollaSpeedOffsetY:-3,
+    civicTurboOffsetX:13, civicTurboOffsetY:15,
+    civicRpmOffsetX:12, civicRpmOffsetY:10,
+    civicSpeedOffsetX:18, civicSpeedOffsetY:22,
+    rx7TurboOffsetX:55, rx7TurboOffsetY:32,
+    rx7RpmOffsetX:0, rx7RpmOffsetY:0,
+    rx7SpeedOffsetX:0, rx7SpeedOffsetY:0,
+    rx7NitroOffsetX:0, rx7NitroOffsetY:0
+  });
+  const originValue=(key)=>ZERO_POSITION_BASELINE[key]??0;
+  // Shift saved coordinate values without touching dimensions, mileage, Car Feed
+  // or visual placement. The schema flag prevents subtracting origins twice.
+  function migrateToZeroOrigin(input, legacyCivic=false){
+    if(!input || typeof input!=="object" || Array.isArray(input))return {};
+    const old=legacyCivic?civicRelativeFromLegacy(input):input;
+    const converted={...old};
+    for(const [key,origin] of Object.entries(ZERO_POSITION_BASELINE)){
+      if(Object.prototype.hasOwnProperty.call(old,key) && Number.isFinite(Number(old[key])))
+        converted[key]=Math.round(Number(old[key]))-origin;
+    }
+    return converted;
+  }
+  // Original v0.9.51 absolute placements from the user's exported Civic preset.
+  // New X/Y sliders represent ADJUSTMENTS relative to these coordinates.
+  const CIVIC_V0951_ORIGIN=Object.freeze({
+    civicTurboOffsetX:16,civicTurboOffsetY:12,
+    civicRpmOffsetX:-2,civicRpmOffsetY:12,
+    civicSpeedOffsetX:-2,civicSpeedOffsetY:8
+  });
+  function civicRelativeFromLegacy(input){
+    const result={...input};
+    for(const [key,oldOrigin] of Object.entries(CIVIC_V0951_ORIGIN)){
+      if(Object.prototype.hasOwnProperty.call(input,key) && Number.isFinite(Number(input[key])))
+        result[key]=Math.round(Number(input[key]))-oldOrigin;
+    }
+    return result;
+  }
+  // The full active snapshot is upgraded atomically to schema 3 alongside any
+  // user-defined profiles. This prevents subtracting old offsets twice.
+  let pendingCivicProfileMigration=false;
+  const COROLLA_LOCAL_LIMIT_X=65, COROLLA_LOCAL_LIMIT_Y=55;
+  const FACTORY_CAR_STYLES=Object.freeze({NISSAN_SKYLINE:"analog",TOYOTA_COROLLA:"corolla",HONDA_CIVIC:"civic",MAZDA_RX7:"rx7"});
+  let carHudStyleLinks=Object.create(null);
+  function carHudStyleFor(carId){
+    return carHudStyleLinks[carId] || FACTORY_CAR_STYLES[carId] || "modern";
+  }
+  function cleanCarHudStyles(raw){
+    const out=Object.create(null);
+    if(raw && typeof raw==="object" && !Array.isArray(raw)){
+      for(const [id,style] of Object.entries(raw)){
+        if(ODOMETER_CAR_IDS.has(id) && HUD_STYLES[style]?.implemented) out[id]=style;
+      }
+    }
+    return out;
+  }
+  function saveCarHudStyles(){
+    return hudStorage.set({[CAR_HUD_STYLE_STORE_KEY]:{version:1,styles:{...carHudStyleLinks}}});
+  }
+  // Controls keep their existing IDs; settings are stored per analog skin.
+  // No interaction with the game's read-only Car Feed or game save.
+  const scopedGaugeKey=key=>{
+    // Modern, GT-R, Corolla and Civic now each store a separate exact zoom.
+    if(key==="hudScale")return settings.hudStyle==="modern"?"hudScale":settings.hudStyle+"HudScalePct";
+    return ["corolla","civic","rx7"].includes(settings.hudStyle) &&
+      (ANALOG_POSITION_KEYS.includes(key)||ANALOG_SIZE_KEYS.includes(key))
+       ? settings.hudStyle+key.slice(6) : key;
+  };
+  const gaugeValue=key=>settings[scopedGaugeKey(key)];
   const colorKeys = new Set([...Object.keys(DEFAULT_COLORS), "analogNeedleColor", "analogNumbersColor", "analogTickColor"]);
   const validColor = color => typeof color === "string" && /^#[0-9a-f]{6}$/i.test(color);
   const alphaColor = (hex, alpha) => {
@@ -181,6 +300,7 @@
   let turboLastPct = -1;
   let renderQueued = false;
   let menuOpen = false;
+  let shortcutCaptureAction = null;
   let saveTimer = null;
   let settingsSaving = false;
   let saveQueued = false;
@@ -245,6 +365,7 @@
   const dirtyKeys = new Set();
 
   function normalize(key, val) {
+    if (SHORTCUT_KEYS.includes(key)) return Hotkeys.canonical(val) || Hotkeys.DEFAULTS[key];
     if (boolKeys.includes(key)) return typeof val === "boolean" ? val : DEFAULTS[key];
     if (key === "hudMode") return val === "cockpit" ? "cockpit" : "full";
     if (key === "hudStyle") return typeof val === "string" && HUD_STYLES[val]?.implemented ? val : "modern";
@@ -259,7 +380,17 @@
     if (key === "menuLeftPx" || key === "menuTopPx") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), -1, 5000) : -1;
     if (key === "menuWidthPx") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), 320, 1800) : DEFAULTS[key];
     if (key === "menuHeightPx") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), 260, 1600) : DEFAULTS[key];
-    if (ANALOG_POSITION_KEYS.includes(key)) return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), -20000, 20000) : DEFAULTS[key];
+    // Corolla's individual gauges stay in the connected chassis; use the
+    // separate Frame X/Y controls to move the entire panel across the screen.
+    if(COROLLA_POSITION_KEYS.includes(key)||CIVIC_POSITION_KEYS.includes(key)){
+      const n=Number(val),isY=key.endsWith("OffsetY");
+      const limit=isY?COROLLA_LOCAL_LIMIT_Y:COROLLA_LOCAL_LIMIT_X;
+      return Number.isFinite(n)?clamp(Math.round(n),-limit,limit):DEFAULTS[key];
+    }
+    if(ANALOG_POSITION_KEYS.includes(key)||RX7_POSITION_KEYS.includes(key)||key==='rx7NitroOffsetX'||key==='rx7NitroOffsetY') return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), -20000, 20000) : DEFAULTS[key];
+    if (key==="corollaFrameScalePct"||key==="civicFrameScalePct") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)/5)*5,50,175):DEFAULTS[key];
+    if (key==="corollaFrameOffsetX" || key==="corollaFrameOffsetY" || key==="civicFrameOffsetX" || key==="civicFrameOffsetY") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)),-2000,2000):DEFAULTS[key];
+    if (ANALOG_SIZE_KEYS.includes(key)||COROLLA_SIZE_KEYS.includes(key)||CIVIC_SIZE_KEYS.includes(key)||RX7_SIZE_KEYS.includes(key)||key==='rx7NitroSizePct') return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)/5)*5, 50, 160) : DEFAULTS[key];
     if (key === "analogGlowPercent") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)/5)*5,0,100) : DEFAULTS[key];
     if (key === "speedDepth") return ["off","subtle","medium"].includes(val) ? val : "subtle";
     if (key === "hudPerformanceMode") return ["eco","balanced","smooth"].includes(val) ? val : "balanced";
@@ -272,11 +403,12 @@
     if (key === "impactFeedbackHeavyDv") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)*2)/2, 8, 50) : DEFAULTS[key];
     if (key === "turboStartMode") return val === "custom" ? "custom" : "default";
     if (key === "turboStartRpm") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), 800, 10000) : 1000;
-    if (key === "turboResponseMs") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val) / 100) * 100, 200, 2200) : 300;
+    if (key === "turboResponseMs") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val) / 100) * 100, 200, 2200) : DEFAULTS[key];
+    if (key === "turboReleaseMs") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val) / 50) * 50, 100, 1500) : DEFAULTS[key];
     if (key === "shiftMode") return val === "manual" ? "manual" : "auto";
     if (key === "manualGreenLead") return [0, 100, 250].includes(Number(val)) ? Number(val) : 100;
     if (key === "hudPosition") return allowedPositions.has(val) ? val : DEFAULTS[key];
-    if (key === "hudScale") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), 70, 130) : 100;
+    if (["hudScale","analogHudScalePct","corollaHudScalePct","civicHudScalePct","rx7HudScalePct"].includes(key)) return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)),10,500) : DEFAULTS[key];
     if (key === "hudBackgroundOpacity" || key === "hudTextOpacity") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), 0, 100) : DEFAULTS[key];
     if (key === "hudUpdateFps") return [10,15,20,25,30].includes(Number(val)) ? Number(val) : 20;
     if (key === "tyreSlipThreshold") return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)*10)/10, 1, 8) : DEFAULTS[key];
@@ -288,10 +420,53 @@
     return DEFAULTS[key];
   }
 
+  // v0.9.46: Firefox can refuse inline <style> in an extension-created Shadow DOM
+  // under the game's Content Security Policy. Convert these extension-owned rules
+  // to constructed stylesheets. Keep the source CSS local; no injected page scripts.
+  function ensureShadowStyles(root) {
+    const styles = [...root.querySelectorAll("style")];
+    if (typeof CSSStyleSheet === "function" && styles.length) {
+      try {
+        const sheets = styles.map(node => {
+          const sheet = new CSSStyleSheet();
+          sheet.replaceSync(node.textContent || "");
+          if (!sheet.cssRules.length) throw new Error("Shadow stylesheet parsed empty");
+          return sheet;
+        });
+        root.adoptedStyleSheets = [...root.adoptedStyleSheets, ...sheets];
+        styles.forEach(node => node.remove());
+      } catch (err) {
+        console.warn("[NFSU2 HUD] Constructed CSS fallback unavailable", err);
+        // Retain original styles for browsers that allow them.
+      }
+    }
+    // style= markup is also blocked by strict CSP in Firefox. Restore the
+    // extension's own inline declarations with setProperty (not cssText), which
+    // remains permitted for DOM API styles under CSP.
+    for (const element of root.querySelectorAll("[style]")) {
+      const literal = element.getAttribute("style") || "";
+      for (const declaration of literal.split(";")) {
+        const index = declaration.indexOf(":");
+        if (index < 1) continue;
+        const key = declaration.slice(0, index).trim();
+        let value = declaration.slice(index + 1).trim();
+        if (!key || !value) continue;
+        const important = /\s*!important\s*$/i.test(value);
+        if (important) value = value.replace(/\s*!important\s*$/i, "").trim();
+        try { element.style.setProperty(key, value, important ? "important" : ""); } catch (_) {}
+      }
+    }
+  }
+  function setHudHostStyle(element, declarations) {
+    for (const [name, value] of Object.entries(declarations)) {
+      element.style.setProperty(name, String(value));
+    }
+  }
+
   // Separate, noninteractive telemetry root: the HUD cannot intercept steering/mouse.
   const host = document.createElement("div");
   host.id = "nfsu2-modern-hud-root";
-  host.style.cssText = "position:fixed;z-index:2147483645;pointer-events:none;display:none;";
+  setHudHostStyle(host, {"position":"fixed","z-index":"2147483645","pointer-events":"none","display":"none"});
   const shadow = host.attachShadow({mode:"closed"});
 
   // Original, lightweight dashboard warning symbols for BOTH HUD skins.
@@ -440,12 +615,12 @@
 
       /* Analog GT-R dashboard: nested gauges, left TURBO, centre RPM, right SPEED. */
       .analog-panel{display:none;position:absolute;left:0;top:0;width:735px;height:345px;pointer-events:none;font-family:Arial,'Segoe UI',sans-serif;}
-      .hud[data-style="analog"]:not(.compact){width:735px;height:345px;}
-      .hud[data-style="analog"]:not(.compact)>:not(.analog-panel){display:none!important;}
-      .hud[data-style="analog"]:not(.compact) .analog-panel{display:block;}
+      .hud[data-style="analog"]:not(.compact),.hud[data-style="corolla"]:not(.compact){width:735px;height:345px;}
+      .hud[data-style="analog"]:not(.compact)>:not(.analog-panel),.hud[data-style="corolla"]:not(.compact)>:not(.analog-panel){display:none!important;}
+      .hud[data-style="analog"]:not(.compact) .analog-panel,.hud[data-style="corolla"]:not(.compact) .analog-panel{display:block;}
       .analog-panel svg{width:100%;height:100%;display:block;overflow:visible;}
       .analog-backing{opacity:var(--analog-bg-opacity,.90);}
-      .analog-foreground{opacity:var(--text-alpha,1);}
+      .analog-foreground{opacity:1;}
       .analog-dial-shell{fill:url(#analog-face);stroke:#302622;stroke-width:5;}
       .hud.analog-depth .analog-dial-shell{stroke-width:5.7;}
       .hud.analog-depth .analog-inner-ring{opacity:.88;stroke-width:1.4;}
@@ -460,6 +635,8 @@
       #analog-turbo-ticks .analog-number{font-size:10.3px;}
       .analog-number{paint-order:stroke fill;stroke:var(--analog-numbers-color,#ffa334);stroke-opacity:var(--analog-glow-alpha,0);stroke-width:var(--analog-glow-width,0px);stroke-linejoin:round;}
       .analog-redzone{fill:none;stroke:#ed342b;stroke-width:7;stroke-linecap:butt;}
+      /* Turbo redline is deliberately shorter and closer to the 3.0 end tick. */
+      #analog-turbo-redzone{stroke-width:4.6;}
       .analog-needle{fill:none;stroke:var(--analog-needle-color,#f4f2ef);stroke-width:3.5;stroke-linecap:round;}
       .analog-needle-core{fill:none;stroke:#8a9296;stroke-width:5.8;opacity:.42;}
       .analog-hub{fill:#17191b;stroke:#928073;stroke-width:2;}
@@ -493,10 +670,331 @@
       #analog-shift.near .analog-shift-rect{fill:#ffab3f;stroke:#ffbf70;}
       #analog-shift.shift .analog-shift-rect{fill:#58da88;stroke:#81ffaf;}
       #analog-shift text{fill:#c7a482;font:700 9px Arial,sans-serif;letter-spacing:.5px;}
+      /* Corolla 1986 inspired instruments: ivory MPH outside, amber 0-400 KM/H
+         inside, scarlet redline; no photographs or game assets embedded. */
+      .hud[data-style="corolla"] .analog-panel{font-family:Arial,'Segoe UI',sans-serif;}
+      .hud[data-style="corolla"] .analog-dial-shell{fill:url(#corolla-face);stroke:#36373a;stroke-width:5.5;}
+      .hud[data-style="corolla"] .analog-rim-shadow{stroke:#111316;stroke-width:10;}
+      .hud[data-style="corolla"] .analog-trim{stroke:#bcb9b1;stroke-width:2.15;}
+      .hud[data-style="corolla"] .analog-inner-ring{stroke:#777878;opacity:.40;}
+      .hud[data-style="corolla"] .analog-tick{stroke:#e7e8e5;opacity:.92;stroke-width:1.6;}
+      .hud[data-style="corolla"] .analog-tick.major{stroke:#fffaf1;stroke-width:3.0;}
+      .hud[data-style="corolla"] .analog-number{fill:#fffaf1;stroke:#fffaf1;font-family:Arial,sans-serif;font-weight:700;}
+      .hud[data-style="corolla"] #analog-turbo-ticks .analog-number{font-size:10px;}
+      .hud[data-style="corolla"] #analog-speed-ticks .analog-number{font-size:14px;}
+      .hud[data-style="corolla"] .corolla-kmh-number{font:700 10.5px Arial,sans-serif;fill:#ffb63b;text-anchor:middle;dominant-baseline:middle;}
+      .hud[data-style="corolla"] .corolla-inner-tick{stroke:#fba52c;stroke-width:1.15;opacity:.90;}
+      .hud[data-style="corolla"] .analog-redzone{stroke:#dc3540;stroke-width:5.5;}
+      .hud[data-style="corolla"] #analog-turbo-redzone{stroke-width:4.3;}
+      .hud[data-style="corolla"] .analog-needle{stroke:#fffdf5;stroke-width:3.1;}
+      .hud[data-style="corolla"] .analog-hub{fill:#16181a;stroke:#a4a6aa;}
+      .hud[data-style="corolla"] .analog-label{fill:#e5e6e3;letter-spacing:1.2px;}
+      .hud[data-style="corolla"] .analog-sub,.hud[data-style="corolla"] .analog-speed-unit{fill:#f2b044;}
+      .hud[data-style="corolla"] .analog-odo-shell{fill:#131517;stroke:#6c7074;}
+      .hud[data-style="corolla"] .analog-odo-border{fill:#1c2024;stroke:#7a7d82;}
+      .hud[data-style="corolla"] .analog-odo-screen{fill:#dedbd1;stroke:#747574;}
+      .hud[data-style="corolla"] .analog-odo-digits{fill:#191b20;}
+      .hud[data-style="corolla"] .analog-charge-a{fill:#ffc24a;}
+      .hud[data-style="corolla"] .analog-charge-b{fill:#d75d37;}
+      .hud[data-style="corolla"] .analog-status-item .status-icon{stroke:#edede8;}
+      .hud[data-style="corolla"] .analog-status-item text{fill:#f2eddf;}
+
+      /* Corolla AE86 retro instrument assembly (1986-inspired): unified charcoal
+         metal backing, vertical grain, ivory markings, amber secondary dial.
+         These SVG/CSS assets are self-contained, not screenshots of game UI. */
+      .hud[data-style="corolla"]:not(.compact){width:820px;height:385px;}
+      .hud[data-style="corolla"] .analog-panel{width:820px;height:385px;}
+      /* A single moving/scaling group preserves the instrument-to-shell layout.
+         The SVG clip keeps all foreground instruments inside the bezel. */
+      .hud[data-style="corolla"] .analog-foreground{clip-path:url(#corolla-body-clip);}
+      .hud[data-style="corolla"] .corolla-integrated-back{display:inline;}
+      .corolla-integrated-back{display:none;}
+      .hud[data-style="corolla"] .analog-dial-shell{
+        fill:url(#corolla-face);stroke:#222124;stroke-width:3.5;
+      }
+      .hud[data-style="corolla"] .analog-rim-shadow{stroke:#09090b;stroke-width:6;}
+      .hud[data-style="corolla"] .analog-trim{stroke:#b9a68f;stroke-width:1.6;opacity:.78;}
+      .hud[data-style="corolla"] .analog-inner-ring{stroke:#69615a;stroke-width:.8;opacity:.48;}
+      .hud[data-style="corolla"] .corolla-dial-grain{display:inline;opacity:.36;}
+      .corolla-dial-grain{display:none;pointer-events:none;}
+      .hud[data-style="corolla"] .analog-tick{stroke:#ddd9cf;opacity:.86;stroke-width:1.45;}
+      .hud[data-style="corolla"] .analog-tick.major{stroke:#fffaf0;stroke-width:3.1;opacity:1;}
+      .hud[data-style="corolla"] .analog-number{font-weight:600;fill:#eee9df;stroke:none;paint-order:normal;}
+      .hud[data-style="corolla"] #analog-rpm-ticks .analog-number{font-size:15px;}
+      .hud[data-style="corolla"] #analog-speed-ticks .analog-number{font-size:14.2px;}
+      .hud[data-style="corolla"] #analog-turbo-ticks .analog-number{font-size:10px;}
+      .hud[data-style="corolla"] .corolla-inner-tick{stroke:#efac3a;stroke-width:1.4;opacity:.91;}
+      .hud[data-style="corolla"] .corolla-kmh-number{font:700 10.7px Arial,sans-serif;fill:#f5a92d;}
+      .hud[data-style="corolla"] .analog-redzone{stroke:#e04a43;stroke-width:5.6;}
+      .hud[data-style="corolla"] #analog-rpm-redzone{stroke-width:6.5;}
+      .hud[data-style="corolla"] .analog-needle{stroke:#f4f0e8;stroke-width:2.8;}
+      .hud[data-style="corolla"] .analog-needle-core{stroke:#45454a;opacity:.38;stroke-width:4.4;}
+      .hud[data-style="corolla"] .analog-hub{fill:#171719;stroke:#555157;stroke-width:1.6;}
+      .hud[data-style="corolla"] .analog-hub-inner{fill:#29272a;}
+      .hud[data-style="corolla"] .analog-label{font-size:11px;fill:#f5f1e5;}
+      .hud[data-style="corolla"] .analog-sub{font-size:9.5px;fill:#eee1c9;}
+      .hud[data-style="corolla"] #analog-shift text{fill:#eee2d1;font-size:9px;}
+      .hud[data-style="corolla"] #analog-gear text{letter-spacing:.35px;}
+      .hud[data-style="corolla"] .corolla-amber-label{font-weight:700;}
+      .hud[data-style="corolla"] #analog-nitro{display:none!important;}
+      .hud[data-style="corolla"] #analog-status{display:none!important;}
+      .hud[data-style="corolla"] .analog-speed-unit{fill:#eee9df;font-size:11.5px;}
+      .hud[data-style="corolla"] .analog-odo-shell{fill:#111011;stroke:#927b63;stroke-width:1.15;}
+      .hud[data-style="corolla"] .analog-odo-border{fill:#222024;stroke:#847d74;}
+      .hud[data-style="corolla"] .analog-odo-screen{fill:#19181c;stroke:#443d36;}
+      .hud[data-style="corolla"] .analog-odo-label{fill:#f8cb83;}
+      .hud[data-style="corolla"] .analog-odo-digits{fill:#faf3e9;font-family:Consolas,monospace;letter-spacing:1.15px;}
+      .hud[data-style="corolla"] .analog-shift-rect{fill:#8b806e;stroke:#ccbda9;}
+      .hud[data-style="corolla"] .analog-charge-a,.hud[data-style="corolla"] .analog-charge-b{fill:#ffbc45;}
+      .hud[data-style="corolla"] .corolla-ribbon-label{fill:#f7e7d2;font:italic 800 17px Arial,sans-serif;letter-spacing:.7px;}
+      .hud[data-style="corolla"] .corolla-status-title{font:700 11px Arial,sans-serif;fill:#ece6da;letter-spacing:.45px;}
+      .hud[data-style="corolla"] .corolla-status-title{font:700 10px Arial,sans-serif;fill:#e4dfd5;letter-spacing:.12px;}
+      .hud[data-style="corolla"] .corolla-status-row .status-icon{fill:none;stroke:#b5b1a8;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;}
+      .hud[data-style="corolla"] .corolla-lamp{fill:#69666b;stroke:#aaa19a;stroke-width:.8;opacity:.94;}
+      .hud[data-style="corolla"] .corolla-status-row.warning-yellow .corolla-lamp{fill:#ffd25f;stroke:#ffe89a;filter:drop-shadow(0 0 3px #edac39);}
+      .hud[data-style="corolla"] .corolla-status-row.warning-red .corolla-lamp,
+      .hud[data-style="corolla"] .corolla-status-row.damage-critical .corolla-lamp{fill:#ff6258;stroke:#ff9891;filter:drop-shadow(0 0 3px #f35b4b);}
+      .hud[data-style="corolla"] .corolla-status-row.warning-yellow .status-icon{stroke:#ffdd75;}
+      .hud[data-style="corolla"] .corolla-status-row.warning-red .status-icon,
+      .hud[data-style="corolla"] .corolla-status-row.damage-critical .status-icon{stroke:#ff8177;}
+      .hud[data-style="corolla"] #corolla-turbo-unit{display:none!important;}
+      .hud[data-style="corolla"] .analog-odo-digits{font-size:11.6px;letter-spacing:.6px;}
+      .hud[data-style="corolla"] .analog-odo-label{font-size:8px;}
+      .hud[data-style="corolla"] .corolla-only.corolla-speed-caption{display:none!important;}
+      .hud[data-style="corolla"] .corolla-bridge-caption{font:700 9px Arial,sans-serif;letter-spacing:.65px;fill:#d5c7b3;}
+      .hud[data-style="corolla"] #corolla-turbo-unit{display:inline;}
+      #corolla-turbo-unit{display:none;}
+      .hud[data-style="corolla"] #analog-gear text{fill:#f1e6d3!important;}
+      /* Corolla and GT-R now SHARE the mechanical gear roller. Both the current
+         and next digit must be visible inside its clipped 24px window. */
+      .hud[data-style="corolla"] #analog-gear-roller .analog-small-value{fill:#fff3d9!important;}
+      .hud[data-style="corolla"] #analog-speed-unit{fill:#fff0d5;}
+      .hud[data-style="corolla"] .corolla-amber-label{fill:#f3a632;font:700 11px Arial,sans-serif;}
+      .corolla-only{display:none;}
+      .hud[data-style="corolla"] .corolla-only{display:inline;}
+
+/* Mazda RX-7 FD — original four-gauge dark analog cluster. No image asset,
+   all shapes are local SVG and scale crisply. Styling only affects this skin. */
+.rx7-panel{display:none;position:absolute;inset:0;width:1000px;height:470px;pointer-events:none;font-family:Arial,'Segoe UI',sans-serif}
+.hud[data-style="rx7"]:not(.compact){width:1000px;height:470px}
+.hud[data-style="rx7"]:not(.compact)>:not(.rx7-panel){display:none!important}
+.hud[data-style="rx7"]:not(.compact) .rx7-panel{display:block}
+.rx7-panel svg{width:100%;height:100%;overflow:visible;display:block}
+.rx7-chassis{opacity:var(--analog-bg-opacity,.90)}
+.rx7-rim-shadow{fill:#030306;stroke:#050507;stroke-width:9}
+.rx7-outer-rim{fill:url(#rx7-rim-metal);stroke:#0d0e10;stroke-width:4}
+.rx7-inner-rim{fill:url(#rx7-dial-bg);stroke:#090b0e;stroke-width:7}
+.rx7-inner-glass{fill:url(#rx7-glass);pointer-events:none;opacity:.42}
+.rx7-tick{stroke:#ff855d;stroke-width:1.75;stroke-linecap:round}
+.rx7-tick.major{stroke:#ff9f6d;stroke-width:4}
+.rx7-number{fill:#ff9870;font:800 18px Arial,sans-serif;text-anchor:middle;dominant-baseline:middle;paint-order:stroke;stroke:#220b0c;stroke-width:.7}
+.rx7-number.small{font-size:11px;font-weight:700;stroke-width:.2}
+.rx7-label{fill:#f3ebe6;font:bold 15px Arial,sans-serif;text-anchor:middle;letter-spacing:1px}
+.rx7-sub{fill:#e3b69b;font:700 11px Arial,sans-serif;text-anchor:middle}
+.rx7-redzone{stroke:#ee294a;stroke-width:8;fill:none;stroke-linecap:round}
+.rx7-needle{fill:url(#rx7-needle-color);stroke:#3c050d;stroke-width:1;filter:drop-shadow(1px 1.5px 1.5px #040405)}
+.rx7-hub{fill:#16151a;stroke:#6b5157;stroke-width:3}
+.rx7-gear-digit{fill:#ff9870;font:800 24px Consolas,'Courier New',monospace;text-anchor:middle;dominant-baseline:middle}
+.rx7-odo-digit{fill:#ff9d74;font:800 12px Consolas,'Courier New',monospace;text-anchor:middle;letter-spacing:1.1px}
+.rx7-shift-dot{fill:#3d2429;stroke:#9d6660;stroke-width:1.2}
+#rx7-shift.near .rx7-shift-dot{fill:#ffa348;filter:drop-shadow(0 0 3px #e57b27)}
+#rx7-shift.shift .rx7-shift-dot{fill:#ef3c56;filter:drop-shadow(0 0 4px #ff2e48)}
+.rx7-warn-label{fill:#ece7e2;font:700 13px Arial,sans-serif;letter-spacing:.8px}
+.rx7-warn-lamp{fill:#26262b;stroke:#8e7e7d;stroke-width:1.2}
+#rx7-tyre.warning-yellow .rx7-warn-lamp,#rx7-engine.warning-yellow .rx7-warn-lamp,#rx7-susp.warning-yellow .rx7-warn-lamp{fill:#ffcb4a;filter:drop-shadow(0 0 3px #ffbf34)}
+#rx7-tyre.warning-red .rx7-warn-lamp,#rx7-engine.warning-red .rx7-warn-lamp,#rx7-susp.warning-red .rx7-warn-lamp{fill:#ff445d;filter:drop-shadow(0 0 4px #ff2d4d)}
+
+
+/* Honda Civic Si (2000 EM1) three-gauge factory-style cluster. */
+.civic-panel{display:none;position:absolute;left:0;top:0;width:940px;height:430px;pointer-events:none;}
+.hud[data-style="civic"]:not(.compact){width:940px;height:430px;}
+.hud[data-style="civic"]:not(.compact)>:not(.civic-panel){display:none!important;}
+.hud[data-style="civic"]:not(.compact) .civic-panel{display:block;}
+#civic-panel svg{display:block;width:100%;height:100%;overflow:visible;}
+.civic-face-label{font:italic bold 17px Arial,sans-serif;fill:#383536;text-anchor:middle;}
+.civic-small-label{font:italic bold 10.5px Arial,sans-serif;fill:#655950;text-anchor:middle;letter-spacing:1px;}
+.civic-tick{stroke:#393334;stroke-width:1.25;stroke-linecap:round;}
+.civic-tick.major{stroke:#171516;stroke-width:2.5;}
+.civic-tick.red{stroke:#e3483d;stroke-width:3.6;}
+.civic-num{font:italic 800 17px Arial,sans-serif;fill:#242124;text-anchor:middle;dominant-baseline:middle;}
+.civic-kmh-num{font:italic 800 17px Arial,sans-serif;fill:#aa8d0d;text-anchor:middle;dominant-baseline:middle;stroke:#faf7e8;stroke-width:.55px;paint-order:stroke fill;}
+.civic-mph-num{font:italic 700 10.3px Arial,sans-serif;fill:#413d3d;text-anchor:middle;dominant-baseline:middle;}
+.civic-mph-label{font:italic bold 15px Arial,sans-serif;fill:#262427;text-anchor:middle;}
+.civic-kmh-label{font:italic bold 16px Arial,sans-serif;fill:#393333;text-anchor:middle;}
+.civic-aux-label{font:italic bold 14px Arial,sans-serif;fill:#36312f;text-anchor:middle;}
+.civic-aux-sub{font:italic bold 11px Arial,sans-serif;fill:#81701c;text-anchor:middle;}
+.civic-hub{fill:#353238;stroke:#99918d;stroke-width:2.2;}
+.civic-gear-label{font:italic bold 10.5px Arial,sans-serif;fill:#59483c;text-anchor:middle;letter-spacing:.6px;}
+.civic-gear-wheel-num{font:700 14px 'Consolas','Courier New',monospace;fill:#f5eae0;text-anchor:middle;dominant-baseline:middle;}
+.civic-si-logo{font:italic 900 27px Arial,sans-serif;fill:#e9434d;text-anchor:middle;letter-spacing:-2px;}
+/* CIV_VTEC: one fixed-size, factory-style badge on the carbon shoulder.
+   OFF / ON are color and text/icon changes ONLY, never a geometry resize. */
+.civic-vtec-pill{fill:#24282c;stroke:#697177;stroke-width:1.15;transition:fill .12s ease,stroke .12s ease;}
+.civic-vtec-text{fill:#92999e;font:700 16px Arial,'Segoe UI',sans-serif;text-anchor:middle;letter-spacing:.7px;transition:fill .12s ease;}
+.civic-vtec-bolt{fill:none;stroke:#ffaf54;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;display:none;}
+#civic-vtec.is-on .civic-vtec-pill{fill:#521c12;stroke:#ef5c2c;}
+#civic-vtec.is-on .civic-vtec-text{fill:#ffad77;}
+#civic-vtec.is-on .civic-vtec-bolt{display:inline;}
+.civic-warning .civic-warning-icon{fill:none;stroke:#ddd8d1;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;}
+.civic-warning text{font:700 12.5px Arial,sans-serif;fill:#e7e2dc;}
+.civic-warning-lamp{fill:#555257;stroke:#9d9490;stroke-width:.9;}
+.civic-warning.warning-yellow .civic-warning-lamp{fill:#ffc94f;stroke:#ffdf88;animation:civic-warning-pulse .85s ease-in-out infinite;filter:drop-shadow(0 0 4px #ffc04c);}
+.civic-warning.warning-red .civic-warning-lamp,.civic-warning.damage-critical .civic-warning-lamp{fill:#ff5f57;stroke:#ffb1a6;animation:civic-warning-pulse .68s ease-in-out infinite;filter:drop-shadow(0 0 4px #ff4b44);}
+@keyframes civic-warning-pulse{50%{opacity:.35}}
+.hud.perf-eco .civic-warning-lamp{animation:none!important;}
+@media(prefers-reduced-motion:reduce){.civic-warning-lamp{animation:none!important;}}
+.civic-odo-wheel-num{font:700 13.3px 'Consolas','Courier New',monospace;fill:#f5eae0;text-anchor:middle;dominant-baseline:middle;}
+/* Only the square lamp flashes, never the static Corolla legend/icon. */
+.hud[data-style="corolla"] .corolla-status-row,
+.hud[data-style="corolla"] .corolla-status-row.warning-yellow,
+.hud[data-style="corolla"] .corolla-status-row.warning-red,
+.hud[data-style="corolla"] .corolla-status-row.damage-critical{animation:none!important;opacity:1!important;}
+.hud[data-style="corolla"] .corolla-status-row.warning-yellow .status-icon,
+.hud[data-style="corolla"] .corolla-status-row.warning-red .status-icon,
+.hud[data-style="corolla"] .corolla-status-row.damage-critical .status-icon{stroke:#b5b1a8!important;fill:none!important;}
+.hud[data-style="corolla"] .corolla-status-row.warning-yellow .corolla-status-title,
+.hud[data-style="corolla"] .corolla-status-row.warning-red .corolla-status-title,
+.hud[data-style="corolla"] .corolla-status-row.damage-critical .corolla-status-title{fill:#e4dfd5!important;}
+.hud[data-style="corolla"] .corolla-status-row.warning-yellow .corolla-lamp{animation:civic-warning-pulse .85s ease-in-out infinite;}
+.hud[data-style="corolla"] .corolla-status-row.warning-red .corolla-lamp,
+.hud[data-style="corolla"] .corolla-status-row.damage-critical .corolla-lamp{animation:civic-warning-pulse .68s ease-in-out infinite;}
+.hud.perf-eco .corolla-lamp{animation:none!important;}
+@media(prefers-reduced-motion:reduce){.corolla-lamp{animation:none!important;}}
+
+.civic-shift-led{fill:#37363a;stroke:#827b7b;stroke-width:2;}
+#civic-shift-lights.near .civic-shift-led{fill:#f7b449;filter:drop-shadow(0 0 3px #d89026)}
+#civic-shift-lights.shift .civic-shift-led{fill:#6bd998;filter:drop-shadow(0 0 4px #62f7a2)}
+
       .analog-hide{display:none!important;}
       .hud.perf-eco .analog-status-item{animation:none!important;}
       @media(prefers-reduced-motion:reduce){.analog-status-item{animation:none!important;}}
-    </style>
+    
+/* RX-7 FD v2 — real CSS/HTML-based gauge design adapted from user's demo.
+   All RX7V2 names are isolated from Modern HUD CSS; static carbon and rims
+   use no imported fonts, remote assets or per-frame layout work. */
+.rx7v2-panel{position:absolute!important;inset:0!important;width:1000px!important;height:470px!important;display:none;pointer-events:none;font-family:'Rajdhani','Arial Narrow','Segoe UI',Arial,sans-serif}
+.hud[data-style="rx7"]:not(.compact) .rx7v2-panel{display:block}
+.rx7v2-frame{position:absolute;inset:0;overflow:visible;isolation:isolate}
+.rx7v2-frame-svg{position:absolute;inset:0;width:1000px!important;height:470px!important;opacity:var(--analog-bg-opacity,.9);z-index:0;filter:drop-shadow(0 9px 9px rgba(0,0,0,.68))}
+.rx7v2-gauge{position:absolute;box-sizing:border-box;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.08) 0%,transparent 55%),radial-gradient(circle,#141619 55%,#0a0b0d 100%);border:5px solid #2a2d32;box-shadow:0 8px 20px rgba(0,0,0,.7),inset 0 0 18px rgba(0,0,0,.95),0 0 0 1.5px rgba(255,123,41,.45);transform-origin:center center;z-index:3;color:#f3f4f6;overflow:visible}
+.rx7v2-small{width:155px;height:155px}
+.rx7v2-large{width:310px;height:310px}
+.rx7v2-medium{width:280px;height:280px}
+#rx7-turbo-group{left:76px;top:58px}
+#rx7-nitro-group{left:76px;top:238px}
+#rx7-rpm-group{left:300px;top:64px}
+#rx7-speed-group{left:645px;top:82px}
+.rx7v2-ticks,.rx7v2-labels{position:absolute;inset:0;pointer-events:none}
+.rx7v2-tick{position:absolute;top:50%;left:50%;width:2px;height:8px;border-radius:1px;background:rgba(255,255,255,.45);transform-origin:center center;margin-left:-1px;margin-top:-4px}
+.rx7v2-tick.major{width:3px;height:13px;margin-left:-1.5px;margin-top:-6.5px;background:#ff7b29;box-shadow:0 0 5px rgba(255,123,41,.75)}
+.rx7v2-tick.redzone{background:#ff2a2a;box-shadow:0 0 7px #ff2a2a}
+.rx7v2-dial-number{position:absolute;color:#f3f4f6;font-weight:700;line-height:1;white-space:nowrap;transform:translate(-50%,-50%);text-align:center;text-shadow:0 0 5px rgba(255,123,41,.3)}
+.rx7v2-title{position:absolute;left:0;right:0;text-align:center;letter-spacing:1.05px;font-weight:700;color:#f3f4f6;text-shadow:0 0 6px rgba(255,123,41,.3);z-index:2}
+.rx7v2-title small{display:block;font-size:10px;letter-spacing:.55px;color:#9ca3af;margin-top:3px}
+.rx7v2-small .rx7v2-title{top:47px;font-size:12px}
+.rx7v2-large .rx7v2-title{top:97px;font-size:20px}
+.rx7v2-large .rx7v2-title small{font-size:12px}
+.rx7v2-medium .rx7v2-title{top:87px;font-size:19px}
+.rx7v2-needle{position:absolute;bottom:50%;left:50%;width:4px;height:var(--rx7-needle-len);border-radius:4px 4px 0 0;transform:translateX(-50%) rotate(-135deg);transform-origin:50% 100%;background:linear-gradient(180deg,#ff5e3a 0%,#e11d1d 100%);box-shadow:0 0 9px rgba(255,42,42,.78);z-index:4;will-change:transform}
+.rx7v2-cap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#6b7280,#1f2937 70%,#090a0c);border:2px solid #111317;box-shadow:0 3px 8px rgba(0,0,0,.8);z-index:5}
+.rx7v2-small .rx7v2-cap{width:16px;height:16px}
+.rx7v2-glass{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.07),transparent 44%);pointer-events:none;z-index:6}
+.rx7v2-gear-box{position:absolute;left:50%;bottom:23px;transform:translateX(-50%);display:flex;align-items:center;flex-direction:column;gap:3px;z-index:7}
+.rx7v2-gear-box .rx7v2-caption,.rx7v2-odo-box .rx7v2-caption{font-size:10px;color:#aeb4ba;letter-spacing:1.15px;line-height:13px;font-weight:700}
+.rx7v2-gear-window{width:45px;height:34px;background:#0b0c0e;border:1.5px solid rgba(255,123,41,.65);border-radius:5px;overflow:hidden;box-shadow:inset 0 0 8px rgba(255,123,41,.25)}
+.rx7v2-gear-roll{display:flex;flex-direction:column;will-change:transform}
+.rx7v2-gear-digit{display:flex;align-items:center;justify-content:center;width:42px;height:32px;font-family:Consolas,'Courier New',monospace;font-size:22px;font-weight:900;color:#ff8f44;text-shadow:0 0 8px rgba(255,123,41,.68)}
+.rx7v2-odo-box{position:absolute;left:50%;bottom:31px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;z-index:7}
+.rx7v2-odo-screen{min-width:132px;height:25px;display:flex;justify-content:center;align-items:center;padding:2px 7px;border:1.5px solid rgba(255,123,41,.55);border-radius:4px;background:#090a0c;color:#ffb074;font-family:Consolas,'Courier New',monospace;font-size:12px;font-weight:700;letter-spacing:1.05px;white-space:nowrap;text-shadow:0 0 7px rgba(255,123,41,.55)}
+/* RX7_SHIFT3: three compact horizontal LED segments on the left carbon shoulder. */
+/* RX7_SHIFT3: moved right and clear of the orange trim and RPM bezel at owner preset sizes. */
+.rx7v2-shift{position:absolute;left:332px;top:55px;display:flex;gap:7px;align-items:center;z-index:4;pointer-events:none}
+.rx7v2-shift-dot{box-sizing:border-box;height:7px;width:16px;background:#27292d;border:1px solid #78645e;border-radius:3px;box-shadow:inset 0 1px 2px #070708;transition:background .1s linear,box-shadow .1s linear}
+.rx7v2-shift.near .rx7v2-shift-dot{background:#ffac47;box-shadow:0 0 5px #e68d2b}
+.rx7v2-shift.shift .rx7v2-shift-dot{background:#58e79b;border-color:#9affc5;box-shadow:0 0 7px #42ed8c}
+/* RX7_WARN: larger icon/lamp pairs, arranged as a spacious staggered arrow
+   in the free carbon shelf so they never enter the speed dial. */
+.rx7v2-warnings{position:absolute;left:560px;top:49px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;z-index:4;pointer-events:none}
+.rx7v2-warning{box-sizing:border-box;width:62px;height:34px;display:flex;align-items:center;justify-content:flex-start;gap:8px;flex:0 0 62px}
+.rx7v2-warning svg{width:32px;height:32px;fill:none;stroke:#dedee0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;flex:0 0 32px}
+.rx7v2-warning-lamp{box-sizing:border-box;width:15px;height:15px;border-radius:3px;background:#33343a;border:1px solid #858389;flex:0 0 15px}
+#rx7-tyre{margin-left:0}
+#rx7-engine{margin-left:18px}
+#rx7-susp{margin-left:36px}
+.rx7v2-warning.warning-yellow .rx7v2-warning-lamp{background:#ffd058;box-shadow:0 0 6px #e7a82a}
+.rx7v2-warning.warning-red .rx7v2-warning-lamp,.rx7v2-warning.damage-critical .rx7v2-warning-lamp{background:#ff5567;box-shadow:0 0 6px #ff3b4e}
+.rx7v2-badge{position:absolute;left:474px;bottom:56px;transform:translateX(-50%);font:700 14px Arial,sans-serif;letter-spacing:4px;color:#f3ebe6;text-shadow:0 0 7px rgba(255,123,41,.7);z-index:2}
+
+/* HONDA SI v2 — RX-7 v2 carbon assembly geometry, ivory factory instruments.
+   This replaces the visual old Civic shell without erasing its settings or
+   removing its telemetry/ODO implementation. RX-7's CSS remains unchanged. */
+.hud[data-style="civic"]:not(.compact){width:1000px;height:470px}
+.hud[data-style="civic"]:not(.compact)>#civic-panel{display:none!important}
+.hud[data-style="civic"]:not(.compact)>#civ2-panel{display:block!important}
+#civ2-panel{display:none;position:absolute!important;inset:0!important;width:1000px!important;height:470px!important;overflow:visible;pointer-events:none;font-family:Arial,'Segoe UI',sans-serif}
+#civ2-panel svg{display:block;overflow:visible}
+#civ2-panel .rx7v2-frame-svg{width:1000px!important;height:470px!important;opacity:var(--analog-bg-opacity,.9);filter:drop-shadow(0 8px 8px rgba(0,0,0,.5))}
+#civ2-panel .rx7v2-gauge{background:radial-gradient(circle at 41% 32%,#fffefa 0%,#f9f5ee 64%,#e4ded5 100%);border:5px solid #32353b;box-shadow:0 6px 16px rgba(0,0,0,.63),inset 0 0 13px rgba(90,82,76,.17),0 0 0 1.35px rgba(193,201,205,.73);color:#24252a}
+#civ2-panel .rx7v2-tick{background:#45454b}
+#civ2-panel .rx7v2-tick.major{background:#24252c;box-shadow:none}
+#civ2-panel .rx7v2-tick.redzone{background:#d43b36;box-shadow:none}
+#civ2-panel .rx7v2-dial-number{color:#22242a;text-shadow:none}
+#civ2-panel .rx7v2-title{color:#202329;text-shadow:none}
+#civ2-panel .rx7v2-title small{color:#545963}
+#civ2-panel .rx7v2-needle{background:linear-gradient(180deg,#fb7a58,#db2e2c);box-shadow:0 0 5px rgba(205,57,40,.34)}
+#civ2-panel .rx7v2-cap{background:radial-gradient(circle at 38% 30%,#787982,#25252e 75%,#11131a);border-color:#50515c}
+#civ2-panel .rx7v2-glass{background:linear-gradient(135deg,rgba(255,255,255,.2),transparent 42%)}
+#civ2-panel .rx7v2-gear-box .rx7v2-caption,#civ2-panel .rx7v2-odo-box .rx7v2-caption{color:#4f555d}
+#civ2-panel .rx7v2-gear-window,#civ2-panel .rx7v2-odo-screen{border-color:#929393;box-shadow:inset 0 0 6px rgba(248,248,255,.12)}
+#civ2-panel .rx7v2-gear-digit,#civ2-panel .rx7v2-odo-screen{color:#f9f2e5;text-shadow:none}
+#civ2-panel .rx7v2-badge{display:none}
+#civ2-panel .rx7v2-shift{left:456px;top:260px;gap:6px;z-index:8}
+#civ2-panel .rx7v2-shift-dot{width:18px;height:9px;border-radius:3px;border-color:#85858b;background:#45464a}
+#civ2-panel .rx7v2-shift.near .rx7v2-shift-dot{background:#f5a044;border-color:#e2a65e}
+#civ2-panel .rx7v2-shift.shift .rx7v2-shift-dot{background:#4fdf95;border-color:#a5fbc6}
+/* Warn icons live entirely on the upper-right carbon shelf, ending ABOVE the
+   rim of the speed dial. None of the three warning pairs intersects the dials. */
+#civ2-panel .rx7v2-warnings{left:633px;top:54px;width:226px;height:78px;display:block;z-index:6}
+/* Honda: SUSP at the blue-marked inter-dial bridge; remain clear of BOTH circular rims. */
+#civ2-panel #civ2-tyre{left:0;top:0}
+#civ2-panel #civ2-engine{left:142px;top:0}
+#civ2-panel #civ2-susp{left:-18px;top:64px}
+#civ2-panel .rx7v2-warning{position:absolute;width:55px;height:28px;display:flex;gap:7px;flex:0 0 55px;justify-content:flex-start;align-items:center;transform:none!important;margin:0!important}
+#civ2-panel .rx7v2-warning svg{display:block;width:30px;height:30px;flex:0 0 30px;stroke:#e3e5e7;stroke-width:3.4;fill:none}
+#civ2-panel .rx7v2-warning-lamp{width:12px;height:13px;flex:0 0 12px;border-radius:2.5px;background:#4b4a50;border:1px solid #929399}
+/* Single AUX instrument (two needles, identical to original Civic concept). */
+#civ2-aux-group{left:46px;top:153px;width:232px;height:232px}
+#civ2-rpm-group{left:302px;top:64px}
+#civ2-speed-group{left:645px;top:82px}
+#civ2-panel #civ2-aux-group .civ2-aux-svg{display:block;width:100%;height:100%;position:absolute;inset:0;overflow:visible}
+.civ2-aux-title{font:700 12.5px Arial,sans-serif;fill:#25252a;text-anchor:middle}
+.civ2-aux-sub{font:700 9.5px Arial,sans-serif;fill:#53565e;text-anchor:middle}
+.civ2-aux-tick{stroke:#3a3b40;stroke-width:1.9;stroke-linecap:round}
+.civ2-aux-tick.major{stroke-width:3}
+.civ2-aux-num{font:700 10px Arial,sans-serif;fill:#36373c;text-anchor:middle;dominant-baseline:central}
+.civ2-aux-needle{fill:#e14335;stroke:#ab3e36;stroke-width:.6}
+.civ2-aux-hub{fill:#33323a;stroke:#9a979b;stroke-width:2}
+.civ2-aux-si{font:italic 900 18px Arial,sans-serif;fill:#d83936;text-anchor:middle}
+/* VTEC: position follows the marked lower carbon shelf above Honda Nitro/Turbo; keep identical ON/OFF shape. */
+#civ2-vtec{position:absolute;left:170px;top:118px;z-index:7;width:89px;height:31px;border:1.5px solid #777a82;border-radius:17px;background:#292c31;color:#949aa0;display:flex;gap:4px;align-items:center;justify-content:center;font:700 13px Arial,sans-serif;letter-spacing:.7px;box-shadow:inset 0 1px 2px rgba(255,255,255,.13)}
+#civ2-vtec svg{display:none;width:15px;height:18px;stroke:#ffae69;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#civ2-vtec.is-on{border-color:#f16535;background:#4c2017;color:#ffb17c;box-shadow:0 0 8px rgba(243,104,42,.4)}
+#civ2-vtec.is-on svg{display:block}
+
+/* Real mechanical per-digit ODO rollers: old digit leaves UP, new one arrives FROM BELOW. */
+#civ2-panel .rx7v2-odo-screen{letter-spacing:0;gap:0}
+.odo-html-slot{display:inline-block;position:relative;vertical-align:middle;width:8.2px;height:16px;line-height:16px;flex:none;overflow:hidden;text-align:center}
+.odo-html-slot.odo-dot{overflow:visible}
+.odo-html-track{display:block;will-change:transform;line-height:16px}
+.odo-html-track>span{display:block;width:100%;height:16px;line-height:16px}
+.odo-html-track.rolling{animation:odo-html-roll-up 480ms cubic-bezier(.18,.67,.25,1) both}
+@keyframes odo-html-roll-up{from{transform:translateY(0)}to{transform:translateY(-16px)}}
+.hud[data-style="corolla"] #analog-odo-digits{display:none}
+.corolla-odo-svg-num{font:700 11.6px Consolas,'Courier New',monospace;fill:#faf3e9;text-anchor:middle;letter-spacing:0;}
+.corolla-odo-svg-track.rolling{animation:odo-svg-roll-up 480ms cubic-bezier(.18,.67,.25,1) both}
+@keyframes odo-svg-roll-up{from{transform:translateY(0)}to{transform:translateY(-18px)}}
+
+</style>
     <section class="hud" aria-label="NFSU2 racing HUD">
       <svg class="shell" viewBox="0 0 520 360" preserveAspectRatio="none" aria-hidden="true">
         <path class="shell-fill" d="M 25,242 C 33,144 86,72 175,38 C 249,6 379,9 465,20 Q 503,26 504,65 L 504,307 Q 502,345 463,346 L 78,346 C 47,345 24,312 25,242 Z"/>
@@ -531,8 +1029,8 @@
           <span class="icon-name">COILOVER</span>
         </div>
       </div>
-      <div class="engine-load" id="turbo-section" title="RPM-gated, smoothed engine-load indicator. Not real turbo boost pressure (bar/PSI).">
-        <div class="load-title"><span>TURBO · LOAD</span><b id="turbo-pct">—</b></div>
+      <div class="engine-load" id="turbo-section" title="Simulated Turbo PSI visual (0–3.0). Derived from engine load and RPM, not measured boost pressure.">
+        <div class="load-title"><span>TURBO · PSI</span><b id="turbo-pct">0.0</b></div>
         <div class="load-track"><div class="load-fill" id="turbo-fill"></div></div>
       </div>
       <div class="shift-strip" id="shift-strip" aria-label="Shift light: normal">
@@ -548,9 +1046,24 @@
         </div>
       </div>
 
-      <div id="analog-panel" class="analog-panel" aria-label="GT-R Analog HUD — Turbo Load, RPM and Speed">
+      <div id="analog-panel" class="analog-panel" aria-label="GT-R Analog HUD — simulated Turbo PSI, RPM and Speed">
         <svg id="analog-svg" viewBox="0 0 735 345" aria-hidden="true">
           <defs>
+            <pattern id="corolla-stripes" x="0" y="0" width="5" height="5" patternUnits="userSpaceOnUse">
+              <rect width="5" height="5" fill="#0c0c0e"/>
+              <path d="M.5 0V5" stroke="#a09a85" stroke-opacity=".12" stroke-width=".7"/>
+              <path d="M3.3 0V5" stroke="#fff5df" stroke-opacity=".038" stroke-width=".6"/>
+            </pattern>
+            <linearGradient id="corolla-metal" x1="0" y1="0" x2=".85" y2="1">
+              <stop offset="0" stop-color="#3e3837"/><stop offset=".15" stop-color="#1a181a"/>
+              <stop offset=".62" stop-color="#151518"/><stop offset="1" stop-color="#07080b"/>
+            </linearGradient>
+            <linearGradient id="corolla-nitro-frame" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#4b433a"/><stop offset="1" stop-color="#0a0a0b"/>
+            </linearGradient>
+            <radialGradient id="corolla-face" cx="40%" cy="30%" r="85%">
+              <stop offset="0" stop-color="#222427"/><stop offset=".73" stop-color="#111215"/><stop offset="1" stop-color="#060709"/>
+            </radialGradient>
             <radialGradient id="analog-face" cx="43%" cy="37%" r="72%">
               <stop offset="0" stop-color="#191617"/><stop offset=".73" stop-color="#0b0a0d"/><stop offset="1" stop-color="#070607"/>
             </radialGradient>
@@ -559,23 +1072,38 @@
               <stop offset=".43" stop-color="#ec8e33"/><stop offset=".73" stop-color="#4c2b1f"/>
               <stop offset="1" stop-color="#ffa94f"/>
             </linearGradient>
+            <clipPath id="corolla-body-clip" clipPathUnits="userSpaceOnUse"><path id="corolla-body-clip-path"/></clipPath>
+            <clipPath id="corolla-gear-roll-clip" clipPathUnits="userSpaceOnUse"><rect x="576" y="211" width="38" height="24" rx="1"/></clipPath>
           </defs>
+          <g id="corolla-assembly">
           <g class="analog-backing">
+            <g class="corolla-integrated-back" aria-hidden="true">
+              <!-- Entire vintage housing follows the dial X/Y and the three
+                   independent circle sizes. Nitro and warning lamps remain
+                   inside the silhouette; the frame itself is not a dial. -->
+              <path id="corolla-frame-shadow" fill="none" stroke="#090809" stroke-width="10"/>
+              <path id="corolla-frame-base" fill="url(#corolla-metal)" stroke="#a99178" stroke-width="1.7"/>
+              <path id="corolla-frame-grain" fill="url(#corolla-stripes)" opacity=".38"/>
+              <path id="corolla-frame-highlight" fill="none" stroke="#ceaf87" stroke-opacity=".26" stroke-width=".9"/>
+            </g>
             <g id="analog-turbo-back" transform="translate(15 0)">
               <circle class="analog-rim-shadow" cx="89" cy="236" r="78"/>
               <circle class="analog-dial-shell" cx="89" cy="236" r="74"/>
+              <circle class="corolla-dial-grain" cx="89" cy="236" r="70" fill="url(#corolla-stripes)"/>
               <circle class="analog-trim" cx="89" cy="236" r="76"/>
               <circle class="analog-inner-ring" cx="89" cy="236" r="68"/>
             </g>
             <g id="analog-rpm-back">
             <circle class="analog-rim-shadow" cx="304" cy="199" r="116"/>
             <circle class="analog-dial-shell" cx="304" cy="199" r="113"/>
+            <circle class="corolla-dial-grain" cx="304" cy="199" r="109" fill="url(#corolla-stripes)"/>
             <circle class="analog-trim" cx="304" cy="199" r="116"/>
             <circle class="analog-inner-ring" cx="304" cy="199" r="108"/>
             </g>
             <g id="analog-speed-back" transform="translate(-33 0)">
               <circle class="analog-rim-shadow" cx="595" cy="164" r="147"/>
               <circle class="analog-dial-shell" cx="595" cy="164" r="144"/>
+              <circle class="corolla-dial-grain" cx="595" cy="164" r="141" fill="url(#corolla-stripes)"/>
               <circle class="analog-trim" cx="595" cy="164" r="147"/>
               <circle class="analog-inner-ring" cx="595" cy="164" r="137"/>
             </g>
@@ -588,7 +1116,8 @@
               <circle class="analog-hub" cx="89" cy="236" r="7"/>
               <circle class="analog-hub-inner" cx="89" cy="236" r="3.3"/>
               <text class="analog-label" x="89" y="275" style="font-size:11px">TURBO</text>
-              <text class="analog-sub" x="89" y="286">LOAD</text>
+              <text class="analog-sub" x="89" y="286">PSI</text>
+              <text id="corolla-turbo-unit" x="89" y="299" class="analog-sub" style="font-size:8px;fill:#c5b49b">simulated · not measured</text>
             </g>
             <g id="analog-rpm-face">
               <g id="analog-rpm-ticks"></g>
@@ -613,7 +1142,7 @@
             </g>
             <g id="analog-speed-face" transform="translate(-33 0)">
               <g id="analog-speed-ticks"></g>
-              <path class="analog-redzone" id="analog-speed-redzone"/>
+              <g id="corolla-speed-kmh" class="corolla-only" aria-label="Inner amber 0 to 400 km/h scale"></g>
               <g id="analog-status">
                 <g id="analog-tyre" class="analog-status-item">
                   <g class="status-icon" transform="translate(553 147) scale(.56) translate(-24 -24)">${warningSymbols.tyre}</g>
@@ -631,9 +1160,17 @@
               <g id="analog-speed-needle"><path class="analog-needle-core" d="M595 164 V63"/><path class="analog-needle" d="M595 169 V63"/></g>
               <circle class="analog-hub" cx="595" cy="164" r="10"/>
               <circle class="analog-hub-inner" cx="595" cy="164" r="4.4"/>
-              <g id="analog-speed-digits"><text class="analog-speed-unit" x="595" y="195" id="analog-speed-unit">KM/H</text></g>
+              <g id="analog-speed-digits"><text class="analog-speed-unit" x="595" y="195" id="analog-speed-unit">KM/H</text>
+                <text class="corolla-only corolla-amber-label" x="595" y="178" text-anchor="middle" style="font-size:9px">km/h</text></g>
               <g id="analog-gear"><text class="analog-label" x="595" y="209" style="font-size:10px;fill:#f3a64c">GEAR</text>
-                <text class="analog-small-value" x="595" y="230" style="font-size:21px" id="analog-gear-value">1</text></g>
+                <g id="analog-gear-roller" aria-label="Rolling gear number">
+                  <g clip-path="url(#corolla-gear-roll-clip)">
+                    <g id="analog-gear-roll">
+                      <text class="analog-small-value" x="595" y="230" style="font-size:21px" id="analog-gear-value">1</text>
+                      <text class="analog-small-value" x="595" y="252" style="font-size:21px" id="analog-gear-next">2</text>
+                    </g>
+                  </g>
+                </g></g>
               <g id="analog-odometer" aria-label="Distance driven, measured by this extension">
                 <rect class="analog-odo-shell" x="531" y="239" width="128" height="35" rx="9"/>
                 <rect class="analog-odo-border" x="534" y="242" width="122" height="29" rx="6"/>
@@ -641,19 +1178,266 @@
                 <text class="analog-odo-label" x="540" y="260">ODO</text>
                 <text class="analog-odo-digits" x="650" y="261" id="analog-odo-digits">--------.-</text>
               </g>
-
+              <text class="corolla-only corolla-speed-caption" x="595" y="301" text-anchor="middle">TOYOTA COROLLA · 1986</text>
+            </g>
+            <!-- Corolla warning stack: compact, precisely in the RPM/speed inter-dial bridge.
+                 One neutral lamp per function; amber/red only on genuine warnings. -->
+            <g id="corolla-status-panel" class="corolla-only" aria-label="Corolla status lamps">
+              <rect x="404" y="105" width="94" height="166" rx="8" fill="#111215" stroke="#8c7968" stroke-width="1.2"/>
+              <rect x="406" y="107" width="90" height="162" rx="7" fill="url(#corolla-stripes)" opacity=".66"/>
+              <path d="M410 111H491" stroke="#9e8c75" stroke-width="1" opacity=".6"/>
+              <g class="corolla-status-row" id="corolla-tyre">
+                <g class="status-icon" transform="translate(416 134) scale(.34) translate(-24 -24)">${warningSymbols.tyre}</g>
+                <text id="corolla-tyre-label" class="corolla-status-title" x="428" y="137">TYRES</text>
+                <rect class="corolla-lamp" x="475" y="126" width="14" height="12" rx="2"/>
+              </g>
+              <path d="M410 153H492" stroke="#5c514a" stroke-width=".75" opacity=".72"/>
+              <g class="corolla-status-row" id="corolla-engine">
+                <g class="status-icon" transform="translate(416 183) scale(.34) translate(-24 -24)">${warningSymbols.engine}</g>
+                <text id="corolla-engine-label" class="corolla-status-title" x="428" y="186">ENGINE</text>
+                <rect class="corolla-lamp" x="475" y="175" width="14" height="12" rx="2"/>
+              </g>
+              <path d="M410 204H492" stroke="#5c514a" stroke-width=".75" opacity=".72"/>
+              <g class="corolla-status-row" id="corolla-susp">
+                <g class="status-icon" transform="translate(416 234) scale(.34) translate(-24 -24)">${warningSymbols.susp}</g>
+                <text id="corolla-susp-label" class="corolla-status-title" x="428" y="237">SUSP</text>
+                <rect class="corolla-lamp" x="475" y="226" width="14" height="12" rx="2"/>
+              </g>
+            </g>
+            <text x="449" y="292" class="corolla-only corolla-bridge-caption" text-anchor="middle">COROLLA ’86</text>
+            <!-- Nitro sits on the lower shell shelf, finishing before the speed dial. -->
+            <g id="corolla-nitro" class="corolla-only" aria-label="Nitrous charge">
+              <rect x="231" y="310" width="249" height="32" rx="8" fill="url(#corolla-nitro-frame)" stroke="#9d8169" stroke-width="1.3"/>
+              <rect x="235" y="314" width="241" height="24" rx="5" fill="none" stroke="#211f22" stroke-width=".8"/>
+              <text class="corolla-ribbon-label" x="243" y="332" style="font-size:14px">NITRO</text>
+              <rect x="311" y="316" width="147" height="20" rx="3" fill="#08090a" stroke="#bba98d" stroke-width="1"/>
+              <rect x="314" y="319" width="141" height="14" rx="1.5" fill="#3f3e3d"/>
+              <rect x="314" y="319" width="0" height="14" rx="1.5" id="corolla-nitro-fill" fill="#ffbd4b"/>
+              <g stroke="#211c19" stroke-width="1.8" opacity=".92">
+                <path d="M328 319V333 M342 319V333 M356 319V333 M370 319V333 M384 319V333 M398 319V333 M412 319V333 M426 319V333 M440 319V333"/>
+              </g>
+              <text x="465" y="331" fill="#e5d9c5" font-size="12" text-anchor="middle">N</text>
             </g>
           </g>
+          </g><!-- /corolla-assembly: shell, dials, lamps, odometer and nitro transform together -->
         </svg>
+      </div>
+<div id="civic-panel" class="civic-panel" aria-label="Honda Civic Si EM1 instrument cluster">
+ <svg id="civic-svg" viewBox="0 0 940 430" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+ <defs>
+  <!-- CIV_BG v2: high-definition, lightweight vector carbon weave and brushed bezel. -->
+  <linearGradient id="civic-shell-grad" x1="0" y1="0" x2=".1" y2="1"><stop stop-color="#34363a"/><stop offset=".16" stop-color="#202124"/><stop offset=".48" stop-color="#121317"/><stop offset=".85" stop-color="#191a1c"/><stop offset="1" stop-color="#333439"/></linearGradient>
+  <linearGradient id="civic-carbon-gloss" x1="0" y1="0" x2=".33" y2="1"><stop stop-color="#a1a2a5" stop-opacity=".13"/><stop offset=".27" stop-color="#191b1c" stop-opacity=".03"/><stop offset=".60" stop-color="#08090a" stop-opacity=".04"/><stop offset="1" stop-color="#ced0d2" stop-opacity=".15"/></linearGradient>
+  <linearGradient id="civic-bezel-outer" x1="0" y1="0" x2=".13" y2="1"><stop stop-color="#b3b6b9"/><stop offset=".13" stop-color="#66696c"/><stop offset=".33" stop-color="#222328"/><stop offset=".73" stop-color="#17191c"/><stop offset=".94" stop-color="#84878a"/><stop offset="1" stop-color="#b1b3b6"/></linearGradient>
+  <pattern id="civic-carbon-weave" width="8" height="8" patternUnits="userSpaceOnUse">
+   <rect width="8" height="8" fill="#1e2023"/>
+   <path d="M-2 2L2 -2 M0 8L8 0 M6 10L10 6" stroke="#474b4e" stroke-width="1.6" stroke-opacity=".48"/>
+   <path d="M-2 6L6 -2 M2 10L10 2" stroke="#272b2f" stroke-width="1.35" stroke-opacity=".8"/>
+   <path d="M-2 0L6 8 M2 -2L10 6" stroke="#383b3d" stroke-width="1.2" stroke-opacity=".62"/>
+   <path d="M0 2L2 0 M4 6L6 4" stroke="#8f9294" stroke-width=".55" stroke-opacity=".2"/>
+  </pattern>
+  <radialGradient id="civic-face-grad"><stop stop-color="#fff9eb"/><stop offset=".72" stop-color="#f2e9d9"/><stop offset="1" stop-color="#bfb5a5"/></radialGradient>
+  <linearGradient id="civic-rim-grad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#08080a"/><stop offset=".28" stop-color="#727071"/><stop offset=".53" stop-color="#181719"/><stop offset=".79" stop-color="#aba7a0"/><stop offset="1" stop-color="#141315"/></linearGradient>
+  <linearGradient id="civic-needle-grad" x1="0" x2="1"><stop stop-color="#ff4f2c"/><stop offset=".5" stop-color="#ff7151"/><stop offset="1" stop-color="#ac1713"/></linearGradient>
+  <linearGradient id="civic-odo-window-grad" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#060606"/><stop offset=".47" stop-color="#222023"/><stop offset="1" stop-color="#080708"/></linearGradient>
+  <pattern id="civic-grain" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1.3" r=".42" fill="#827e78" opacity=".29"/></pattern>
+  <!-- v0.9.47: calculated at runtime from actual RPM, Speed and Nitro/Turbo dial sizes/positions. -->
+  <path id="civic-body-shape" d="M24 220 Q28 91 176 78 Q310 70 334 93 Q480 -7 640 85 Q779 44 910 125 Q933 199 926 317 Q901 411 771 406 L164 407 Q25 404 24 292 Z"/>
+  <clipPath id="civic-body-clip"><use href="#civic-body-shape"/></clipPath>
+  <clipPath id="civic-odo-window-clip"><rect x="426" y="300" width="112" height="22" rx="2.5"/></clipPath>
+  <clipPath id="civic-gear-roll-clip"><rect x="466" y="276" width="32" height="17" rx="2.5"/></clipPath>
+ </defs>
+ <g id="civic-assembly">
+  <!-- All three chassis layers share the Background Opacity control.
+       Gauge faces, icons, needles, ODO and shift LEDs stay fully legible. -->
+  <g id="civic-chassis" opacity=".90">
+   <!-- One adaptive shell. All the following layers fade together with Background Opacity. -->
+   <use href="#civic-body-shape" fill="none" stroke="#050507" stroke-width="15" stroke-opacity=".48"/>
+   <use href="#civic-body-shape" fill="url(#civic-shell-grad)" stroke="#07080b" stroke-width="8"/>
+   <use href="#civic-body-shape" fill="url(#civic-carbon-weave)" opacity=".90"/>
+   <use href="#civic-body-shape" fill="url(#civic-carbon-gloss)"/>
+   <!-- Subtle inset rings only: the carbon weave now stays visible BETWEEN every dial. -->
+   <g id="civic-instrument-shadows" clip-path="url(#civic-body-clip)" fill="none" stroke="#050608" stroke-width="5.2" stroke-opacity=".55">
+     <circle id="civic-shadow-aux" cx="763" cy="238" r="149"/>
+     <circle id="civic-shadow-rpm" cx="178" cy="228" r="155"/>
+     <circle id="civic-shadow-speed" cx="482" cy="205" r="189"/>
+   </g>
+   <!-- Outer polished trim, a dark inner pinstripe, and soft lower highlight. -->
+   <use href="#civic-body-shape" fill="none" stroke="url(#civic-bezel-outer)" stroke-width="3.4"/>
+   <use href="#civic-body-shape" fill="none" stroke="#0b0e11" stroke-width="1" transform="translate(0 1)"/>
+   <use href="#civic-body-shape" fill="none" stroke="#c3c5c8" stroke-opacity=".40" stroke-width=".85" transform="translate(0 -1.2)"/>
+  </g>
+  <g clip-path="url(#civic-body-clip)" id="civic-dials-clipped">
+   <g id="civic-aux-gauge">
+    <circle cx="763" cy="238" r="144" fill="#08080a" stroke="url(#civic-rim-grad)" stroke-width="8"/><circle cx="763" cy="238" r="139" fill="none" stroke="#9d9fa0" stroke-width="1.15" opacity=".74"/>
+    <circle cx="763" cy="238" r="131" fill="url(#civic-face-grad)" stroke="#181518" stroke-width="3"/>
+    <circle cx="763" cy="238" r="130" fill="url(#civic-grain)" opacity=".45"/>
+    <text x="705" y="177" class="civic-aux-label">NITRO</text><text x="824" y="177" class="civic-aux-label">TURBO</text>
+    <text x="702" y="196" class="civic-aux-sub">F / E</text><text x="822" y="196" class="civic-aux-sub">PSI*</text>
+    <g id="civic-nitro-ticks"></g><g id="civic-turbo-ticks"></g>
+    <g id="civic-nitro-needle"><path d="M706 249 L704 244 L706 203 L708 244 Z" fill="url(#civic-needle-grad)"/><circle cx="706" cy="245" r="10" class="civic-hub"/></g>
+    <g id="civic-turbo-needle"><path d="M817 249 L815 244 L817 204 L819 244 Z" fill="url(#civic-needle-grad)"/><circle cx="817" cy="245" r="10" class="civic-hub"/></g>
+    <text id="civic-si-badge" x="763" y="320" class="civic-si-logo">Si</text>
+   </g>
+   <g id="civic-rpm-gauge">
+    <circle cx="178" cy="228" r="150" fill="#0a090a" stroke="url(#civic-rim-grad)" stroke-width="9"/><circle cx="178" cy="228" r="144" fill="none" stroke="#9d9fa0" stroke-width="1.15" opacity=".74"/>
+    <circle cx="178" cy="228" r="137" fill="url(#civic-face-grad)" stroke="#151313" stroke-width="3"/>
+    <circle cx="178" cy="228" r="135" fill="url(#civic-grain)" opacity=".47"/>
+    <g id="civic-rpm-ticks"></g><path id="civic-rpm-redzone" stroke="#d93b32" stroke-width="7" fill="none"/>
+    <text x="178" y="185" class="civic-face-label">×1000 r/min</text>
+    <g id="civic-rpm-needle"><path d="M178 239 L173 231 L178 114 L183 231 Z" fill="url(#civic-needle-grad)" stroke="#c82d22" stroke-width="1"/><circle cx="178" cy="228" r="14" class="civic-hub"/></g>
+    <text x="178" y="333" class="civic-small-label">VTEC · RPM</text>
+   </g>
+   <g id="civic-speed-gauge">
+    <circle cx="482" cy="205" r="184" fill="#070708" stroke="url(#civic-rim-grad)" stroke-width="9"/><circle cx="482" cy="205" r="178" fill="none" stroke="#a8abad" stroke-width="1.2" opacity=".8"/>
+    <circle cx="482" cy="205" r="170" fill="url(#civic-face-grad)" stroke="#151313" stroke-width="3"/>
+    <circle cx="482" cy="205" r="168" fill="url(#civic-grain)" opacity=".45"/>
+    <g id="civic-kmh-ticks"></g><g id="civic-mph-ticks"></g>
+    <text x="482" y="165" class="civic-mph-label">mph</text>
+    <g id="civic-speed-needle"><path d="M482 221 L477 211 L482 76 L487 211 Z" fill="url(#civic-needle-grad)" stroke="#be2c22" stroke-width="1"/><circle cx="482" cy="205" r="17" class="civic-hub"/></g>
+    <text x="482" y="254" class="civic-kmh-label">km/h</text>
+    <g id="civic-odometer" aria-label="Smooth rolling seven digit and tenths odometer">
+      <rect x="409" y="296" width="146" height="32" rx="4.5" fill="#141113" stroke="#524843" stroke-width="2"/>
+      <rect x="425" y="299" width="114" height="24" rx="2.5" fill="url(#civic-odo-window-grad)" stroke="#8a7870" stroke-width="1"/>
+      <g id="civic-odo-digits" clip-path="url(#civic-odo-window-clip)"></g>
+      <text x="482" y="343" class="civic-small-label">ODO · KM</text>
+    </g>
+    <g id="civic-gear" aria-label="Selected gear — rolling mechanical window">
+      <text x="482" y="269" class="civic-gear-label">GEAR</text>
+      <rect x="460" y="273" width="44" height="23" rx="3.5" fill="#141113" stroke="#524843" stroke-width="1.5"/>
+      <rect x="465" y="275" width="34" height="19" rx="2" fill="url(#civic-odo-window-grad)" stroke="#8a7870" stroke-width=".8"/>
+      <g clip-path="url(#civic-gear-roll-clip)">
+        <g id="civic-gear-roll"><text x="482" y="284.5" class="civic-gear-wheel-num" id="civic-gear-value">N</text><text x="482" y="302.5" class="civic-gear-wheel-num" id="civic-gear-next">1</text></g>
+      </g>
+    </g>
+   </g>
+
+  </g>
+  <!-- CIV_VTEC sits on the upper-left carbon bridge between RPM and Speed.
+       It is simulated from Car Feed RPM; shape and dimensions NEVER change. -->
+  <g id="civic-vtec" aria-label="VTEC simulation: off" transform="translate(271 79)">
+    <rect class="civic-vtec-pill" x="0" y="0" width="88" height="35" rx="17.5"/>
+    <path class="civic-vtec-bolt" d="M24 8 L17 19 H23 L19 28 L30 16 H24 Z"/>
+    <text id="civic-vtec-text" class="civic-vtec-text" x="44" y="23">VTEC</text>
+  </g>
+  <!-- Three small Shift Guide dots stay INSIDE the adaptive Civic housing,
+       just above the RPM dial; coordinates update with RPM size / X / Y. -->
+  <g id="civic-shift-lights" aria-label="Shift guide status lights">
+    <circle class="civic-shift-led" r="5.5"/><circle class="civic-shift-led" r="5.5"/><circle class="civic-shift-led" r="5.5"/>
+  </g>
+  <!-- The warning icons and square lamps live directly on the main housing.
+       Their coordinates follow the right instrument and its adaptive shoulder. -->
+  <g id="civic-warning-panel" aria-label="TYRES ENGINE SUSP integrated into the main Civic body; only squares illuminate">
+   <g class="civic-warning" id="civic-tyre" transform="translate(650 88)"><g class="civic-warning-icon" transform="translate(0 0) scale(.70)">${warningSymbols.tyre}</g><rect class="civic-warning-lamp" x="38" y="11" width="12" height="14" rx="2.5"/></g>
+   <g class="civic-warning" id="civic-engine" transform="translate(870 88)"><g class="civic-warning-icon" transform="translate(0 0) scale(.70)">${warningSymbols.engine}</g><rect class="civic-warning-lamp" x="38" y="11" width="12" height="14" rx="2.5"/></g>
+   <g class="civic-warning" id="civic-susp" transform="translate(760 88)"><g class="civic-warning-icon" transform="translate(0 0) scale(.70)">${warningSymbols.susp}</g><rect class="civic-warning-lamp" x="32" y="11" width="12" height="14" rx="2.5"/></g>
+  </g>
+ </g>
+ </svg>
+</div>
+
+
+      <div id="rx7-panel" class="rx7-panel rx7v2-panel" aria-label="Mazda RX-7 FD carbon analog gauges">
+        <div id="rx7-frame" class="rx7v2-frame">
+          <svg class="rx7v2-frame-svg" viewBox="0 0 1000 470" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <pattern id="rx7v2-carbon" patternUnits="userSpaceOnUse" width="8" height="8"><rect width="8" height="8" fill="#17191c"/><circle cx="1" cy="1" r="1.3" fill="#050607" opacity=".65"/><circle cx="5" cy="5" r="1.3" fill="#060708" opacity=".7"/><circle cx="2" cy="5" r=".6" fill="#585a5e" opacity=".55"/><circle cx="6" cy="1" r=".6" fill="#585a5e" opacity=".55"/></pattern>
+              <linearGradient id="rx7v2-chassis-brush" x1="0" y1="0" x2="0.7" y2="1"><stop stop-color="#5c5d63" stop-opacity=".28"/><stop offset=".23" stop-color="#111216" stop-opacity=".1"/><stop offset=".76" stop-color="#07080a" stop-opacity=".2"/><stop offset="1" stop-color="#8b7478" stop-opacity=".24"/></linearGradient>
+            </defs>
+            <path d="M61 137 C69 89 91 71 153 68 L253 67 C328 62 335 32 408 23 Q476 5 537 27 C581 46 599 43 646 31 Q716 13 820 32 L880 46 C937 59 971 96 980 169 L980 337 C974 398 944 421 893 424 L737 424 C677 438 632 431 587 418 L393 416 C328 413 278 434 223 438 L140 434 C77 429 45 401 42 348 Z" fill="#040506" stroke="#050506" stroke-width="12"/>
+            <path d="M61 137 C69 89 91 71 153 68 L253 67 C328 62 335 32 408 23 Q476 5 537 27 C581 46 599 43 646 31 Q716 13 820 32 L880 46 C937 59 971 96 980 169 L980 337 C974 398 944 421 893 424 L737 424 C677 438 632 431 587 418 L393 416 C328 413 278 434 223 438 L140 434 C77 429 45 401 42 348 Z" fill="url(#rx7v2-carbon)" stroke="#37383e" stroke-width="4"/>
+            <path d="M61 137 C69 89 91 71 153 68 L253 67 C328 62 335 32 408 23 Q476 5 537 27 C581 46 599 43 646 31 Q716 13 820 32 L880 46 C937 59 971 96 980 169 L980 337 C974 398 944 421 893 424 L737 424 C677 438 632 431 587 418 L393 416 C328 413 278 434 223 438 L140 434 C77 429 45 401 42 348 Z" fill="url(#rx7v2-chassis-brush)" stroke="#e78146" stroke-opacity=".48" stroke-width="1.8"/>
+            <path d="M92 134 Q105 91 168 88 L276 84 M352 45 Q460 10 555 49 M688 54 Q829 29 915 89" fill="none" stroke="#ff7b29" stroke-opacity=".44" stroke-width="2"/>
+            <path d="M131 422 Q257 432 370 405 M585 406 Q699 427 834 413" fill="none" stroke="#ff6c2a" stroke-opacity=".35" stroke-width="2"/>
+          </svg>
+          <div id="rx7-shift" class="rx7v2-shift" aria-label="Shift guide"><span class="rx7v2-shift-dot"></span><span class="rx7v2-shift-dot"></span><span class="rx7v2-shift-dot"></span></div>
+          <div id="rx7-warnings" class="rx7v2-warnings" aria-label="Telemetry warnings">
+            <div id="rx7-tyre" class="rx7v2-warning" role="img" aria-label="Tyres warning"><svg viewBox="0 0 48 48" aria-hidden="true">${warningSymbols.tyre}</svg><span class="rx7v2-warning-lamp" aria-hidden="true"></span></div>
+            <div id="rx7-engine" class="rx7v2-warning" role="img" aria-label="Engine warning"><svg viewBox="0 0 48 48" aria-hidden="true">${warningSymbols.engine}</svg><span class="rx7v2-warning-lamp" aria-hidden="true"></span></div>
+            <div id="rx7-susp" class="rx7v2-warning" role="img" aria-label="Suspension warning"><svg viewBox="0 0 48 48" aria-hidden="true">${warningSymbols.susp}</svg><span class="rx7v2-warning-lamp" aria-hidden="true"></span></div>
+          </div>
+          <div class="rx7v2-gauge rx7v2-small" id="rx7-turbo-group" style="--rx7-needle-len:54px">
+            <div class="rx7v2-ticks" id="rx7-turbo-ticks"></div><div class="rx7v2-labels" id="rx7-turbo-labels"></div>
+            <div class="rx7v2-title">TURBO<small>PSI</small></div>
+            <div class="rx7v2-needle" id="rx7-turbo-needle"></div><div class="rx7v2-cap"></div><div class="rx7v2-glass"></div>
+          </div>
+          <div class="rx7v2-gauge rx7v2-small" id="rx7-nitro-group" style="--rx7-needle-len:54px">
+            <div class="rx7v2-ticks" id="rx7-nitro-ticks"></div><div class="rx7v2-labels" id="rx7-nitro-labels"></div>
+            <div class="rx7v2-title">NITRO<small>%</small></div>
+            <div class="rx7v2-needle" id="rx7-nitro-needle"></div><div class="rx7v2-cap"></div><div class="rx7v2-glass"></div>
+          </div>
+          <div class="rx7v2-gauge rx7v2-large" id="rx7-rpm-group" style="--rx7-needle-len:118px">
+            <div class="rx7v2-ticks" id="rx7-rpm-ticks"></div><div class="rx7v2-labels" id="rx7-rpm-labels"></div>
+            <div class="rx7v2-title">RPM<small>×1000 r/min</small></div>
+            <div class="rx7v2-needle" id="rx7-rpm-needle"></div><div class="rx7v2-cap"></div>
+            <div id="rx7-gear" class="rx7v2-gear-box"><span class="rx7v2-caption">GEAR</span><div class="rx7v2-gear-window"><div id="rx7-gear-roll" class="rx7v2-gear-roll"><div id="rx7-gear-current" class="rx7v2-gear-digit">1</div><div id="rx7-gear-next" class="rx7v2-gear-digit">2</div></div></div></div>
+            <div class="rx7v2-glass"></div>
+          </div>
+          <div class="rx7v2-gauge rx7v2-medium" id="rx7-speed-group" style="--rx7-needle-len:105px">
+            <div class="rx7v2-ticks" id="rx7-speed-ticks"></div><div class="rx7v2-labels" id="rx7-speed-labels"></div>
+            <div class="rx7v2-title" id="rx7-speed-unit">KM/H</div>
+            <div class="rx7v2-needle" id="rx7-speed-needle"></div><div class="rx7v2-cap"></div>
+            <div id="rx7-odometer" class="rx7v2-odo-box"><span class="rx7v2-caption">ODO · KM</span><div class="rx7v2-odo-screen" id="rx7-odo-digits">00000000.0</div></div>
+            <div class="rx7v2-glass"></div>
+          </div>
+          <div class="rx7v2-badge">RX-7</div>
+        </div>
       </div>
     </section>
     <aside id="damage-alert" class="damage-alert" role="status" aria-live="off">
       <b>ENGINE DAMAGE</b><span>LIMP MODE ACTIVE</span><small id="damage-countdown">00:30</small>
     </aside>`;
+  ensureShadowStyles(shadow);
+
+  // CIV2 reuses the exact RX-7 frame shape, grid and gauge components; create
+  // a separate Honda copy with unique IDs. It does NOT change the RX-7 skin.
+  const civ2Clone=shadow.getElementById('rx7-panel').cloneNode(true);
+  civ2Clone.id='civ2-panel';
+  civ2Clone.classList.add('civic-panel');
+  civ2Clone.setAttribute('aria-label','Honda Civic Si carbon analog cluster v2');
+  civ2Clone.querySelectorAll('[id]').forEach(node=>{
+    if(node.id.startsWith('rx7-'))node.id='civ2-'+node.id.slice(4);
+    else if(node.id.startsWith('rx7v2-'))node.id='civ2v2-'+node.id.slice(6);
+  });
+  // Remap SVG carbon pattern references to their renamed private Honda defs.
+  civ2Clone.querySelectorAll('*').forEach(el=>{
+    for(const attr of [...el.attributes]){
+      if(attr.value.includes('url(#rx7v2-'))el.setAttribute(attr.name,attr.value.replaceAll('url(#rx7v2-','url(#civ2v2-'));
+    }
+  });
+  const civ2FrameSvg=civ2Clone.querySelector('.rx7v2-frame-svg');
+  // Silver-grey accents in the cloned carbon housing; original path is SAME RX7.
+  civ2FrameSvg.innerHTML=civ2FrameSvg.innerHTML
+    .replaceAll('#e78146','#b7b9be').replaceAll('#ff7b29','#d0d1d4')
+    .replaceAll('#ff6c2a','#b6bac1').replaceAll('#37383e','#515158');
+  // Keep the decorative upper-right stroke intact; Honda warnings are placed
+  // lower and farther inward so the frame styling stays untouched.
+  civ2Clone.querySelector('.rx7v2-badge').textContent='Si';
+  // Replace the two stacked mini dials with the original Civic-style dual dial.
+  const civ2Aux=civ2Clone.querySelector('#civ2-turbo-group');
+  civ2Aux.id='civ2-aux-group';
+  civ2Aux.classList.remove('rx7v2-small');
+  civ2Aux.innerHTML=`
+    <svg class="civ2-aux-svg" viewBox="0 0 205 205" aria-label="Nitro and turbo dual analog dial">
+      <text class="civ2-aux-title" x="64" y="60">NITRO</text>
+      <text class="civ2-aux-title" x="143" y="60">TURBO</text>
+      <text class="civ2-aux-sub" x="64" y="76">F / E</text>
+      <text class="civ2-aux-sub" x="143" y="76">PSI</text>
+      <g id="civ2-nitro-ticks"></g><g id="civ2-turbo-ticks"></g>
+      <g id="civ2-nitro-needle"><path class="civ2-aux-needle" d="M62 125 L64 84 L66 125 Z"/><circle class="civ2-aux-hub" cx="64" cy="125" r="7"/></g>
+      <g id="civ2-turbo-needle"><path class="civ2-aux-needle" d="M141 125 L143 84 L145 125 Z"/><circle class="civ2-aux-hub" cx="143" cy="125" r="7"/></g>
+      <text class="civ2-aux-si" x="103" y="174">Si</text>
+    </svg><div class="rx7v2-glass"></div>`;
+  civ2Clone.querySelector('#civ2-nitro-group').remove();
+  const vtecNode=document.createElement('div');vtecNode.id='civ2-vtec';
+  vtecNode.setAttribute('aria-label','VTEC simulated: off');
+  vtecNode.innerHTML='<svg viewBox="0 0 20 25" aria-hidden="true"><path d="M11 2 L4 13 H10 L7 23 L17 9 H11 Z"/></svg><span>VTEC</span>';
+  civ2Clone.querySelector('.rx7v2-frame').append(vtecNode);
+  shadow.querySelector('.hud').append(civ2Clone);
 
   const menuHost = document.createElement("div");
   menuHost.id = "nfsu2-modern-hud-menu-root";
-  menuHost.style.cssText = "position:fixed;inset:0;z-index:2147483647;pointer-events:none;display:none;";
+  setHudHostStyle(menuHost, {"position":"fixed","inset":"0","z-index":"2147483647","pointer-events":"none","display":"none"});
   const menuShadow = menuHost.attachShadow({mode:"closed"});
   menuShadow.innerHTML = `
     <style>
@@ -726,7 +1510,7 @@
       @media(max-height:650px){.panel{max-height:calc(100vh - 10px);}}
     </style>
     <section class="panel" id="settingsPanel" aria-label="Modern HUD in-game settings" role="dialog" aria-modal="false">
-      <div class="top" id="dragHandle" title="Drag menu with mouse"><h2>Modern HUD <span style="color:#72d4dd">v0.9.31</span></h2><button class="x" id="close" type="button" aria-label="Close settings">×</button></div>
+      <div class="top" id="dragHandle" title="Drag menu with mouse"><h2>Modern HUD <span style="color:#72d4dd">v0.9.47</span></h2><button class="x" id="close" type="button" aria-label="Close settings">×</button></div>
       <p>Drag the header to move the menu. Drag the bottom-left corner to resize its width and height. Changes apply live and are saved.</p>
       <div class="sections-grid" id="sectionsGrid">
       <fieldset><legend>HUD</legend>
@@ -734,27 +1518,42 @@
         <label for="hudMode" style="display:block;margin:6px 0">Display mode</label>
         <select id="hudMode"><option value="full">Full HUD</option><option value="cockpit">Cockpit (compact)</option></select>
       </fieldset>
-      <fieldset><legend>HUD Style — ready for future skins</legend>
-        <select id="hudStyle" aria-label="HUD style"><option value="modern">Modern HUD (default)</option><option value="analog">GT-R Analog HUD — orange / red / white</option><option value="old" disabled>Old Style HUD (coming later)</option><option value="retro2000" disabled>2000s HUD (coming later)</option></select>
-        <div class="help">Modern is the default. GT-R Analog has three needles: TURBO LOAD (0–3 dial, left), RPM (centre), and SPEED (right, 0–400 KM/H or 0–250 MPH). TYRES, ENGINE and SUSP are around the centre; ODO appears at the bottom. Modern-only color settings are hidden for GT-R. Turbo reflects engine load, not measured boost pressure.</div>
+      <fieldset id="keyboardShortcutSettings"><legend>Keyboard Shortcuts — TKL / Numpad</legend>
+        <div class="help">Click Change, then press your key or combination. For letters/digits, use Ctrl or Alt so driving and chat stay safe. Escape cancels. Shortcut changes apply immediately and are included in SAVE ALL / Export Settings JSON.</div>
+        <div class="space"><span>Open / close HUD menu</span><strong id="shortcutMenuText">Numpad +</strong></div>
+        <button type="button" id="shortcutMenuBind" style="width:100%;margin:4px 0 9px">Change menu shortcut</button>
+        <div class="space"><span>Toggle HUD ON / OFF</span><strong id="shortcutToggleHudText">Numpad −</strong></div>
+        <button type="button" id="shortcutToggleHudBind" style="width:100%;margin:4px 0 9px">Change HUD toggle shortcut</button>
+        <div class="space"><span>SAVE ALL (HUD + ODO)</span><strong id="shortcutSaveAllText">Numpad *</strong></div>
+        <button type="button" id="shortcutSaveAllBind" style="width:100%;margin:4px 0 9px">Change SAVE ALL shortcut</button>
+        <button type="button" id="shortcutResetDefaults" style="width:100%;margin-top:5px">Reset Shortcuts to Defaults</button>
+        <div class="help">TKL backup for opening this menu: <strong>Ctrl + Alt + M</strong>. Reset changes only keyboard shortcuts — never HUD layout or mileage.</div>
+      </fieldset>
+      <fieldset><legend>HUD Style — five dashboard styles</legend>
+        <select id="hudStyle" aria-label="HUD style"><option value="modern">Modern Digital HUD (default)</option><option value="analog">GT-R Analog HUD — orange / red / white</option><option value="corolla">Toyota Corolla Retro (1986) — white / amber / red</option><option value="civic">Honda Civic Si EM1 (2000) — ivory / red</option><option value="rx7">Mazda RX-7 FD — rotary black / orange / red</option><option value="old" disabled>Old Style HUD (coming later)</option><option value="retro2000" disabled>2000s HUD (coming later)</option></select>
+        <div class="help">Manual HUD selection never changes the car or ODO. Choosing a car in the ODO list loads its linked style (factory defaults: Skyline=GT-R, Corolla=Retro, Civic=Civic Si, RX-7=RX-7 Analog, others=Modern). Use Assign current HUD to car to save a personalized link for any model. Dynamic RPM is based on the game Car Feed. No automatic game car identification yet.</div>
       </fieldset>
       <fieldset><legend>Speedometer</legend>
         <label for="speedUnit" style="display:block;margin:5px 0">Speed units</label>
         <select id="speedUnit"><option value="kmh">KM/H — kilometres per hour</option><option value="mph">MPH — miles per hour</option></select>
+        <div id="speedDepthSettings">
         <label for="speedDepth" style="display:block;margin:10px 0 5px">Speed digits depth</label>
         <select id="speedDepth"><option value="off">Flat — no effects</option><option value="subtle">Subtle 3D — visibly embossed (default)</option><option value="medium">Strong 3D — raised metallic digits</option></select>
         <div class="speed-depth-demo" id="depthDemo" data-depth="subtle"><span class="demo-speed">185</span></div>
         <div class="help">Live preview above. Light CSS-only depth; no game physics change.</div>
+        </div>
       </fieldset>
       <fieldset><legend>Position / Size / Transparency</legend>
         <label for="hudPosition">HUD Position</label>
         <select id="hudPosition"><option value="bottom-right">Bottom Right</option><option value="bottom-left">Bottom Left</option><option value="top-right">Top Right</option><option value="top-left">Top Left</option></select>
         <div class="space" style="margin-top:12px"><label for="hudScale">HUD Scale</label><span class="value" id="hudScaleValue">100%</span></div>
-        <input type="range" id="hudScale" min="70" max="130" step="5">
+        <input type="range" id="hudScale" min="10" max="500" step="1" aria-label="HUD scale percentage slider">
+        <div class="space" style="margin:8px 0 0"><label for="hudScaleNumber">Custom HUD scale (%)</label><input type="number" id="hudScaleNumber" min="10" max="500" step="1" value="100" aria-label="Precise HUD scale percentage"></div>
+        <div class="help">10–500% (or type the precise number). Modern, GT-R Analog, Corolla and Civic each remember their own size. Saved in SAVE ALL / JSON. Frame and dial sizes remain separate.</div>
         <div class="space"><label for="hudBackgroundOpacity">Background opacity</label><span class="value" id="hudBackgroundOpacityValue">90%</span></div>
         <input type="range" id="hudBackgroundOpacity" min="0" max="100" step="5">
-        <div class="space"><label for="hudTextOpacity">Text / numbers opacity</label><span class="value" id="hudTextOpacityValue">100%</span></div>
-        <input type="range" id="hudTextOpacity" min="0" max="100" step="5">
+        <div id="hudTextOpacityControls"><div class="space"><label for="hudTextOpacity">Text / numbers opacity</label><span class="value" id="hudTextOpacityValue">100%</span></div>
+        <input type="range" id="hudTextOpacity" min="0" max="100" step="5"></div>
         <label for="hudUpdateFps" style="display:block;margin:7px 0 5px">HUD update rate (FPS-friendly)</label>
         <select id="hudUpdateFps"><option value="10">10 Hz (lowest use)</option><option value="15">15 Hz (Eco)</option><option value="20">20 Hz (Default)</option><option value="25">25 Hz (Balanced)</option><option value="30">30 Hz (Smoother)</option></select>
         <label for="hudPerformanceMode" style="display:block;margin:10px 0 5px">Performance 2.0</label>
@@ -809,17 +1608,54 @@
       </fieldset>
       <fieldset id="odometerSettings"><legend>Odometer — Mileage by Car</legend>
         <div class="help">Choose the car you are currently driving. Each model has its OWN stored mileage. Switching cars never resets the others. Selection is manual; the game does not send a verified car model in the Car Feed.</div>
-        <label for="odometerCarSelect" style="display:block;margin:9px 0 5px">Current vehicle (31 car models)</label>
+        <label for="odometerCarSelect" style="display:block;margin:9px 0 5px">Current vehicle (31 car models) — manual override</label>
         <select id="odometerCarSelect" aria-label="Select vehicle for mileage">
           <option value="">— Select a car first —</option><option value="ACURA_RSX">Acura RSX Type-S</option><option value="AUDI_A3">Audi A3 3.2 quattro</option><option value="AUDI_TT">Audi TT 3.2 quattro</option><option value="CADILLAC_ESCALADE">Cadillac Escalade</option><option value="FORD_FOCUS">Ford Focus ZX3</option><option value="FORD_MUSTANG">Ford Mustang GT</option><option value="HONDA_CIVIC">Honda Civic Si</option><option value="HUMMER_H2">Hummer H2</option><option value="HYUNDAI_TIBURON">Hyundai Tiburon GT</option><option value="INFINITI_G35">Infiniti G35</option><option value="LEXUS_IS300">Lexus IS 300</option><option value="LINCOLN_NAVIGATOR">Lincoln Navigator</option><option value="MAZDA_MX5">Mazda MX-5 / Miata</option><option value="MAZDA_RX7">Mazda RX-7</option><option value="MAZDA_RX8">Mazda RX-8</option><option value="MITSUBISHI_3000GT">Mitsubishi 3000GT</option><option value="MITSUBISHI_ECLIPSE">Mitsubishi Eclipse GSX</option><option value="MITSUBISHI_EVO8">Mitsubishi Lancer Evolution VIII</option><option value="NISSAN_240SX">Nissan 240SX</option><option value="NISSAN_350Z">Nissan 350Z</option><option value="NISSAN_SENTRA">Nissan Sentra SE-R Spec V</option><option value="NISSAN_SKYLINE">Nissan Skyline GT-R R34</option><option value="PEUGEOT_106">Peugeot 106</option><option value="PEUGEOT_206">Peugeot 206</option><option value="PONTIAC_GTO">Pontiac GTO</option><option value="SUBARU_IMPREZA">Subaru Impreza WRX STi</option><option value="TOYOTA_CELICA">Toyota Celica GT-S</option><option value="TOYOTA_COROLLA">Toyota Corolla GT-S</option><option value="TOYOTA_SUPRA">Toyota Supra</option><option value="VAUXHALL_CORSA">Vauxhall Corsa 1.8</option><option value="VOLKSWAGEN_GOLF">Volkswagen Golf GTI</option></select>
-        <label class="line"><input type="checkbox" id="analogOdometerEnabled"> Show ODO in Analog &amp; Modern HUD</label>
+        <div class="help">Choosing a car loads its ODO and assigned HUD automatically. Skyline defaults to GT-R Analog, Corolla to Corolla Retro, Civic to Civic Si; other models default to Modern. To override the HUD temporarily, select any HUD Style above — the car and ODO stay unchanged.</div>
+        <div class="space"><span>HUD assigned to this model</span><span class="value" id="carAssignedHudValue">Select a car</span></div>
+        <div class="two"><button id="carAssignCurrentHud" type="button">Assign current HUD to car</button><button id="carResetAssignedHud" type="button">Reset car's HUD</button></div>
+        <label class="line"><input type="checkbox" id="analogOdometerEnabled"> Show ODO in all HUD styles</label>
         <div class="space"><span>Selected car mileage</span><span class="value" id="odometerMenuValue">No car selected</span></div>
         <div class="two"><button id="odometerSaveNow" type="button">Save mileage now</button><button id="odometerReset" type="button">Reset selected car</button></div>
-        <div class="help" id="odometerStatus" role="status">Each 0.1 km is 100 m. Max 9,999,999.9 km. Autosave after EVERY 100 m (0.1 km) and every 30 seconds while driving. Press Numpad * to save mileage AND all active HUD settings.</div>
+        <div class="help" id="odometerStatus" role="status">Each 0.1 km is 100 m. Max 9,999,999.9 km. Autosave after EVERY 100 m (0.1 km) and every 30 seconds while driving. Use your SAVE ALL shortcut to save mileage AND all active HUD settings.</div>
         <div class="help">Cars of the same model share one counter (e.g. two Skylines). Previous v0.9.27 mileage is preserved under "Previous ODO (unassigned)". Mileage is saved in the extension, not in the game's own save.</div>
       </fieldset>
-      <fieldset id="analogPositionSettings"><legend>GT-R Analog — Full-Screen Circle Position</legend>
-        <div class="help">Move Turbo, RPM and Speed circles independently anywhere on the screen. Sliders automatically cover your entire display, and the number boxes allow 1 px precision. Positions are relative to the original layout and saved in your profiles. The original default layout and circle sizes are unchanged.</div>
+      <fieldset id="corollaFrameSettings"><legend>Corolla — Complete Frame &amp; Instruments</legend>
+        <div class="help">Move or zoom the WHOLE Toyota Corolla 1986 dashboard together: chassis, Turbo, RPM, Speed, warning lamps, Nitro and ODO. Each circle stays inside the connected frame; individual Corolla circle X/Y is limited to ±65 px horizontally and ±55 px vertically. GT-R is unaffected.</div>
+        <div class="space"><label for="corollaFrameScalePct">Whole frame + gauges — Scale</label><span class="value" id="corollaFrameScalePctValue">100%</span></div>
+        <input type="range" id="corollaFrameScalePct" min="50" max="175" step="5">
+        <div class="space"><label for="corollaFrameOffsetX">Whole frame — X offset</label><span class="value" id="corollaFrameOffsetXValue">0 px</span></div>
+        <input type="range" id="corollaFrameOffsetX" min="-600" max="600" step="1">
+        <div class="space"><label for="corollaFrameOffsetY">Whole frame — Y offset</label><span class="value" id="corollaFrameOffsetYValue">0 px</span></div>
+        <input type="range" id="corollaFrameOffsetY" min="-600" max="600" step="1">
+        <button id="corollaFrameReset" type="button" style="width:100%;margin-top:8px">Reset Whole Frame Scale &amp; X/Y</button>
+      </fieldset>
+      <fieldset id="civicFrameSettings"><legend>Honda Civic Si — Whole Frame &amp; Instruments</legend>
+        <div class="help">Zoom and move the complete Civic Si instrument cluster. The main black chassis now follows the sizes and positions of RPM (left), Speed (center) and Nitro/Turbo (right), keeping a slim margin. TYRES / ENGINE / SUSP are built into the chassis (no separate box).</div>
+        <div class="space"><label for="civicFrameScalePct">Whole frame + gauges — Scale</label><span class="value" id="civicFrameScalePctValue">100%</span></div>
+        <input type="range" id="civicFrameScalePct" min="50" max="175" step="5">
+        <div class="space"><label for="civicFrameOffsetX">Whole frame — X offset</label><span class="value" id="civicFrameOffsetXValue">0 px</span></div>
+        <input type="range" id="civicFrameOffsetX" min="-600" max="600" step="1">
+        <div class="space"><label for="civicFrameOffsetY">Whole frame — Y offset</label><span class="value" id="civicFrameOffsetYValue">0 px</span></div>
+        <input type="range" id="civicFrameOffsetY" min="-600" max="600" step="1">
+        <button id="civicFrameReset" type="button" style="width:100%;margin-top:8px">Reset Civic Frame Scale &amp; X/Y</button>
+      </fieldset>
+      <fieldset id="rx7NitroSettings"><legend>Mazda RX-7 — Nitro Gauge Independent Position</legend>
+        <div class="help">Turbo, RPM and Speed use the gauge position/size controls below. Nitro has its own X/Y and size here; all four gauges are saved independently.</div>
+        <div class="space"><label for="rx7NitroOffsetX">Nitro X offset</label><span class="value" id="rx7NitroOffsetXValue">0 px</span></div><input type="range" id="rx7NitroOffsetX" min="-200" max="200" step="1">
+        <div class="space"><label for="rx7NitroOffsetY">Nitro Y offset</label><span class="value" id="rx7NitroOffsetYValue">0 px</span></div><input type="range" id="rx7NitroOffsetY" min="-200" max="200" step="1">
+        <div class="space"><label for="rx7NitroSizePct">Nitro circle size</label><span class="value" id="rx7NitroSizePctValue">100%</span></div><input type="range" id="rx7NitroSizePct" min="50" max="160" step="5">
+        <button id="rx7NitroReset" type="button" style="width:100%;margin-top:8px">Reset RX-7 Nitro position and size</button>
+      </fieldset>
+      <fieldset id="analogPositionSettings"><legend id="analogPositionLegend">Analog / Corolla / Civic — Circle Size &amp; Position</legend>
+        <div class="help">Each skin has independent sizes (50–160%) and X/Y. On RX-7 these three controls move TURBO, RPM and SPEED; the separate NITRO controls are above. Civic uses zero-based X/Y factory positions. Corolla local positions are constrained to the shared frame. SAVE ALL and CURRENT JSON preserve settings.</div>
+        <div class="space"><label for="analogTurboSizePct">Turbo circle — Size</label><span class="value" id="analogTurboSizePctValue">100%</span></div>
+        <input type="range" id="analogTurboSizePct" min="50" max="160" step="5">
+        <div class="space"><label for="analogRpmSizePct">RPM circle — Size</label><span class="value" id="analogRpmSizePctValue">100%</span></div>
+        <input type="range" id="analogRpmSizePct" min="50" max="160" step="5">
+        <div class="space"><label for="analogSpeedSizePct">Speed circle — Size</label><span class="value" id="analogSpeedSizePctValue">100%</span></div>
+        <input type="range" id="analogSpeedSizePct" min="50" max="160" step="5">
+        <button id="analogResetSizes" type="button" style="width:100%;margin:8px 0 12px">Reset Circle Sizes to 100%</button>
         <div class="space"><label for="analogTurboOffsetX">Turbo circle — Horizontal (X/Y)</label><span class="value" id="analogTurboOffsetXValue">0 px</span></div>
         <input type="range" id="analogTurboOffsetX" min="-3000" max="3000" step="1">
         <div class="space" style="margin-top:3px"><label for="analogTurboOffsetXNumber" style="font-size:11px">Precise offset (px)</label><input type="number" id="analogTurboOffsetXNumber" min="-20000" max="20000" step="1" value="0" style="width:95px"></div>
@@ -841,7 +1677,7 @@
         <button id="analogResetPositions" type="button" style="width:100%;margin-top:10px">Reset Analog Circle Positions to Defaults</button>
       </fieldset>
       <fieldset><legend>HUD Profiles — Save / Download / Load</legend>
-        <div class="help">Auto Save stores ALL current HUD settings. A saved profile is a separate snapshot: edit it, then press Update selected to replace its old values. Download Current exports the LIVE settings, while Download Selected exports a saved snapshot.</div>
+        <div class="help">SAVE ALL stores both layouts, frame scale and X/Y, independent dial sizes, per-car HUD links and ODO mileage. Download CURRENT exports settings and car/HUD links (NOT mileage) to JSON. Download Selected exports SAVED visual settings.</div>
         <label for="profileSelect" style="display:block;margin:7px 0 5px">Choose a profile</label>
         <select id="profileSelect"></select>
         <div class="two" style="margin-top:8px"><button id="profileApply" type="button">Apply selected</button><button id="profileDownload" type="button">Download selected .json</button></div>
@@ -919,16 +1755,18 @@
         <div class="space"><label for="impactRedThreshold">Strong impact</label><span class="value" id="impactRedThresholdValue">9.0 m/s</span></div>
         <input id="impactRedThreshold" type="range" min="3" max="12" step="0.5">
       </fieldset>
-      <fieldset><legend>Turbo · Load — smooth response</legend>
-        <div class="help">This is an RPM-gated engine-load visualization, not measured turbo boost or PSI. It does not change the game's turbo or driving physics.</div>
+      <fieldset><legend>Turbo PSI — rise &amp; release</legend>
+        <div class="help">Visual 0–3.0 PSI-style scale, estimated from RPM and engine load (NOT real measured turbo pressure). Default rise: 1.0 second from 0 to 3.0. Default release: 0.2 seconds from 3.0 to 0. This does not change the game's turbo or physics.</div>
         <label for="turboStartMode" style="display:block;margin:8px 0 5px">Activation RPM</label>
         <select id="turboStartMode"><option value="default">Default — 1,000 RPM</option><option value="custom">Custom RPM</option></select>
         <div class="space" style="margin-top:11px"><label for="turboStartRpm">Custom turbo start</label><span class="value" id="turboStartRpmValue">1,000 RPM</span></div>
         <input id="turboStartRpm" type="range" min="800" max="10000" step="100">
         <div class="space"><label for="turboStartRpmInput">Exact start RPM</label><input id="turboStartRpmInput" type="number" min="800" max="10000" step="50" value="1000"></div>
-        <div class="space"><label for="turboResponseMs">Turbo gauge response</label><span class="value" id="turboResponseMsValue">0.3 s</span></div>
+        <div class="space"><label for="turboResponseMs">Turbo rise time (0 to 3.0)</label><span class="value" id="turboResponseMsValue">1.0 s</span></div>
         <input id="turboResponseMs" type="range" min="200" max="2200" step="100">
-        <div class="help">The bar begins filling above the selected RPM and fades in smoothly as engine load rises.</div>
+        <div class="space"><label for="turboReleaseMs">Turbo release time (3.0 to 0)</label><span class="value" id="turboReleaseMsValue">0.2 s</span></div>
+        <input id="turboReleaseMs" type="range" min="100" max="1500" step="50">
+        <div class="help">The gauge follows engine load after its selected activation RPM; it cannot read the throttle pedal or actual turbo pressure directly.</div>
       </fieldset>
       <fieldset><legend>Shift Light (existing v0.3.1)</legend>
         <label for="shiftMode" style="display:block;margin-bottom:5px">Gearbox mode</label>
@@ -938,11 +1776,12 @@
       </fieldset>
       </div><!-- end responsive columns -->
       <div class="bottom"><button id="reset" type="button">Reset Defaults</button><button id="done" type="button">Close Menu</button></div>
-      <div class="status" id="status" role="status">Settings auto-save in this browser.</div>
-      <div class="save-wrapper" style="margin:6px 0"><button id="saveNow" type="button" style="width:100%">Save current settings now</button></div>
+      <div class="status" id="status" role="status">Changes auto-save. SAVE ALL stores both analog layouts, whole-frame X/Y/scale, circle sizes, per-car HUD assignments and all ODO mileage.</div>
+      <div class="save-wrapper" style="margin:6px 0"><button id="saveNow" type="button" style="width:100%">SAVE ALL — HUD, sizes, positions &amp; ODO</button></div>
       <div class="hint"><span class="kbd">Num +</span> Open / close settings · <span class="kbd">Num −</span> Hide / show WHOLE custom Speedometer HUD · <span class="kbd">Num *</span> SAVE ALL settings + selected vehicle mileage<br>Original game HUD is controlled separately in NFSU2.xyz settings.</div>
           <div id="menuResizeGrip" class="resize-grip" title="Drag to resize the menu" aria-label="Resize settings menu" role="separator">↙</div>
     </section>`;
+  ensureShadowStyles(menuShadow);
 
   const get = (id) => shadow.getElementById(id);
   const mget = (id) => menuShadow.getElementById(id);
@@ -963,14 +1802,678 @@
   const analogUi = {
     panel:aget("analog-panel"),speedTicks:aget("analog-speed-ticks"),rpmTicks:aget("analog-rpm-ticks"),turboTicks:aget("analog-turbo-ticks"),
     speedNeedle:aget("analog-speed-needle"),rpmNeedle:aget("analog-rpm-needle"),turboNeedle:aget("analog-turbo-needle"),
-    speedUnit:aget("analog-speed-unit"),gear:aget("analog-gear-value"),
+    speedUnit:aget("analog-speed-unit"),gear:aget("analog-gear-value"),gearNext:aget("analog-gear-next"),
+    gearRoll:aget("analog-gear-roll"),
     nitroText:aget("analog-nitro-text"),nitroA:aget("analog-nitro-a"),nitroB:aget("analog-nitro-b"),
-    speedRed:aget("analog-speed-redzone"),rpmRed:aget("analog-rpm-redzone"),turboRed:aget("analog-turbo-redzone"),
+    rpmRed:aget("analog-rpm-redzone"),turboRed:aget("analog-turbo-redzone"),
     turboBack:aget("analog-turbo-back"),rpmBack:aget("analog-rpm-back"),speedBack:aget("analog-speed-back"),
     turboFace:aget("analog-turbo-face"),rpmFace:aget("analog-rpm-face"),speedFace:aget("analog-speed-face"),
     shift:aget("analog-shift"),tyre:aget("analog-tyre"),engine:aget("analog-engine"),susp:aget("analog-susp"),
-    odo:aget("analog-odo-digits"),odoGroup:aget("analog-odometer")
+    odo:aget("analog-odo-digits"),odoGroup:aget("analog-odometer"),corollaKmh:aget("corolla-speed-kmh"),
+    corollaNitroFill:aget("corolla-nitro-fill"),corollaStatus:aget("corolla-status-panel"),
+    corollaFrameShadow:aget("corolla-frame-shadow"),corollaFrameBase:aget("corolla-frame-base"),
+    corollaFrameGrain:aget("corolla-frame-grain"),corollaFrameHighlight:aget("corolla-frame-highlight"),
+    analogSvg:aget("analog-svg"),corollaAssembly:aget("corolla-assembly"),
+    corollaClipPath:aget("corolla-body-clip-path"),
+    corollaStatusRows:{tyre:aget("corolla-tyre"),engine:aget("corolla-engine"),susp:aget("corolla-susp")}
   };
+  // Civic EM1 vector cluster: self-contained gauges, independent from GT-R and Corolla.
+  const civicGet = id => shadow.getElementById(id);
+  const civicUi = {
+    panel:civicGet("civic-panel"), assembly:civicGet("civic-assembly"),
+    bodyShape:civicGet("civic-body-shape"), siBadge:civicGet("civic-si-badge"),
+    rpm:civicGet("civic-rpm-gauge"), speed:civicGet("civic-speed-gauge"), aux:civicGet("civic-aux-gauge"),
+    rpmTicks:civicGet("civic-rpm-ticks"), speedTicks:civicGet("civic-kmh-ticks"), mphTicks:civicGet("civic-mph-ticks"),
+    nitroTicks:civicGet("civic-nitro-ticks"), turboTicks:civicGet("civic-turbo-ticks"),
+    rpmNeedle:civicGet("civic-rpm-needle"),speedNeedle:civicGet("civic-speed-needle"),
+    nitroNeedle:civicGet("civic-nitro-needle"),turboNeedle:civicGet("civic-turbo-needle"),
+    redzone:civicGet("civic-rpm-redzone"),gear:civicGet("civic-gear-value"),gearNext:civicGet("civic-gear-next"),gearRoll:civicGet("civic-gear-roll"),odo:civicGet("civic-odo-digits"),
+    icons:{tyre:civicGet("civic-tyre"),engine:civicGet("civic-engine"),susp:civicGet("civic-susp")},
+    vtec:civicGet("civic-vtec"),vtecText:civicGet("civic-vtec-text")
+  };
+  // Quick code names for future Civic Si requests / maintenance:
+  // CIV_WARN_ROW = full upper warning row
+  // CIV_TYR = TYRES icon + lamp
+  // CIV_SUS = SUSP icon + lamp
+  // CIV_ENG = ENGINE icon + lamp
+  // CIV_SHIFT3 = three shift LEDs
+  // CIV_GEAR = rolling gear window / label
+  // CIV_ODO = rolling odometer window
+  // CIV_AUX = right Nitro / Turbo dual gauge
+
+
+  // RX7V2: animated HTML/CSS gauges faithfully adapted from the supplied demo.
+  // We keep the existing Car Feed, speed units, persistence, gear roll and telemetry.
+  const rx7Get=id=>shadow.getElementById(id);
+  const rx7Ui={
+    panel:rx7Get("rx7-panel"),speedTicks:rx7Get("rx7-speed-ticks"),rpmTicks:rx7Get("rx7-rpm-ticks"),
+    turboTicks:rx7Get("rx7-turbo-ticks"),nitroTicks:rx7Get("rx7-nitro-ticks"),
+    speedNeedle:rx7Get("rx7-speed-needle"),rpmNeedle:rx7Get("rx7-rpm-needle"),
+    turboNeedle:rx7Get("rx7-turbo-needle"),nitroNeedle:rx7Get("rx7-nitro-needle"),
+    speedUnit:rx7Get("rx7-speed-unit"),odo:rx7Get("rx7-odo-digits"),
+    gearCurrent:rx7Get("rx7-gear-current"),gearNext:rx7Get("rx7-gear-next"),
+    gearRoll:rx7Get("rx7-gear-roll"),shift:rx7Get("rx7-shift"),
+    groups:{turbo:rx7Get("rx7-turbo-group"),nitro:rx7Get("rx7-nitro-group"),rpm:rx7Get("rx7-rpm-group"),speed:rx7Get("rx7-speed-group")},
+    warnings:rx7Get("rx7-warnings"),icons:{tyre:rx7Get("rx7-tyre"),engine:rx7Get("rx7-engine"),susp:rx7Get("rx7-susp")}
+  };
+
+  // Honda RX7-form-factor UI; the old civic SVG still exists as a compatibility
+  // layer for old profiles, but is not shown when Honda is selected.
+  const civ2Get=id=>shadow.getElementById(id);
+  const civ2Ui={
+    panel:civ2Get('civ2-panel'),frame:civ2Get('civ2-panel').querySelector('.rx7v2-frame'),
+    aux:civ2Get('civ2-aux-group'),rpm:civ2Get('civ2-rpm-group'),speed:civ2Get('civ2-speed-group'),
+    rpmTicks:civ2Get('civ2-rpm-ticks'),rpmLabels:civ2Get('civ2-rpm-labels'),
+    speedTicks:civ2Get('civ2-speed-ticks'),speedLabels:civ2Get('civ2-speed-labels'),
+    nitroTicks:civ2Get('civ2-nitro-ticks'),turboTicks:civ2Get('civ2-turbo-ticks'),
+    rpmNeedle:civ2Get('civ2-rpm-needle'),speedNeedle:civ2Get('civ2-speed-needle'),
+    nitroNeedle:civ2Get('civ2-nitro-needle'),turboNeedle:civ2Get('civ2-turbo-needle'),
+    gearCurrent:civ2Get('civ2-gear-current'),gearNext:civ2Get('civ2-gear-next'),gearRoll:civ2Get('civ2-gear-roll'),
+    odo:civ2Get('civ2-odo-digits'),vtec:civ2Get('civ2-vtec'),shift:civ2Get('civ2-shift'),
+    speedUnit:civ2Get('civ2-speed-unit'),warnings:civ2Get('civ2-warnings'),
+    icons:{tyre:civ2Get('civ2-tyre'),engine:civ2Get('civ2-engine'),susp:civ2Get('civ2-susp')}
+  };
+  // Keep tick labels tucked away from the central label and windows.
+  const civ2Config={
+    rpm:{max:10,major:1,div:5,radius:116,fontSize:18,needleRadius:143},
+    speed:{max:400,major:40,div:4,radius:94,fontSize:15,needleRadius:126}
+  };
+  function civ2DrawDial(key){
+    const cfg=civ2Config[key],ticks=civ2Ui[key+'Ticks'],labels=civ2Ui[key+'Labels'];
+    const size=key==='rpm'?310:280,center=size/2,majorCount=Math.round(cfg.max/cfg.major),total=majorCount*cfg.div;
+    const tf=document.createDocumentFragment(),lf=document.createDocumentFragment();
+    for(let i=0;i<=total;i++){
+      const fraction=i/total,deg=-135+fraction*270;
+      const major=i%cfg.div===0,tick=document.createElement('span');
+      tick.className='rx7v2-tick'+(major?' major':'')+(key==='rpm'&&fraction>=.8?' redzone':'');
+      tick.style.transform=`rotate(${deg}deg) translateY(${-cfg.needleRadius}px)`;
+      tf.append(tick);
+      if(major){
+        const rad=deg*Math.PI/180,label=document.createElement('span');
+        label.className='rx7v2-dial-number';label.textContent=String(Math.round(fraction*cfg.max));
+        label.style.left=`${center+cfg.radius*Math.sin(rad)}px`;
+        label.style.top=`${center-cfg.radius*Math.cos(rad)}px`;
+        label.style.fontSize=`${cfg.fontSize}px`;lf.append(label);
+      }
+    }
+    ticks.replaceChildren(tf);labels.replaceChildren(lf);
+  }
+  let civ2SpeedKey='',civ2RpmKey='',civ2LastGear=null,civ2GearFrame=0;
+  /* Individual ODO drums. A tenth-of-km increment rolls each changed numeral
+     from bottom to top; model switches / resets render immediately. */
+  const ODO_ROLL_MS=480;
+  const createHtmlOdoDrums=container=>{
+    const slots=[];
+    container.replaceChildren();
+    for(let i=0;i<10;i++){
+      const slot=document.createElement('span');
+      slot.className='odo-html-slot'+(i===8?' odo-dot':'');
+      const track=document.createElement('span');track.className='odo-html-track';
+      const cell=document.createElement('span');cell.textContent=i===8?'.':'-';
+      track.append(cell);slot.append(track);container.append(slot);slots.push({track,cell,timer:0});
+    }
+    return {slots,last:'',lastTenths:null,lastCar:null};
+  };
+  const hondaOdoDrum=createHtmlOdoDrums(civ2Ui.odo);
+  const svgOdoNS='http://www.w3.org/2000/svg';
+  const svgOdoEl=(tag,attrs={})=>{
+    const el=document.createElementNS(svgOdoNS,tag);
+    for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));
+    return el;
+  };
+  const createCorollaOdoDrums=()=>{
+    const def=svgOdoEl('defs'),roller=svgOdoEl('g',{id:'corolla-odo-roller'}),slots=[];
+    for(let i=0;i<10;i++){
+      const x=650-(9-i)*8.5-4.1;
+      const clipId='corolla-odo-drum-clip-'+i;
+      const clip=svgOdoEl('clipPath',{id:clipId,clipPathUnits:'userSpaceOnUse'});
+      clip.append(svgOdoEl('rect',{x:x-4.5,y:245,width:9,height:23}));def.append(clip);
+      const outer=svgOdoEl('g',{'clip-path':`url(#${clipId})`});
+      const track=svgOdoEl('g',{class:'corolla-odo-svg-track'});
+      const cell=svgOdoEl('text',{x,y:261,class:'corolla-odo-svg-num'});cell.textContent=i===8?'.':'-';
+      track.append(cell);outer.append(track);roller.append(outer);slots.push({track,cell,x,timer:0});
+    }
+    analogUi.odoGroup.append(def,roller);
+    return {slots,last:'',lastTenths:null,lastCar:null};
+  };
+  const corollaOdoDrum=createCorollaOdoDrums();
+  function updateOdoDrum(state,value,tenths,car,isSvg,active){
+    if(state.last===value&&state.lastCar===car)return;
+    const previous=state.last;
+    const smooth=active&&car===state.lastCar&&state.lastTenths!==null&&tenths-state.lastTenths===1;
+    for(let i=0;i<10;i++){
+      const slot=state.slots[i],oldChar=previous[i]||'-',newChar=value[i]||'-';
+      if(oldChar===newChar)continue;
+      clearTimeout(slot.timer);slot.timer=0;
+      slot.track.classList.remove('rolling');
+      slot.track.replaceChildren();
+      const createCell=(v,row)=>{
+        if(isSvg){
+          const node=svgOdoEl('text',{x:slot.x,y:261+row*18,class:'corolla-odo-svg-num'});
+          node.textContent=v;return node;
+        }
+        const node=document.createElement('span');node.textContent=v;return node;
+      };
+      if(smooth&&/^[0-9]$/.test(oldChar)&&/^[0-9]$/.test(newChar)){
+        slot.track.append(createCell(oldChar,0),createCell(newChar,1));
+        void slot.track.getBoundingClientRect();
+        slot.track.classList.add('rolling');
+        slot.timer=setTimeout(()=>{
+          slot.track.classList.remove('rolling');
+          slot.track.replaceChildren(createCell(newChar,0));slot.timer=0;
+        },ODO_ROLL_MS+20);
+      }else{
+        slot.track.append(createCell(newChar,0));
+      }
+    }
+    state.last=value;state.lastTenths=tenths;state.lastCar=car;
+  }
+
+  function civ2SpeedScale(){
+    const unit=settings.speedUnit;if(civ2SpeedKey===unit)return;
+    civ2SpeedKey=unit;civ2Config.speed.max=unit==='mph'?250:400;
+    civ2Config.speed.major=unit==='mph'?25:40;
+    civ2DrawDial('speed');civ2Ui.speedUnit.textContent=unit==='mph'?'MPH':'KM/H';
+  }
+  function civ2RpmScale(max,redline){
+    const cap=Math.max(10000,Math.ceil(Math.max(max,redline)/1000)*1000);
+    if(civ2RpmKey!==cap){civ2RpmKey=cap;civ2Config.rpm.max=cap/1000;civ2DrawDial('rpm');}
+    return cap;
+  }
+  function civ2AuxMarks(node,cx,cy,r,start,end,steps,labelSet){
+    const ns='http://www.w3.org/2000/svg',frag=document.createDocumentFragment();
+    for(let i=0;i<=steps;i++){
+      const angle=(start+(end-start)*(i/steps))*Math.PI/180;
+      const inner=r-(i%5===0?10:5),x=Math.sin(angle),y=-Math.cos(angle);
+      const line=document.createElementNS(ns,'line');
+      line.setAttribute('class','civ2-aux-tick'+(i%5===0?' major':''));
+      line.setAttribute('x1',(cx+x*inner).toFixed(2));line.setAttribute('y1',(cy+y*inner).toFixed(2));
+      line.setAttribute('x2',(cx+x*r).toFixed(2));line.setAttribute('y2',(cy+y*r).toFixed(2));frag.append(line);
+      if(labelSet?.[i]){
+        const text=document.createElementNS(ns,'text');text.setAttribute('class','civ2-aux-num');
+        text.setAttribute('x',(cx+x*(r-22)).toFixed(2));
+        text.setAttribute('y',(cy+y*(r-22)).toFixed(2));text.textContent=labelSet[i];frag.append(text);
+      }
+    }
+    node.replaceChildren(frag);
+  }
+  // Nitro: E at lower-left, F at upper-left. Turbo: 0 to 3 on right arc.
+  civ2AuxMarks(civ2Ui.nitroTicks,64,125,54,230,310,15,{0:'E',15:'F'});
+  civ2AuxMarks(civ2Ui.turboTicks,143,125,54,50,130,15,{0:'3',5:'2',10:'1',15:'0'});
+  civ2RpmScale(9000,7700);civ2SpeedScale();
+  function civ2Layout(){
+    // Owner-approved Honda 85% corresponds to 100% of the new RX-7-style dials.
+    const set=(node,cx,cy,settingsPart)=>{
+      const keyX='civic'+settingsPart+'OffsetX',keyY='civic'+settingsPart+'OffsetY';
+      const x=originValue(keyX)+settings[keyX],y=originValue(keyY)+settings[keyY];
+      const sz=settings['civic'+settingsPart+'SizePct']/85;
+      node.style.transformOrigin=`${cx}px ${cy}px`;
+      node.style.transform=`translate(${x}px,${y}px) scale(${sz})`;
+    };
+    set(civ2Ui.aux,102.5,102.5,'Turbo');
+    set(civ2Ui.rpm,155,155,'Rpm');
+    set(civ2Ui.speed,140,140,'Speed');
+    const s=settings.civicFrameScalePct/100;
+    civ2Ui.frame.style.transformOrigin='500px 235px';
+    civ2Ui.frame.style.transform=`translate(${settings.civicFrameOffsetX}px,${settings.civicFrameOffsetY}px) scale(${s})`;
+    civ2Ui.panel.querySelector('.rx7v2-frame-svg').style.opacity=String(settings.hudBackgroundOpacity/100);
+  }
+  function civ2Visibility(){
+    const active=settings.hudStyle==='civic'&&settings.hudMode==='full';
+    civ2Ui.panel.style.display=active?'block':'none';
+    if(!active){civ2LastGear=null;return;}
+    civ2Ui.aux.style.display=settings.showTurbo||settings.showNitro?'':'none';
+    civ2Ui.rpm.style.display=settings.showRpm||settings.showGear?'':'none';
+    civ2Ui.speed.style.display=settings.showSpeed||settings.analogOdometerEnabled?'':'none';
+    civ2Ui.rpmNeedle.style.display=settings.showRpm?'':'none';
+    civ2Ui.speedNeedle.style.display=settings.showSpeed?'':'none';
+    civ2Ui.nitroNeedle.style.display=settings.showNitro?'':'none';
+    civ2Ui.turboNeedle.style.display=settings.showTurbo?'':'none';
+    civ2Ui.rpmTicks.style.display=settings.showRpm?'':'none';
+    civ2Ui.rpmLabels.style.display=settings.showRpm?'':'none';
+    civ2Ui.speedTicks.style.display=settings.showSpeed?'':'none';
+    civ2Ui.speedLabels.style.display=settings.showSpeed?'':'none';
+    civ2Ui.speedUnit.style.display=settings.showSpeed?'':'none';
+    civ2Get('civ2-gear').style.display=settings.showGear?'':'none';
+    civ2Get('civ2-odometer').style.display=settings.analogOdometerEnabled?'':'none';
+    civ2Ui.shift.style.display=settings.showShift?'':'none';
+    civ2Ui.warnings.style.display=settings.showIcons?'':'none';
+    for(const k of ['tyre','engine','susp']){
+      const flag=k==='tyre'?'showTyreIcon':k==='engine'?'showEngineIcon':'showSuspIcon';
+      civ2Ui.icons[k].style.display=settings.showIcons&&settings[flag]?'':'none';
+    }
+    civ2Layout();
+  }
+  function civ2RollingGearUpdate(value){
+    const next=String(value??'N');if(next===civ2LastGear)return;
+    const previous=civ2LastGear;civ2LastGear=next;
+    if(civ2GearFrame){cancelAnimationFrame(civ2GearFrame);civ2GearFrame=0;}
+    const finish=()=>{
+      civ2Ui.gearCurrent.textContent=next;civ2Ui.gearNext.textContent=next;
+      civ2Ui.gearRoll.style.transform='translateY(0px)';civ2GearFrame=0;
+    };
+    if(previous===null||!settings.showGear||settings.hudPerformanceMode==='eco'){finish();return;}
+    civ2Ui.gearCurrent.textContent=previous;civ2Ui.gearNext.textContent=next;
+    const t0=performance.now(),duration=285;
+    const frame=t=>{
+      if(civ2LastGear!==next){civ2GearFrame=0;return;}
+      const p=Math.min(1,(t-t0)/duration),ease=1-(1-p)**3;
+      civ2Ui.gearRoll.style.transform=`translateY(${(-32*ease).toFixed(2)}px)`;
+      if(p<1)civ2GearFrame=requestAnimationFrame(frame);else finish();
+    };
+    civ2GearFrame=requestAnimationFrame(frame);
+  }
+  function civ2Update(rpm,max,redline,kmh,nitro,gear){
+    if(settings.hudStyle!=='civic'||settings.hudMode!=='full')return;
+    const cap=civ2RpmScale(max,redline);civ2SpeedScale();
+    if(settings.showRpm)rx7Angle(civ2Ui.rpmNeedle,rpm/cap);
+    if(settings.showSpeed)rx7Angle(civ2Ui.speedNeedle,
+      (settings.speedUnit==='mph'?kmh/1.609344:kmh)/(settings.speedUnit==='mph'?250:400));
+    const rot=(node,val,a,b,cx,cy)=>node.setAttribute('transform',`rotate(${(a+(b-a)*clamp(val,0,1)).toFixed(2)} ${cx} ${cy})`);
+    if(settings.showNitro)rot(civ2Ui.nitroNeedle,nitro/NITRO_CAPACITY,230,310,64,125);
+    if(settings.showTurbo)rot(civ2Ui.turboNeedle,turboDisplay,130,50,143,125);
+    if(settings.showGear)civ2RollingGearUpdate(gear);
+    civ2Ui.vtec.classList.toggle('is-on',civicVtecActive);
+    civ2Ui.vtec.setAttribute('aria-label',civicVtecActive?'VTEC simulated: active':'VTEC simulated: off');
+  }
+
+  const rx7v2Config={
+    turbo:{max:3,major:1,div:4,radius:52,fontSize:12,needleRadius:63},
+    nitro:{max:100,major:25,div:5,radius:52,fontSize:11,needleRadius:63},
+    rpm:{max:10,major:1,div:5,radius:117,fontSize:17,needleRadius:143},
+    speed:{max:400,major:40,div:4,radius:88,fontSize:14,needleRadius:126}
+  };
+  function rx7v2DrawDial(key){
+    const cfg=rx7v2Config[key],ticks=rx7Ui[key+"Ticks"];
+    const labels=rx7Get(`rx7-${key}-labels`),size=key==="rpm"?310:key==="speed"?280:155;
+    const center=size/2;
+    ticks.replaceChildren();labels.replaceChildren();
+    const total=Math.round((cfg.max/cfg.major)*cfg.div);
+    const tickFragment=document.createDocumentFragment(),labelFragment=document.createDocumentFragment();
+    for(let i=0;i<=total;i++){
+      const value=(i/total)*cfg.max,angle=-135+(i/total)*270;
+      const major=i%cfg.div===0;
+      const tick=document.createElement('span');tick.className="rx7v2-tick"+(major?" major":"")+(key==="rpm"&&value>=8?" redzone":"");
+      const rad=angle*Math.PI/180;
+      tick.style.transform=`rotate(${angle}deg) translateY(${-cfg.needleRadius}px)`;
+      tickFragment.append(tick);
+      if(major){
+        const lab=document.createElement('span');lab.className="rx7v2-dial-number";
+        lab.textContent=key==="rpm"?String(Math.round(value)):key==="turbo"?String(Math.round(value)):String(Math.round(value));
+        lab.style.left=`${center+cfg.radius*Math.sin(rad)}px`;
+        lab.style.top=`${center-cfg.radius*Math.cos(rad)}px`;
+        lab.style.fontSize=`${cfg.fontSize}px`;
+        labelFragment.append(lab);
+      }
+    }
+    ticks.append(tickFragment);labels.append(labelFragment);
+  }
+  let rx7SpeedKey='',rx7RpmKey='',rx7LastGear=null,rx7GearFrame=0;
+  function rx7SpeedScale(){
+    const unit=settings.speedUnit;if(rx7SpeedKey===unit)return;
+    rx7SpeedKey=unit;
+    rx7v2Config.speed.max=unit==='mph'?250:400;
+    rx7v2Config.speed.major=unit==='mph'?25:40;
+    rx7v2DrawDial('speed');
+    rx7Ui.speedUnit.textContent=unit==='mph'?'MPH':'KM/H';
+  }
+  function rx7RpmScale(max,redline){
+    const cap=Math.max(10000,Math.ceil(Math.max(max,redline)/1000)*1000);
+    if(rx7RpmKey!==cap){
+      rx7RpmKey=cap;rx7v2Config.rpm.max=cap/1000;rx7v2DrawDial('rpm');
+    }
+    return cap;
+  }
+  function rx7Angle(el,f){
+    const v=`translateX(-50%) rotate(${(-135+270*clamp(f,0,1)).toFixed(2)}deg)`;
+    if(el.style.transform!==v)el.style.transform=v;
+  }
+  rx7v2DrawDial('turbo');rx7v2DrawDial('nitro');rx7RpmScale(9000,7700);rx7SpeedScale();
+  function rx7GearUpdate(value){
+    const gear=String(value??"N");if(gear===rx7LastGear)return;
+    const prev=rx7LastGear;rx7LastGear=gear;
+    if(rx7GearFrame){cancelAnimationFrame(rx7GearFrame);rx7GearFrame=0;}
+    const finish=()=>{
+      rx7Ui.gearCurrent.textContent=gear;rx7Ui.gearNext.textContent=gear;
+      rx7Ui.gearRoll.style.transform='translateY(0px)';rx7GearFrame=0;
+    };
+    if(prev===null||!settings.showGear||settings.hudPerformanceMode==='eco'){finish();return;}
+    rx7Ui.gearCurrent.textContent=prev;rx7Ui.gearNext.textContent=gear;
+    const t0=performance.now(),duration=285;
+    const frame=now=>{
+      if(rx7LastGear!==gear){rx7GearFrame=0;return;}
+      const t=Math.min(1,(now-t0)/duration),eased=1-(1-t)**3;
+      rx7Ui.gearRoll.style.transform=`translateY(${(-32*eased).toFixed(2)}px)`;
+      if(t<1)rx7GearFrame=requestAnimationFrame(frame);else finish();
+    };
+    rx7GearFrame=requestAnimationFrame(frame);
+  }
+  function rx7Visibility(){
+    const active=settings.hudStyle==='rx7'&&settings.hudMode==='full';
+    rx7Ui.panel.style.display=active?'block':'none';
+    if(!active){rx7LastGear=null;return;}
+    rx7Ui.groups.turbo.style.display=settings.showTurbo?'':'none';
+    rx7Ui.groups.nitro.style.display=settings.showNitro?'':'none';
+    rx7Ui.groups.rpm.style.display=(settings.showRpm||settings.showGear)?'':'none';
+    rx7Ui.groups.speed.style.display=(settings.showSpeed||settings.analogOdometerEnabled)?'':'none';
+    rx7Ui.rpmTicks.style.display=settings.showRpm?'':'none';
+    rx7Get('rx7-rpm-labels').style.display=settings.showRpm?'':'none';
+    rx7Ui.rpmNeedle.style.display=settings.showRpm?'':'none';
+    rx7Ui.speedTicks.style.display=settings.showSpeed?'':'none';
+    rx7Get('rx7-speed-labels').style.display=settings.showSpeed?'':'none';
+    rx7Ui.speedNeedle.style.display=settings.showSpeed?'':'none';
+    rx7Ui.speedUnit.style.display=settings.showSpeed?'':'none';
+    rx7Get('rx7-gear').style.display=settings.showGear?'':'none';
+    rx7Get('rx7-odometer').style.display=settings.analogOdometerEnabled?'':'none';
+    rx7Ui.shift.style.display=settings.showShift?'':'none';
+    rx7Ui.warnings.style.display=settings.showIcons?'':'none';
+    for(const k of ['tyre','engine','susp'])rx7Ui.icons[k].style.display=settings.showIcons&&settings['show'+(k==='tyre'?'Tyre':k==='susp'?'Susp':'Engine')+'Icon']?'':'none';
+  }
+  function rx7Update(rpm,max,redline,kmh,nitro,gear){
+    if(settings.hudStyle!=='rx7'||settings.hudMode!=='full')return;
+    const cap=rx7RpmScale(max,redline);rx7SpeedScale();
+    if(settings.showRpm)rx7Angle(rx7Ui.rpmNeedle,rpm/cap);
+    if(settings.showSpeed)rx7Angle(rx7Ui.speedNeedle,(settings.speedUnit==='mph'?kmh/1.609344:kmh)/(settings.speedUnit==='mph'?250:400));
+    if(settings.showNitro)rx7Angle(rx7Ui.nitroNeedle,nitro/NITRO_CAPACITY);
+    if(settings.showTurbo)rx7Angle(rx7Ui.turboNeedle,turboDisplay);
+    if(settings.showGear)rx7GearUpdate(gear);
+  }
+
+  const civicNs="http://www.w3.org/2000/svg";
+  const civicPoint=(cx,cy,r,a)=>[cx+r*Math.sin(a*Math.PI/180),cy-r*Math.cos(a*Math.PI/180)];
+  function civicEl(tag,attrs={},value){
+    const el=document.createElementNS(civicNs,tag);
+    for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));
+    if(value!==undefined)el.textContent=String(value);
+    return el;
+  }
+  function civicRotate(el,a,cx,cy){
+    if(!el)return;
+    const v=`rotate(${a.toFixed(2)} ${cx} ${cy})`;
+    if(el.getAttribute("transform")!==v)el.setAttribute("transform",v);
+  }
+  function civicDrawScale(container,{cx,cy,r,start=232,end=488,max,major,minor,numberRadius=r-29,numClass="civic-num",formatter=v=>String(v),labelEvery=major}){
+    const f=document.createDocumentFragment();
+    const count=Math.round(max/minor);
+    for(let i=0;i<=count;i++){
+      const val=i*minor,angle=start+(end-start)*val/max;
+      const isMajor=Math.abs(val/major-Math.round(val/major))<.001;
+      const inner=isMajor?r-13:r-7;
+      const [x1,y1]=civicPoint(cx,cy,inner,angle),[x2,y2]=civicPoint(cx,cy,r,angle);
+      f.append(civicEl("line",{x1:x1.toFixed(2),y1:y1.toFixed(2),x2:x2.toFixed(2),y2:y2.toFixed(2),class:`civic-tick${isMajor?' major':''}`}));
+      if(isMajor && Math.abs(val/labelEvery-Math.round(val/labelEvery))<.001){
+        const label=formatter(val);
+        if(label!=="" && label!==null && label!==undefined){
+          const [x,y]=civicPoint(cx,cy,numberRadius,angle);
+          f.append(civicEl("text",{x:x.toFixed(2),y:y.toFixed(2),class:numClass},label));
+        }
+      }
+    }
+    container.replaceChildren(f);
+  }
+  function civicArc(cx,cy,r,start,end){
+    const a=civicPoint(cx,cy,r,start),b=civicPoint(cx,cy,r,end);
+    const large=(end-start)>180?1:0;
+    return `M${a[0].toFixed(2)} ${a[1].toFixed(2)} A${r} ${r} 0 ${large} 1 ${b[0].toFixed(2)} ${b[1].toFixed(2)}`;
+  }
+  let civicRpmCache="";
+  function civicRpmScale(max,red){
+    const scale=Math.max(9000,Math.ceil(max/1000)*1000);
+    const ratio=clamp(red/scale,0,1);
+    const key=`${scale}:${ratio.toFixed(3)}`;
+    if(civicRpmCache===key)return scale;
+    civicRpmCache=key;
+    civicDrawScale(civicUi.rpmTicks,{cx:178,cy:228,r:121,max:scale,major:1000,minor:250,numberRadius:90,formatter:v=>String(Math.round(v/1000))});
+    civicUi.redzone.setAttribute("d",civicArc(178,228,123,232+256*ratio,486));
+    return scale;
+  }
+  civicDrawScale(civicUi.speedTicks,{cx:482,cy:205,r:150,max:400,major:40,minor:10,labelEvery:80,numberRadius:119,numClass:"civic-kmh-num"});
+  civicDrawScale(civicUi.mphTicks,{cx:482,cy:205,r:92,max:250,major:50,minor:25,numberRadius:68,numClass:"civic-mph-num"});
+  // The right dial is one housing but has two completely separate needles.
+  civicDrawScale(civicUi.nitroTicks,{cx:706,cy:245,r:65,start:225,end:315,max:100,major:50,minor:10,numberRadius:38,numClass:"civic-mph-num",formatter:v=>v===0?"E":v===100?"F":""});
+  // Four major numbers instead of seven tightly stacked ones on the Turbo half-dial.
+  civicDrawScale(civicUi.turboTicks,{cx:817,cy:245,r:67,start:160,end:20,max:3,major:1,minor:.25,numberRadius:38,numClass:"civic-mph-num",formatter:v=>v.toFixed(0)});
+  civicRpmScale(9000,7700);
+  const civicOdoWheels=[];
+  for(let i=0;i<8;i++){
+    const x=i===7?532:432+i*12.5;
+    const group=civicEl("g",{id:`civic-odo-wheel-${i}`});
+    for(let j=-1;j<=1;j++)group.append(civicEl("text",{x,y:311+j*18,class:"civic-odo-wheel-num"},"0"));
+    civicUi.odo.append(group);civicOdoWheels.push(group);
+  }
+  civicUi.odo.append(civicEl("text",{x:520,y:311,class:"civic-odo-wheel-num"},"."));
+  function civicOdometerUpdate(){
+    if(!civicUi.odo)return;
+    if(!selectedOdometerCar){
+      for(const g of civicOdoWheels){const digits=g.querySelectorAll("text");for(const el of digits)el.textContent="–";g.setAttribute("transform","");}
+      return;
+    }
+    const km=clamp(Number(odometerKm)||0,0,ODOMETER_MAX_KM);
+    const tenths=km*10;
+    for(let i=0;i<8;i++){
+      const magnitude=10**(7-i),floor=Math.floor(tenths/magnitude+1e-8);
+      const digit=floor%10;
+      const fraction=(tenths/magnitude)-floor;
+      // A real mechanical carry wheel moves only in the last tenth of its lower wheel's cycle.
+      const phase=i===7?fraction:clamp((fraction-.9)*10,0,1);
+      const g=civicOdoWheels[i];
+      const values=g.querySelectorAll("text");
+      values[0].textContent=String((digit+9)%10);
+      values[1].textContent=String(digit);
+      values[2].textContent=String((digit+1)%10);
+      g.setAttribute("transform",`translate(0 ${(-18*phase).toFixed(3)})`);
+    }
+  }
+  // CIV_BG — continuous factory-inspired shoulder arch around three dials.
+  // The body is recalculated from ALL three real dial bounds, warning indicators
+  // and three Shift LEDs. Symmetric cubic contours replace freehand/stepped bumps.
+  // Dial faces and indicator lamps have reserved clearance; the shell alone fades.
+  function civicAdaptiveBodyPath(gauges,extras){
+    const [rpm,mid,aux]=[gauges[1],gauges[2],gauges[0]];
+    const objects=[...gauges,...extras];
+    const left=Math.min(...objects.map(q=>q.cx-q.rx))-10;
+    const right=Math.max(...objects.map(q=>q.cx+q.rx))+13;
+    const bottom=Math.max(...objects.map(q=>q.cy+q.ry))+10;
+    const led=extras[0];
+    const warning=extras.slice(1);
+    const vtecBadge=extras[extras.length-1];
+    // Include the VTEC badge in the actual left-shoulder silhouette so its
+    // upper edge never pokes outside the carbon case.
+    const leftTop=Math.min(rpm.cy-rpm.ry-17,led.cy-led.ry-13,vtecBadge.cy-vtecBadge.ry-11);
+    const rightTop=Math.min(aux.cy-aux.ry-17,...warning.map(q=>q.cy-q.ry-17));
+    const crownTop=Math.min(mid.cy-mid.ry-13,leftTop,rightTop);
+    const radius=Math.max(22,Math.min(42,(right-left)*.07,(bottom-Math.min(leftTop,rightTop))*.27));
+    const crownStart=mid.cx-mid.rx*1.23;
+    const crownEnd=mid.cx+mid.rx*1.23;
+    const crownFlatL=mid.cx-mid.rx*.45;
+    const crownFlatR=mid.cx+mid.rx*.45;
+    const f=x=>Number(x).toFixed(2);
+    // With freely moved or oversized instruments, use a guaranteed envelope.
+    // No folded Beziers, inverted control handles or separate indicator boxes.
+    const invalid=!objects.every(q=>[q.cx,q.cy,q.rx,q.ry].every(Number.isFinite))||
+      crownStart<=left+radius+8||crownEnd>=right-radius-8||
+      crownFlatL<=crownStart||crownFlatR>=crownEnd||
+      rightTop>=bottom-radius||leftTop>=bottom-radius;
+    if(invalid){
+      const top=Math.min(...objects.map(q=>q.cy-q.ry))-15;
+      const r=Math.max(15,Math.min(radius,(bottom-top)*.35));
+      return `M ${f(left+r)} ${f(top)} H ${f(right-r)} Q ${f(right)} ${f(top)} ${f(right)} ${f(top+r)} `+
+        `V ${f(bottom-r)} Q ${f(right)} ${f(bottom)} ${f(right-r)} ${f(bottom)} `+
+        `H ${f(left+r)} Q ${f(left)} ${f(bottom)} ${f(left)} ${f(bottom-r)} `+
+        `V ${f(top+r)} Q ${f(left)} ${f(top)} ${f(left+r)} ${f(top)} Z`;
+    }
+    const ascent=crownFlatL-crownStart;
+    const descent=crownEnd-crownFlatR;
+    return [
+      `M ${f(left)} ${f(leftTop+radius)}`,
+      `Q ${f(left)} ${f(leftTop)} ${f(left+radius)} ${f(leftTop)}`,
+      `L ${f(crownStart)} ${f(leftTop)}`,
+      `C ${f(crownStart+ascent*.38)} ${f(leftTop)} ${f(crownFlatL-ascent*.54)} ${f(crownTop)} ${f(crownFlatL)} ${f(crownTop)}`,
+      `L ${f(crownFlatR)} ${f(crownTop)}`,
+      `C ${f(crownFlatR+descent*.54)} ${f(crownTop)} ${f(crownEnd-descent*.38)} ${f(rightTop)} ${f(crownEnd)} ${f(rightTop)}`,
+      `L ${f(right-radius)} ${f(rightTop)}`,
+      `Q ${f(right)} ${f(rightTop)} ${f(right)} ${f(rightTop+radius)}`,
+      `L ${f(right)} ${f(bottom-radius)}`,
+      `Q ${f(right)} ${f(bottom)} ${f(right-radius)} ${f(bottom)}`,
+      `L ${f(left+radius)} ${f(bottom)}`,
+      `Q ${f(left)} ${f(bottom)} ${f(left)} ${f(bottom-radius)}`,
+      'Z'
+    ].join(' ');
+  }
+  function civicLayout(){
+    const entries=[
+      [civicUi.aux,"Turbo",763,238,144],
+      [civicUi.rpm,"Rpm",178,228,150],
+      [civicUi.speed,"Speed",482,205,184]
+    ];
+    const circles=[];
+    for(const [el,part,cx,cy,r] of entries){
+      const offsetX=settings[`civic${part}OffsetX`]+originValue(`civic${part}OffsetX`);
+      const offsetY=settings[`civic${part}OffsetY`]+originValue(`civic${part}OffsetY`);
+      const baseX=CIVIC_V0951_ORIGIN[`civic${part}OffsetX`];
+      const baseY=CIVIC_V0951_ORIGIN[`civic${part}OffsetY`];
+      // Native SVG centers differ by 10px Y (AUX 238, RPM 228). Compensate
+      // inside the default layout so the two outer dials share one centerline.
+      const x=offsetX+baseX, y=offsetY+baseY+(part==="Turbo"?-10:0);
+      // Native AUX rim r=144; RPM rim r=150. Apply a calibrated ratio so
+      // equal size controls mean equal VISIBLE size, not merely equal percent.
+      const size=settings[`civic${part}SizePct`]/100*(part==="Turbo"?150/144:1);
+      el.setAttribute("transform",`translate(${x} ${y}) translate(${cx} ${cy}) scale(${size}) translate(${-cx} ${-cy})`);
+      const pad=12;
+      circles.push({cx:cx+x,cy:cy+y,rx:r*size+pad,ry:r*size+pad,size,r:r*size});
+    }
+    const aux=circles[0],rpmCircle=circles[1],speed=circles[2];
+    // Shift dots: lifted higher to match the requested upper lip position.
+    const shiftY=rpmCircle.cy-rpmCircle.r-18;
+    const shiftDots=civicGet("civic-shift-lights").querySelectorAll("circle");
+    shiftDots.forEach((dot,i)=>{
+      dot.setAttribute("cx",String(rpmCircle.cx+(i-1)*25));
+      dot.setAttribute("cy",String(shiftY));
+    });
+    // CIV_WARN_ROW: uniform 80px icon-to-icon spacing, identical vertical alignment.
+    // Lamp offsets account for the narrower SUSP spring symbol, so visual gaps match.
+    const rowY=aux.cy-aux.r-38;
+    const gap=80;
+    const tyreX=aux.cx-154, suspX=tyreX+gap, engineX=suspX+gap;
+    for(const [el,x] of [
+      [civicUi.icons.tyre,tyreX],
+      [civicUi.icons.susp,suspX],
+      [civicUi.icons.engine,engineX]
+    ]) el.setAttribute("transform",`translate(${x.toFixed(2)} ${rowY.toFixed(2)})`);
+    // CIV_VTEC is anchored to the free bridge between the left and center dials.
+    // Keep it on the carbon, ahead of the rims even at alternative circle sizes.
+    const vtecX=rpmCircle.cx+(speed.cx-rpmCircle.cx)*.355;
+    // Keep the fixed 88x35 badge in the carbon bridge. Its bottom stays
+    // clear of both moving dial rims, even when users enlarge either gauge.
+    const pillL=vtecX-44, pillR=vtecX+44;
+    let badgeBottomLimit=Infinity;
+    for(const dial of [rpmCircle,speed]){
+      const closestX=clamp(dial.cx,pillL,pillR);
+      const dx=Math.abs(closestX-dial.cx),clearanceRadius=dial.r+8;
+      if(dx<clearanceRadius){
+        badgeBottomLimit=Math.min(badgeBottomLimit,
+          dial.cy-Math.sqrt(clearanceRadius*clearanceRadius-dx*dx));
+      }
+    }
+    const vtecY=Math.min(rpmCircle.cy-rpmCircle.r-4,badgeBottomLimit-17.5-2);
+    civicGet("civic-vtec").setAttribute("transform",`translate(${pillL.toFixed(2)} ${(vtecY-17.5).toFixed(2)})`);
+    const extra=[
+      {cx:rpmCircle.cx,cy:shiftY,rx:56,ry:10},
+      {cx:tyreX+25,cy:rowY+17,rx:29,ry:17},
+      {cx:suspX+22,cy:rowY+17,rx:26,ry:17},
+      {cx:engineX+25,cy:rowY+17,rx:29,ry:17},
+      {cx:vtecX,cy:vtecY,rx:45,ry:18.5}
+    ];
+    civicUi.bodyShape.setAttribute("d",civicAdaptiveBodyPath(circles,extra));
+    // Independent subtle ring shadows follow each dial; no black face fills
+    // the carbon area separating the instruments.
+    for(const [id, dial] of [
+      ["civic-shadow-aux", aux],
+      ["civic-shadow-rpm", rpmCircle],
+      ["civic-shadow-speed", speed]
+    ]){
+      const circle=civicGet(id);
+      circle.setAttribute("cx",dial.cx.toFixed(2));
+      circle.setAttribute("cy",dial.cy.toFixed(2));
+      circle.setAttribute("r",(dial.r+5.5).toFixed(2));
+    }
+    // Si badge is a child of the Nitro/Turbo dial and follows its scale / X/Y automatically.
+    const scale=settings.civicFrameScalePct/100,dx=settings.civicFrameOffsetX,dy=settings.civicFrameOffsetY;
+    civicUi.assembly.setAttribute("transform",`translate(${dx} ${dy}) translate(470 215) scale(${scale}) translate(-470 -215)`);
+    // The actual filled shell + its trim/grain are ONE opacity group.
+    // 0% = fully transparent chassis (dials remain visible); 100% = opaque.
+    civicGet("civic-chassis").style.opacity=String(settings.hudBackgroundOpacity/100);
+  }
+  function civicVisibility(){
+    const enabled=settings.hudStyle==="civic"&&settings.hudMode==="full";
+    civicUi.panel.style.display=enabled?"block":"none";
+    if(!enabled)return;
+    civicUi.rpm.style.display=settings.showRpm?"":"none";
+    civicUi.speed.style.display=(settings.showSpeed||settings.showGear||settings.analogOdometerEnabled)?"":"none";
+    civicUi.aux.style.display=(settings.showTurbo||settings.showNitro)?"":"none";
+    civicGet("civic-rpm-needle").style.display=settings.showRpm?"":"none";
+    civicGet("civic-speed-needle").style.display=settings.showSpeed?"":"none";
+    civicGet("civic-nitro-needle").style.display=settings.showNitro?"":"none";
+    civicGet("civic-turbo-needle").style.display=settings.showTurbo?"":"none";
+    civicGet("civic-odometer").style.display=settings.analogOdometerEnabled?"":"none";
+    civicGet("civic-gear").style.display=settings.showGear?"":"none";
+    civicGet("civic-shift-lights").style.display=settings.showShift?"":"none";
+    for(const [name,row] of Object.entries(civicUi.icons))row.style.display=settings.showIcons&&settings[`show${name==='tyre'?'Tyre':name==='engine'?'Engine':'Susp'}Icon`]?"":"none";
+    civicLayout();
+  }
+  // CIV_GEAR: one rolling character on each shift, matching the ODO drum.
+  // Only schedule frames when the gear actually changes, not on every car-feed tick.
+  let civicLastGear=null,civicGearFrame=0;
+  function civicRollingGearUpdate(nextValue){
+    const value=String(nextValue??"N");
+    if(value===civicLastGear)return;
+    const prev=civicLastGear;
+    civicLastGear=value;
+    if(civicGearFrame){cancelAnimationFrame(civicGearFrame);civicGearFrame=0;}
+    const wheel=civicUi.gearRoll;
+    const finish=()=>{
+      civicUi.gear.textContent=value;
+      civicUi.gearNext.textContent=value;
+      wheel.setAttribute("transform","translate(0 0)");
+      civicGearFrame=0;
+    };
+    if(prev===null || !settings.showGear || settings.hudPerformanceMode==="eco"){
+      finish();return;
+    }
+    civicUi.gear.textContent=prev;
+    civicUi.gearNext.textContent=value;
+    const t0=performance.now(), duration=285;
+    const frame=now=>{
+      if(civicLastGear!==value){civicGearFrame=0;return;}
+      const x=Math.min(1,(now-t0)/duration);
+      const easing=1-Math.pow(1-x,3);
+      wheel.setAttribute("transform",`translate(0 ${(-18*easing).toFixed(2)})`);
+      if(x>=1)finish();else civicGearFrame=requestAnimationFrame(frame);
+    };
+    civicGearFrame=requestAnimationFrame(frame);
+  }
+  // Simulated engagement: ON at 5600 RPM, OFF below 5500 to avoid
+  // rapid flickering around the threshold. This is not an ECU VTEC signal.
+  let civicVtecActive=false;
+  function civicVtecUpdate(rpm){
+    const next=civicVtecActive ? rpm>=5500 : rpm>=5600;
+    if(next===civicVtecActive)return;
+    civicVtecActive=next;
+    civicUi.vtec.classList.toggle("is-on",next);
+    civicUi.vtec.setAttribute("aria-label",next?"VTEC simulated: active":"VTEC simulated: off");
+    civicUi.vtecText.setAttribute("x",next?"56":"44");
+  }
+  function civicUpdate(rpm,rpmMax,redline,kmh,nitro,gear){
+    if(settings.hudStyle!=="civic"||settings.hudMode!=="full")return;
+    civicVtecUpdate(rpm);
+    const rpmScale=civicRpmScale(rpmMax,redline);
+    civicRotate(civicUi.rpmNeedle,232+256*clamp(rpm/rpmScale,0,1),178,228);
+    civicRotate(civicUi.speedNeedle,232+256*clamp(kmh/400,0,1),482,205);
+    civicRotate(civicUi.nitroNeedle,225+90*clamp(nitro/NITRO_CAPACITY,0,1),706,245);
+    civicRotate(civicUi.turboNeedle,160-140*clamp(turboDisplay,0,1),817,245);
+    civicRollingGearUpdate(gear);
+  }
+
   // A displayed tenth represents a FULL 100 m travelled. Use exactly the
   // same quantization for the menu, BOTH HUDs and persistence checkpoints.
   function odometerTenths(km){
@@ -993,14 +2496,28 @@
   }
   function updateOdometerDisplay(){
     const value=odometerText(odometerKm);
-    setText(analogUi.odo,value);
+    const civicValue=selectedOdometerCar?value:"--------.-";
+    setText(analogUi.odo,value); // GT-R uses its original static SVG value.
     setText(get("modern-odo-digits"),value);
+    civicOdometerUpdate(); // original Civic wheel code retained for compatibility.
+    const tenths=selectedOdometerCar?odometerTenths(odometerKm):null;
+    updateOdoDrum(corollaOdoDrum,value,tenths,selectedOdometerCar,true,settings.hudStyle==='corolla');
+    updateOdoDrum(hondaOdoDrum,civicValue,tenths,selectedOdometerCar,false,settings.hudStyle==='civic');
+    if(rx7Ui.odo)rx7Ui.odo.textContent=civicValue;
     ensureLegacyOdometerOption();
     const select=mget("odometerCarSelect");
     if(select){
       if(select.value!==selectedOdometerCar)select.value=selectedOdometerCar;
       select.disabled=!odometerReady; // initial async storage restore must finish first
     }
+    const styleNode=mget("carAssignedHudValue");
+    if(styleNode)styleNode.textContent=ODOMETER_CAR_IDS.has(selectedOdometerCar)
+      ? (HUD_STYLES[carHudStyleFor(selectedOdometerCar)]?.name || "Modern HUD")
+      : "Select a car";
+    const styleButton=mget("carAssignCurrentHud");
+    if(styleButton)styleButton.disabled=!ODOMETER_CAR_IDS.has(selectedOdometerCar);
+    const styleReset=mget("carResetAssignedHud");
+    if(styleReset)styleReset.disabled=!ODOMETER_CAR_IDS.has(selectedOdometerCar);
     const menuNode=mget("odometerMenuValue");
     if(menuNode)setText(menuNode,selectedOdometerCar ? `${(odometerTenths(odometerKm)/10).toFixed(1)} km` : "Select a car");
     const reset=mget("odometerReset"),save=mget("odometerSaveNow");
@@ -1024,12 +2541,19 @@
     odometerKm=carId ? (odometers[carId]||0) : 0;
     odometerSavedKm=carId ? (savedOdometers[carId]||0) : 0;
     odometerLastSampleAt=0;odometerLastSpeedKmh=null;
+    shiftGuide.reset(); // A manually switched car may have a different shift point.
     odometerRevision++;odometerDirty=true;
     odometerResetArmedAt=0;mget("odometerReset").textContent="Reset selected car";
     updateOdometerDisplay();
+    // Car choice is authoritative for mileage AND its saved/factory HUD skin.
+    // Manual HUD Style choices remain independent and never rewrite ODO.
+    if(ODOMETER_CAR_IDS.has(carId)){
+      const nextStyle=carHudStyleFor(carId);
+      if(settings.hudStyle!==nextStyle)changeSetting("hudStyle",nextStyle);
+    }
     void saveOdometer(true);
     const carName=carId===ODOMETER_LEGACY_ID?"Previous ODO":ODOMETER_CARS.find(([id])=>id===carId)?.[1]||"No car";
-    odometerStatus(`${carName} selected. Its mileage is tracked separately.`);
+    odometerStatus(`${carName} selected. ODO and assigned HUD loaded; manual HUD override is available.`);
   }
   function saveOdometer(force=false){
     if(!odometerReady || (!odometerDirty && !force))return odometerSavePromise;
@@ -1089,22 +2613,22 @@
     }
     odometerLastSampleAt=now;odometerLastSpeedKmh=kmh;
   }
-  const A_START=135, A_SWEEP=270;
+  const A_START=135, A_SWEEP=270, TURBO_SWEEP=193;
   const svgNS="http://www.w3.org/2000/svg";
-  let analogLastRpmMax=0, analogLastRpmRedline=0, analogLastSpeedUnit="",analogLastTurboPct=-1;
+  let analogLastRpmMax=0, analogLastRpmRedline=0, analogLastSpeedUnit="",analogLastTurboValue=-1;
   // Angles go clockwise from lower left across the top to lower right.
   function analogXY(cx,cy,r,angle){const rad=angle*Math.PI/180;return [cx+Math.cos(rad)*r,cy+Math.sin(rad)*r];}
   function analogArc(cx,cy,r,from,to){
     const [x0,y0]=analogXY(cx,cy,r,from),[x1,y1]=analogXY(cx,cy,r,to);
     return `M${x0.toFixed(2)},${y0.toFixed(2)} A${r},${r} 0 ${Math.abs(to-from)>180?1:0} 1 ${x1.toFixed(2)},${y1.toFixed(2)}`;
   }
-  function analogDialScale(root,cx,cy,r,max,labelStep,tickStep,fmt){
+  function analogDialScale(root,cx,cy,r,max,labelStep,tickStep,fmt,sweep=A_SWEEP){
     root.replaceChildren();
     const frag=document.createDocumentFragment();
     for(let v=0,i=0;i<=Math.round(max/tickStep);i++){
       v=Math.min(max,i*tickStep);
       const major=Math.abs(v/labelStep-Math.round(v/labelStep))<1e-5;
-      const angle=A_START+A_SWEEP*(v/max);
+      const angle=A_START+sweep*(v/max);
       const [x1,y1]=analogXY(cx,cy,r-(major?14:9),angle);
       const [x2,y2]=analogXY(cx,cy,r,angle);
       const tick=document.createElementNS(svgNS,"line");
@@ -1119,9 +2643,14 @@
     }
     root.append(frag);
   }
-  // Analog-only load indication on a familiar 0–3.0 dial; NOT measured turbo pressure.
-  analogDialScale(analogUi.turboTicks,89,236,61,3,0.5,0.1,v=>v===0?"0":v.toFixed(1));
-  analogUi.turboRed.setAttribute("d",analogArc(89,236,65,A_START+A_SWEEP*.88,A_START+A_SWEEP*.995));
+  // Turbo Load: keep the original themeable colors, numeric labels, dial
+  // geometry and asymmetric needle smoothing from v0.9.34. Place the short
+  // redline ENTIRELY between 2.5 and 3.0, without extending past the 3.0 tick.
+  // Simulated engine load, NOT actual turbo boost/PSI.
+  analogDialScale(analogUi.turboTicks,89,236,61,3,0.5,0.1,v=>v===0?"0":v.toFixed(1),TURBO_SWEEP);
+  const turboRedStart=A_START+TURBO_SWEEP*(2.65/3);
+  const turboRedEnd=A_START+TURBO_SWEEP*(2.95/3);
+  analogUi.turboRed.setAttribute("d",analogArc(89,236,62,turboRedStart,turboRedEnd));
   function analogScaleForRpm(max,redline){
     if(analogLastRpmMax===max&&analogLastRpmRedline===redline)return;
     if(analogLastRpmMax!==max){
@@ -1134,16 +2663,43 @@
     analogUi.rpmRed.setAttribute("d",analogArc(304,199,100,A_START+A_SWEEP*redRatio,A_START+A_SWEEP*.995));
   }
   function analogScaleForSpeed(unit){
-    if(analogLastSpeedUnit===unit)return;
-    analogLastSpeedUnit=unit;
-    const max=unit==="mph"?250:400,step=unit==="mph"?25:40;
-    analogDialScale(analogUi.speedTicks,595,164,131,max,step,step/5,v=>String(v));
-    analogUi.speedRed.setAttribute("d",analogArc(595,164,135,A_START+A_SWEEP*.875,A_START+A_SWEEP*.995));
-    setText(analogUi.speedUnit,unit==="mph"?"MPH":"KM/H");
+    const corolla=settings.hudStyle==="corolla";
+    const cacheKey=unit+(corolla?":corolla":":gtr");
+    if(analogLastSpeedUnit===cacheKey)return;
+    analogLastSpeedUnit=cacheKey;
+    if(corolla){
+      // A true dual-scale Corolla instrument: white outer mph and amber inner
+      // km/h, with a fixed 0-400 km/h sweep (approx. 0-250 mph).
+      analogDialScale(analogUi.speedTicks,595,164,131,250,50,5,v=>String(v));
+      analogUi.corollaKmh.replaceChildren();
+      const frag=document.createDocumentFragment();
+      for(let kmh=0;kmh<=400;kmh+=20){
+        const a=A_START+A_SWEEP*(kmh/400);
+        const [x1,y1]=analogXY(595,164,87, a);
+        const [x2,y2]=analogXY(595,164,94, a);
+        const mark=document.createElementNS(svgNS,"line");
+        mark.setAttribute("class","corolla-inner-tick");
+        for(const [k,v] of Object.entries({x1,y1,x2,y2}))mark.setAttribute(k,v.toFixed(1));
+        frag.append(mark);
+        if(kmh%80===0){
+          const [tx,ty]=analogXY(595,164,75,a);
+          const lbl=document.createElementNS(svgNS,"text");
+          lbl.setAttribute("class","corolla-kmh-number");
+          lbl.setAttribute("x",tx.toFixed(1));lbl.setAttribute("y",ty.toFixed(1));
+          lbl.textContent=String(kmh);frag.append(lbl);
+        }
+      }
+      analogUi.corollaKmh.append(frag);
+      // Speedometers have no engine redline, regardless of units or vehicle.
+    }else{
+      const max=unit==="mph"?250:400,step=unit==="mph"?25:40;
+      analogDialScale(analogUi.speedTicks,595,164,131,max,step,step/5,v=>String(v));
+    }
+    setText(analogUi.speedUnit,corolla?"MPH":(unit==="mph"?"MPH":"KM/H"));
   }
   // Use one cheap SVG rotation per needle, no secondary animation loop.
-  function analogNeedle(el,value,max,cx,cy){
-    const rotation=225+A_SWEEP*clamp(value/Math.max(max,.01),0,1);
+  function analogNeedle(el,value,max,cx,cy,sweep=A_SWEEP){
+    const rotation=225+sweep*clamp(value/Math.max(max,.01),0,1);
     const target=`rotate(${rotation.toFixed(2)} ${cx} ${cy})`;
     if(el.getAttribute("transform")!==target)el.setAttribute("transform",target);
   }
@@ -1153,16 +2709,35 @@
     const row=analogUi[name];if(!row)return;
     row.classList.toggle("warning-yellow",status==="yellow");
     row.classList.toggle("warning-red",status==="red");
+    const retroRow=analogUi.corollaStatusRows[name];
+    if(retroRow){
+      retroRow.classList.toggle("warning-yellow",status==="yellow");
+      retroRow.classList.toggle("warning-red",status==="red");
+    }
+    const civicRow=civicUi.icons[name];
+    if(civicRow){
+      civicRow.classList.toggle("warning-yellow",status==="yellow");
+      civicRow.classList.toggle("warning-red",status==="red");
+    }
+    const civicNewRow=civ2Ui.icons[name];
+    if(civicNewRow){civicNewRow.classList.toggle("warning-yellow",status==="yellow");civicNewRow.classList.toggle("warning-red",status==="red");}
+    const rx7Row=rx7Ui.icons[name];
+    if(rx7Row){
+      rx7Row.classList.toggle("warning-yellow",status==="yellow");
+      rx7Row.classList.toggle("warning-red",status==="red");
+    }
     const next=label==="COILOVER"?"SUSP":label;
     if(analogLabelTimers[name]!==null){clearTimeout(analogLabelTimers[name]);analogLabelTimers[name]=null;}
     if(analogLabels[name]!==next){
       analogLabels[name]=next;
       row.classList.remove("label-changing");
       setText(aget(`analog-${name}-label`),analogLabels[name]);
+      // Corolla has fixed TYRES / ENGINE / SUSP legends. State is conveyed
+      // by the single lamp and icon color, not lengthy dynamic labels.
     }
   }
   function analogVisibility(){
-    const active=settings.hudStyle==="analog"&&settings.hudMode==="full";
+    const active=(settings.hudStyle==="analog"||settings.hudStyle==="corolla")&&settings.hudMode==="full";
     analogUi.panel.classList.toggle("analog-hide",!active);
     const vis=(id,v)=>aget(id).classList.toggle("analog-hide",!v);
     vis("analog-turbo-face",settings.showTurbo);
@@ -1171,35 +2746,167 @@
     vis("analog-shift",settings.showRpm&&settings.showShift);
     vis("analog-speed-face",settings.showSpeed||settings.showGear||settings.analogOdometerEnabled||(settings.showIcons&&(settings.showTyreIcon||settings.showEngineIcon||settings.showSuspIcon)));
     vis("analog-speed-ticks",settings.showSpeed);vis("analog-speed-needle",settings.showSpeed);
-    vis("analog-speed-digits",settings.showSpeed);
+    vis("analog-speed-digits",settings.showSpeed);vis("corolla-speed-kmh",settings.showSpeed&&settings.hudStyle==="corolla");
     vis("analog-gear",settings.showGear);
     vis("analog-odometer",settings.analogOdometerEnabled);
     vis("analog-status",settings.showIcons&&(settings.showTyreIcon||settings.showEngineIcon||settings.showSuspIcon));
+    vis("corolla-status-panel",settings.hudStyle==="corolla"&&settings.showIcons&&(settings.showTyreIcon||settings.showEngineIcon||settings.showSuspIcon));
+    vis("corolla-tyre",settings.showIcons&&settings.showTyreIcon);
+    vis("corolla-engine",settings.showIcons&&settings.showEngineIcon);
+    vis("corolla-susp",settings.showIcons&&settings.showSuspIcon);
+    vis("corolla-nitro",settings.hudStyle==="corolla"&&settings.showNitro);
     vis("analog-tyre",settings.showIcons&&settings.showTyreIcon);
     vis("analog-engine",settings.showIcons&&settings.showEngineIcon);
     vis("analog-susp",settings.showIcons&&settings.showSuspIcon);
+    civicVisibility();
   }
   analogScaleForSpeed("kmh");analogScaleForRpm(9000,7600);
 
-  function setTranslateAttr(el,x,y){
+  // Scale the dial around its own needle hub: its centre does not drift and
+  // its labels, backing rim and needle move together. No CSS scale on the page.
+  function setDialTransform(el,x,y,cx,cy,pct){
     if(!el)return;
-    const value=`translate(${x} ${y})`;
+    const scale=pct/100;
+    const value=pct===100 ? `translate(${x} ${y})` :
+      `translate(${x} ${y}) translate(${cx} ${cy}) scale(${scale}) translate(${-cx} ${-cy})`;
     if(el.getAttribute("transform")!==value)el.setAttribute("transform",value);
   }
+  // Reshape the combined Corolla bezel around the ACTUAL transformed rim
+  // extents, not the original fixed positions. The housing is a single SVG
+  // silhouette and therefore contains no seams between separately scaled dials.
+  // Status lamps and Nitro are included in the shape; their own panels stay fixed.
+  function updateCorollaFrame(positions){
+    const frame=analogUi.corollaFrameBase;
+    if(!frame)return;
+    const pad=9;
+    const circles=[
+      {cx:89+positions.turbo.x, cy:236+positions.turbo.y, r:78*positions.turbo.scale+pad},
+      {cx:304+positions.rpm.x, cy:199+positions.rpm.y, r:116*positions.rpm.scale+pad},
+      {cx:595+positions.speed.x, cy:164+positions.speed.y, r:147*positions.speed.scale+pad}
+    ];
+    const [turbo,rpm,speed]=circles;
+    // The original reference places status lamps between the middle/right
+    // dials and Nitro in the shelf below RPM. Both always belong to the body.
+    const shelf={x0:222,x1:488,y0:303,y1:352,r:12};
+    const status={x0:396,x1:508,y0:98,y1:288,r:9};
+    // A low connector guarantees a continuous shell even with moved dials.
+    const bottomBridge={x0:turbo.cx,x1:speed.cx,y0:194,y1:304,r:24};
+    // The upper bridge keeps a subtle, old-school stepped shoulder between
+    // RPM and the speed dial, rather than a rigid rectangular background.
+    const upperBridge={x0:rpm.cx+rpm.r*.45,x1:speed.cx-speed.r*.45,
+                       y0:88,y1:275,r:20};
+    const rects=[shelf,status,bottomBridge,upperBridge].filter(b=>b.x1>b.x0+6);
+    const xmin=Math.min(...circles.map(c=>c.cx-c.r),...rects.map(r=>r.x0));
+    const xmax=Math.max(...circles.map(c=>c.cx+c.r),...rects.map(r=>r.x1));
+    const steps=Math.min(650,Math.max(130,Math.ceil((xmax-xmin)/3)));
+    const top=[],bottom=[];
+    // Rounded-rectangle Y envelope at a given x.
+    const rectY=(x,q)=>{
+      if(x<q.x0||x>q.x1)return null;
+      const radius=Math.min(q.r,(q.x1-q.x0)/2,(q.y1-q.y0)/2);
+      let inset=0;
+      if(x<q.x0+radius){const dx=q.x0+radius-x;inset=radius-Math.sqrt(Math.max(0,radius*radius-dx*dx));}
+      else if(x>q.x1-radius){const dx=x-(q.x1-radius);inset=radius-Math.sqrt(Math.max(0,radius*radius-dx*dx));}
+      return [q.y0+inset,q.y1-inset];
+    };
+    const n=v=>Math.round(v*10)/10;
+    for(let i=0;i<=steps;i++){
+      const x=xmin+(xmax-xmin)*i/steps;
+      let yTop=Infinity,yBottom=-Infinity;
+      for(const c of circles){
+        const dx=x-c.cx;
+        if(Math.abs(dx)>c.r)continue;
+        const half=Math.sqrt(Math.max(0,c.r*c.r-dx*dx));
+        yTop=Math.min(yTop,c.cy-half);yBottom=Math.max(yBottom,c.cy+half);
+      }
+      for(const q of rects){
+        const ys=rectY(x,q);
+        if(ys){yTop=Math.min(yTop,ys[0]);yBottom=Math.max(yBottom,ys[1]);}
+      }
+      if(Number.isFinite(yTop) && Number.isFinite(yBottom)){
+        top.push([n(x),n(yTop)]);bottom.push([n(x),n(yBottom)]);
+      }
+    }
+    if(top.length<4)return;
+    const path='M '+top.map(p=>p.join(' ')).join(' L ')+
+      ' L '+bottom.reverse().map(p=>p.join(' ')).join(' L ')+' Z';
+    for(const el of [analogUi.corollaFrameShadow,frame,analogUi.corollaFrameGrain,
+                     analogUi.corollaFrameHighlight]){
+      if(el?.getAttribute('d')!==path)el?.setAttribute('d',path);
+    }
+    // One exact silhouette is used by the shell and the foreground clipping.
+    // A local dial cannot visually escape the integrated housing.
+    if(analogUi.corollaClipPath?.getAttribute('d')!==path)
+      analogUi.corollaClipPath?.setAttribute('d',path);
+  }
+
   function applyAnalogLayout(){
-    const turboX=15+settings.analogTurboOffsetX, turboY=settings.analogTurboOffsetY;
-    const rpmX=settings.analogRpmOffsetX, rpmY=settings.analogRpmOffsetY;
-    const speedX=-33+settings.analogSpeedOffsetX, speedY=settings.analogSpeedOffsetY;
-    setTranslateAttr(analogUi.turboBack,turboX,turboY);
-    setTranslateAttr(analogUi.turboFace,turboX,turboY);
-    setTranslateAttr(analogUi.rpmBack,rpmX,rpmY);
-    setTranslateAttr(analogUi.rpmFace,rpmX,rpmY);
-    setTranslateAttr(analogUi.speedBack,speedX,speedY);
-    setTranslateAttr(analogUi.speedFace,speedX,speedY);
-    // These three indicators have fixed anchors relative to the speed dial.
-    // Moving that dial also moves ODO and all indicators together.
+    const retro=settings.hudStyle==="corolla";
+    // Corolla: all three needle hubs aligned on the same retro instrument row.
+    // Saved user X/Y offsets are preserved; the shared frame stays put.
+    const keyPrefix=retro?'corolla':'analog';
+    const zero=(part,axis)=>originValue(keyPrefix+part+'Offset'+axis);
+    const turboX=(retro?-4:15)+zero('Turbo','X')+gaugeValue("analogTurboOffsetX"),
+      turboY=(retro?-56:0)+zero('Turbo','Y')+gaugeValue("analogTurboOffsetY");
+    const rpmX=(retro?-24:0)+zero('Rpm','X')+gaugeValue("analogRpmOffsetX"),
+      rpmY=(retro?-19:0)+zero('Rpm','Y')+gaugeValue("analogRpmOffsetY");
+    const speedX=(retro?47:-33)+zero('Speed','X')+gaugeValue("analogSpeedOffsetX"),
+      speedY=(retro?16:0)+zero('Speed','Y')+gaugeValue("analogSpeedOffsetY");
+    setDialTransform(analogUi.turboBack,turboX,turboY,89,236,gaugeValue("analogTurboSizePct"));
+    setDialTransform(analogUi.turboFace,turboX,turboY,89,236,gaugeValue("analogTurboSizePct"));
+    setDialTransform(analogUi.rpmBack,rpmX,rpmY,304,199,gaugeValue("analogRpmSizePct"));
+    setDialTransform(analogUi.rpmFace,rpmX,rpmY,304,199,gaugeValue("analogRpmSizePct"));
+    setDialTransform(analogUi.speedBack,speedX,speedY,595,164,gaugeValue("analogSpeedSizePct"));
+    setDialTransform(analogUi.speedFace,speedX,speedY,595,164,gaugeValue("analogSpeedSizePct"));
+    // Corolla uses its true 820 x 385 SVG coordinate system; preserve the
+    // original geometry and scale for GT-R Analog when switching back.
+    const svgBox=retro?'0 0 820 385':'0 0 735 345';
+    if(analogUi.analogSvg.getAttribute('viewBox')!==svgBox)analogUi.analogSvg.setAttribute('viewBox',svgBox);
+    if(retro)updateCorollaFrame({
+      turbo:{x:turboX,y:turboY,scale:gaugeValue("analogTurboSizePct")/100},
+      rpm:{x:rpmX,y:rpmY,scale:gaugeValue("analogRpmSizePct")/100},
+      speed:{x:speedX,y:speedY,scale:gaugeValue("analogSpeedSizePct")/100}
+    });
+    // Entire Corolla chassis is a rigid group: moving/zooming it also moves
+    // every nested instrument, warning lamp, label, nitro ribbon and ODO.
+    const assembly=analogUi.corollaAssembly;
+    const scale=retro?settings.corollaFrameScalePct/100:1;
+    const dx=retro?settings.corollaFrameOffsetX:0;
+    const dy=retro?settings.corollaFrameOffsetY:0;
+    const transform=retro
+      ? `translate(${dx} ${dy}) translate(410 192) scale(${scale}) translate(-410 -192)`
+      : "";
+    if(assembly.getAttribute("transform")!==transform)
+      assembly.setAttribute("transform",transform);
+    // Toyota original ODO stays complete: label, distance and all three bezel
+    // rectangles move down by 2 actual SVG pixels. The speed rim has >17px of
+    // clearance at both lower corners, so the shell/clip cannot be touched.
+    // Reserve 1px fallback for any future geometry with <5px clearance.
+    const odoClearance=147-Math.hypot(64,276-164);
+    const odoDy=odoClearance<5?1:2;
+    if(retro){
+      const value=`translate(0 ${odoDy})`;
+      if(analogUi.odoGroup.getAttribute("transform")!==value)
+        analogUi.odoGroup.setAttribute("transform",value);
+    }else if(analogUi.odoGroup.hasAttribute("transform")){
+      analogUi.odoGroup.removeAttribute("transform");
+    }
+    // GT-R circles keep their original full-screen independent positioning.
   }
   applyAnalogLayout();
+
+  function applyRx7Layout(){
+    const tr=(name,settingsPrefix)=>{
+      const element=rx7Ui.groups[name];if(!element)return;
+      const keyX=settingsPrefix+'OffsetX',keyY=settingsPrefix+'OffsetY';
+      const dx=originValue(keyX)+settings[keyX],dy=originValue(keyY)+settings[keyY];
+      const scale=settings[settingsPrefix+'SizePct']/100;
+      const value=`translate(${dx}px,${dy}px) scale(${scale})`;
+      if(element.style.transform!==value)element.style.transform=value;
+    };
+    tr('turbo','rx7Turbo');tr('nitro','rx7Nitro');tr('rpm','rx7Rpm');tr('speed','rx7Speed');
+  }
+  applyRx7Layout();
 
   // Build grouped color controls: suggested swatches and native custom color picker per field.
   const colorControlRows = new Map();
@@ -1250,7 +2957,7 @@
   // for each telemetry frame. Does not intercept input or modify game rendering.
   const speedFxHost = document.createElement("div");
   speedFxHost.id = "nfsu2-modern-hud-speed-fx-root";
-  speedFxHost.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;z-index:2147483645;pointer-events:none!important;overflow:hidden;";
+  setHudHostStyle(speedFxHost, {"position":"fixed","inset":"0","width":"100vw","height":"100vh","z-index":"2147483645","pointer-events":"none","overflow":"hidden"});
   const speedFxShadow = speedFxHost.attachShadow({mode:"closed"});
   const makeTunnelLines = quadrant => {
     const configs = {
@@ -1306,6 +3013,7 @@
       <div class="zone bl">${makeTunnelLines("bl")}</div>
       <div class="zone br">${makeTunnelLines("br")}</div>
     </div>`;
+  ensureShadowStyles(speedFxShadow);
   const speedFx = speedFxShadow.getElementById("speed-fx");
   let lastSpeedFxOpacity = -1, lastSpeedFxBand = -1, lastFogEnabled = null, lastFogPercent = -1;
   let lastSpeedFxFeedAt = 0, speedFxPreviewUntil = 0;
@@ -1384,12 +3092,13 @@
   // Only observed Car Feed impacts (NOT suspension landings) can trigger it.
   const impactFxHost=document.createElement("div");
   impactFxHost.id="nfsu2-modern-hud-impact-fx-root";
-  impactFxHost.style.cssText="position:fixed;inset:0;z-index:2147483646;pointer-events:none!important;overflow:hidden;";
+  setHudHostStyle(impactFxHost, {"position":"fixed","inset":"0","z-index":"2147483646","pointer-events":"none","overflow":"hidden"});
   const impactFxShadow=impactFxHost.attachShadow({mode:"closed"});
   impactFxShadow.innerHTML=`<style>
     :host{all:initial;pointer-events:none!important;}
     #impact-flash{position:absolute;inset:0;pointer-events:none!important;opacity:0;}
   </style><div id="impact-flash" aria-hidden="true"></div>`;
+  ensureShadowStyles(impactFxShadow);
   const impactFlash=impactFxShadow.getElementById("impact-flash");
   (document.documentElement||document.body).append(impactFxHost);
   let impactFlashAnimation=null,impactShakeAnimation=null;
@@ -1412,24 +3121,23 @@
         {opacity:0,offset:0},{opacity:peak,offset:.18},{opacity:0,offset:1}
       ],{duration,easing:"ease-out",iterations:1});
     }
-    if(settings.impactFeedbackShake && level!=="light" && typeof host.animate==="function" &&
+    if(settings.impactFeedbackShake && level!=="light" && typeof hud.animate==="function" &&
        !window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches &&
        host.style.display!=="none"){
-      // Animate the HOST rather than the scaled HUD. The former uses widely
-      // supported 'transform' keyframes, while the previous 'translate' style
-      // on the HUD itself was barely visible and inconsistent in browsers.
-      // HUD internal scale, location and analog dial offsets are untouched.
-      const px=(level==="heavy"?10:6)*amount;
-      impactShakeAnimation?.cancel();
+      // Animate the ACTUAL visible HUD, not its fixed-position host. This is
+      // perceptible in both Modern and analog/Corolla skins, and never touches
+      // the game camera or rendering surface. Keep the scale in every frame:
+      // otherwise WAAPI's transform would temporarily discard HUD zoom.
+      const scale=gaugeValue("hudScale")/100;
+      const px=(level==="heavy"?28:17)*amount;
       const fmt=n=>Math.round(n*10)/10;
-      impactShakeAnimation=host.animate([
-        {transform:"translate3d(0px,0px,0px)",offset:0},
-        {transform:`translate3d(${fmt(px)}px,${fmt(-px*.48)}px,0px)`,offset:.18},
-        {transform:`translate3d(${fmt(-px*.84)}px,${fmt(px*.33)}px,0px)`,offset:.40},
-        {transform:`translate3d(${fmt(px*.52)}px,${fmt(-px*.18)}px,0px)`,offset:.61},
-        {transform:`translate3d(${fmt(-px*.22)}px,${fmt(px*.16)}px,0px)`,offset:.80},
-        {transform:"translate3d(0px,0px,0px)",offset:1}
-      ],{duration,easing:"ease-out",iterations:1});
+      const frame=(x,y,offset)=>({transform:`translate3d(${fmt(x)}px,${fmt(y)}px,0px) scale(${scale})`,offset});
+      impactShakeAnimation?.cancel();
+      impactShakeAnimation=hud.animate([
+        frame(0,0,0), frame(px,-px*.50,.12), frame(-px*.82,px*.42,.29),
+        frame(px*.66,px*.20,.44), frame(-px*.47,-px*.35,.60),
+        frame(px*.22,px*.17,.76), frame(0,0,1)
+      ],{duration:level==="heavy"?520:380,easing:"ease-out",iterations:1});
     }
   }
   // Independent Impact Feedback thresholds. The SUSP/BUMP warning thresholds are
@@ -1556,9 +3264,12 @@
       // Place figures just outside the arc, rather than at fixed overlapping coordinates.
       const dx = p.x - 193, dy = p.y - 231;
       const length = Math.hypot(dx,dy) || 1;
-      const spacing = n === count ? 11 : 15;
-      const x = p.x + dx / length * spacing;
-      const y = p.y + dy / length * spacing;
+      const spacing = 15;
+      // The last scale mark sits beside the Modern COILOVER indicator.
+      // Bring just its NUMBER inward so 9/10/11/etc never intrudes into
+      // the warning card. The RPM arc, tick geometry and other labels stay put.
+      const x = n === count ? p.x - 24 : p.x + dx / length * spacing;
+      const y = n === count ? p.y + 12 : p.y + dy / length * spacing;
       const label = document.createElementNS(ns,"text");
       label.setAttribute("x",String(x.toFixed(1)));
       label.setAttribute("y",String(y.toFixed(1)));
@@ -1568,23 +3279,34 @@
     }
   }
 
-  // One render loop for everthing; no extra 60fps turbo animation.
+  // A linear full-scale sweep gives predictable 0->3.0 in 1.0 s and
+  // 3.0->0 in 0.2 s by default (when the RPM/engine-load target stays at
+  // maximum or minimum). This is visual telemetry, not measured boost/PSI.
+  // All three HUD skins share this state and no extra animation timers run.
   function updateTurbo(now) {
-    const elapsed = lastTurboRenderAt ? clamp(now-lastTurboRenderAt, 1, 200) : 50;
+    const elapsed = lastTurboRenderAt ? clamp(now-lastTurboRenderAt,0,1000) : 0;
     lastTurboRenderAt = now;
-    const response = settings.turboResponseMs;
-    const timeConstant = turboTarget > turboDisplay ? response : Math.max(180, response*.55);
-    turboDisplay += (turboTarget-turboDisplay) * (1-Math.exp(-elapsed/timeConstant));
-    if (Math.abs(turboTarget-turboDisplay) < .002) turboDisplay=turboTarget;
-    const pct = Math.round(100*turboDisplay);
-    if (pct !== turboLastPct) {
-      turboLastPct = pct;
-      ui.turboFill.style.transform = `scaleX(${clamp(turboDisplay,0,1).toFixed(3)})`;
-      setText(ui.turboPct, `${pct}%`);
+    const target=clamp(Number.isFinite(turboTarget)?turboTarget:0,0,1);
+    const delta=target-turboDisplay;
+    if(delta!==0){
+      const travel=elapsed/Math.max(1,delta>0?settings.turboResponseMs:settings.turboReleaseMs);
+      turboDisplay += Math.sign(delta)*Math.min(Math.abs(delta),travel);
+      turboDisplay=clamp(turboDisplay,0,1);
     }
-    if (settings.hudStyle === "analog" && analogLastTurboPct !== pct) {
-      analogLastTurboPct = pct;
-      analogNeedle(analogUi.turboNeedle,turboDisplay*3,3,89,236);
+    if(target===0 && turboDisplay<.00001)turboDisplay=0;
+    const displayTenths=Math.round(turboDisplay*30);
+    const displayText=(displayTenths/10).toFixed(1);
+    // Keep the original internal percentage cache for efficient DOM updates.
+    const pct=Math.round(100*turboDisplay);
+    if(pct!==turboLastPct || ui.turboPct.textContent!==displayText){
+      turboLastPct=pct;
+      ui.turboFill.style.transform=`scaleX(${turboDisplay.toFixed(4)})`;
+      setText(ui.turboPct,displayText);
+    }
+    if(settings.hudStyle==="civic")civicRotate(civicUi.turboNeedle,160-140*clamp(turboDisplay,0,1),817,245);
+    if(["analog","corolla"].includes(settings.hudStyle) && Math.abs(analogLastTurboValue-turboDisplay)>=.0005){
+      analogLastTurboValue=turboDisplay;
+      analogNeedle(analogUi.turboNeedle,turboDisplay*3,3,89,236,TURBO_SWEEP);
     }
   }
   function setText(el, value) {
@@ -1625,6 +3347,7 @@
     }
     ui.engineIcon.classList.toggle("damage-critical",active && settings.showIcons && settings.showEngineIcon);
     analogUi.engine.classList.toggle("damage-critical",active && settings.showIcons && settings.showEngineIcon);
+    analogUi.corollaStatusRows.engine.classList.toggle("damage-critical",active && settings.showIcons && settings.showEngineIcon);
     if (active && settings.showIcons && settings.showEngineIcon) setIndicator("engine","red","DAMAGE");
     if (!active && lastDamageLabel === "active" && settings.showEngineIcon) {
       currentIndicators.engine="?";setIndicator("engine","","ENGINE");
@@ -1795,6 +3518,8 @@
     get("turbo-section").classList.toggle("is-hidden", !settings.showTurbo);
     get("modern-odometer").classList.toggle("is-hidden", !settings.analogOdometerEnabled || compact || settings.hudStyle!=="modern");
     analogVisibility();
+    rx7Visibility();
+    civ2Visibility();
     const anyEnabled = compact ? settings.showGear || settings.showShift || settings.showNitro
       : settings.showSpeed || settings.showGear || settings.showRpm || settings.showShift || settings.showNitro || (settings.showIcons && (settings.showTyreIcon || settings.showEngineIcon || settings.showSuspIcon)) || settings.showTurbo;
     host.style.display = settings.hudEnabled && anyEnabled && received && latest?.state?.driving !== false ? "block" : "none";
@@ -1805,6 +3530,12 @@
     const p = settings.hudPosition;
     // Skin switch is isolated from shared read-only telemetry and settings state.
     hud.dataset.style = settings.hudStyle;
+    const analogSvg=aget("analog-svg");
+    const targetViewBox=settings.hudStyle==="corolla"?"0 0 820 345":"0 0 735 345";
+    if(analogSvg.getAttribute("viewBox")!==targetViewBox)analogSvg.setAttribute("viewBox",targetViewBox);
+    applyAnalogLayout();
+    civicLayout();
+    rx7SpeedScale();
     hud.classList.toggle("perf-eco",settings.hudPerformanceMode === "eco");
     hud.style.setProperty("--analog-bg-opacity",String(settings.hudBackgroundOpacity/100));
     hud.classList.toggle("analog-depth",settings.analogDepthEnabled);
@@ -1823,7 +3554,7 @@
     host.style.bottom = isBottom ? "23px" : "auto";
     host.style.left = isRight ? "auto" : "18px";
     host.style.right = isRight ? "18px" : "auto";
-    hud.style.transform = `scale(${settings.hudScale / 100})`;
+    hud.style.transform = `scale(${gaugeValue("hudScale") / 100})`;
     hud.style.transformOrigin = `${isBottom ? "bottom" : "top"} ${isRight ? "right" : "left"}`;
     hud.style.opacity = "1";
     hud.style.setProperty("--text-alpha",String(settings.hudTextOpacity/100));
@@ -1851,6 +3582,8 @@
     };
     for (const [property,color] of Object.entries(colors)) hud.style.setProperty(property,color);
     applyAnalogLayout();
+    applyRx7Layout();
+    civ2Layout();
     applyVisibility();
     updateSpeedSensation();
   }
@@ -1858,33 +3591,52 @@
   function analogDragRange(){
     // Convert a full viewport travel distance into unscaled SVG offset pixels.
     // Include the current saved position so resizing the browser never clamps it.
-    return Math.min(20000,Math.ceil(1.45*Math.max(innerWidth,innerHeight,1000)/Math.max(.50,settings.hudScale/100)));
+    return Math.min(20000,Math.ceil(1.45*Math.max(innerWidth,innerHeight,1000)/Math.max(.50,gaugeValue("hudScale")/100)));
   }
   function syncAnalogPositionControls(){
     const range=analogDragRange();
     for(const key of ANALOG_POSITION_KEYS){
       const slider=mget(key),input=mget(`${key}Number`);
-      const bound=Math.min(20000,Math.max(range,Math.abs(settings[key])));
-      slider.min=String(-bound);slider.max=String(bound);
-      slider.value=String(settings[key]);
-      input.value=String(settings[key]);
+      const value=gaugeValue(key);
+      const limit=["corolla","civic"].includes(settings.hudStyle) ?
+        (key.endsWith("OffsetY")?COROLLA_LOCAL_LIMIT_Y:COROLLA_LOCAL_LIMIT_X) :
+        Math.min(20000,Math.max(range,Math.abs(value)));
+      slider.min=String(-limit);slider.max=String(limit);
+      input.min=String(-limit);input.max=String(limit);
+      slider.value=String(value);
+      input.value=String(value);
     }
   }
   function syncMenu() {
+    for (const key of SHORTCUT_KEYS) { const el=mget(`${key}Text`); if(el)el.textContent=Hotkeys.display(settings[key]); }
+    for (const key of SHORTCUT_KEYS) { const el=mget(`${key}Bind`); if(el)el.textContent=shortcutCaptureAction===key ? "Press a key... (Esc cancels)" : "Change " + (key==="shortcutMenu"?"menu":key==="shortcutToggleHud"?"HUD toggle":"SAVE ALL") + " shortcut"; }
     mget("modernColorsSettings").hidden=settings.hudStyle!=="modern";
-    mget("analogPositionSettings").hidden=settings.hudStyle!=="analog";
-    mget("analogCustomizationSettings").hidden=settings.hudStyle!=="analog";
+    mget("speedDepthSettings").hidden=settings.hudStyle!=="modern";
+    mget("hudTextOpacityControls").hidden=settings.hudStyle!=="modern";
+    mget("analogPositionSettings").hidden=!(["analog","corolla","civic","rx7"].includes(settings.hudStyle));
+    mget("rx7NitroSettings").hidden=settings.hudStyle!=="rx7";
+    mget("analogPositionLegend").textContent=settings.hudStyle==="civic"?"Honda Civic Si — Instrument Size & Position":settings.hudStyle==="corolla"?"Corolla — Circle Size & Position":settings.hudStyle==="rx7"?"Mazda RX-7 — Gauge Size & Position":"GT-R Analog — Circle Size & Position";
+    mget("analogResetSizes").textContent=settings.hudStyle==="civic"?"Reset Civic Sizes (85% / 95% / 95%)":settings.hudStyle==="rx7"?"Reset RX-7 Turbo/RPM/Speed Sizes to 100%":"Reset Circle Sizes to 100%";
+    mget("corollaFrameSettings").hidden=settings.hudStyle!=="corolla";
+    mget("civicFrameSettings").hidden=settings.hudStyle!=="civic";
+    mget("analogCustomizationSettings").hidden=settings.hudStyle!=="analog"; // Corolla keeps its dedicated retro palette
     syncAnalogPositionControls();
     for (const [key, val] of Object.entries(settings)) {
       const field = mget(key);
       if (!field) continue;
       if (field.type === "checkbox") field.checked = Boolean(val);
-      else field.value = String(val);
+      else field.value = String(scopedGaugeKey(key)!==key?gaugeValue(key):val);
     }
-    mget("hudScaleValue").textContent = `${settings.hudScale}%`;
+    for(const key of ['rx7NitroOffsetX','rx7NitroOffsetY','rx7NitroSizePct'])mget(key+'Value').textContent=`${settings[key]}${key.endsWith('Pct')?'%':' px'}`;
+    mget("hudScaleValue").textContent = `${gaugeValue("hudScale")}%`;
+    mget("hudScaleNumber").value = String(gaugeValue("hudScale"));
     mget("hudBackgroundOpacityValue").textContent = `${settings.hudBackgroundOpacity}%`;
     mget("hudTextOpacityValue").textContent = `${settings.hudTextOpacity}%`;
     mget("analogGlowPercentValue").textContent = `${settings.analogGlowPercent}%`;
+    for(const key of [...COROLLA_FRAME_KEYS,...CIVIC_FRAME_KEYS]){
+      const valueNode=mget(`${key}Value`);
+      if(valueNode)valueNode.textContent=`${settings[key]}${key.endsWith("Pct")?"%":" px"}`;
+    }
     updateOdometerDisplay();
     mget("speedSensationIntensityValue").textContent = `${settings.speedSensationIntensity}%`;
     mget("speedSensationFogPercentValue").textContent = `${settings.speedSensationFogPercent}%`;
@@ -1894,9 +3646,13 @@
     mget("impactFeedbackIntensityValue").textContent = `${settings.impactFeedbackIntensity}%`;
     mget("impactFeedbackMediumDvValue").textContent = `${settings.impactFeedbackMediumDv.toFixed(1)} m/s`;
     mget("impactFeedbackHeavyDvValue").textContent = `${Math.max(settings.impactFeedbackHeavyDv,settings.impactFeedbackMediumDv+3).toFixed(1)} m/s`;
-    for (const key of ["analogTurboOffsetX","analogTurboOffsetY","analogRpmOffsetX","analogRpmOffsetY","analogSpeedOffsetX","analogSpeedOffsetY"]) {
+    for (const key of ANALOG_POSITION_KEYS) {
       const valueNode=mget(`${key}Value`);
-      if(valueNode) valueNode.textContent = `${settings[key]} px`;
+      if(valueNode) valueNode.textContent = `${gaugeValue(key)} px`;
+    }
+    for (const key of ANALOG_SIZE_KEYS) {
+      const valueNode=mget(`${key}Value`);
+      if(valueNode) valueNode.textContent = `${gaugeValue(key)}%`;
     }
     mget("tyreSlipThresholdValue").textContent = `${settings.tyreSlipThreshold.toFixed(1)} m/s`;
     mget("tyreSlipHoldMsValue").textContent = `${(settings.tyreSlipHoldMs/1000).toFixed(2)} s`;
@@ -1916,6 +3672,7 @@
     mget("turboStartRpmInput").value = String(settings.turboStartRpm);
     mget("turboStartRpmValue").textContent = `${settings.turboStartRpm.toLocaleString("en-US")} RPM`;
     mget("turboResponseMsValue").textContent = `${(settings.turboResponseMs/1000).toFixed(1)} s`;
+    mget("turboReleaseMsValue").textContent = `${(settings.turboReleaseMs/1000).toFixed(2).replace(/0$/," ").trim()} s`;
     mget("damageMinImpactValue").textContent=`${settings.damageMinImpact.toFixed(1)} m/s`;
     mget("damageCustomHits").disabled=settings.damageHitMode!=="custom";
     for(const key of ["damageHitMode","damageRepairSeconds","damageMinImpact","damageCutScope"])
@@ -1952,8 +3709,13 @@
     // Do not mark changes saved until storage.local confirms the write succeeded.
     const changed=[...dirtyKeys];
     const snapshot=getActiveSnapshot();
-    const payload={ [ACTIVE_SETTINGS_KEY]: {schema:2,settings:snapshot,savedAt:new Date().toISOString()} };
+    const payload={ [ACTIVE_SETTINGS_KEY]: {schema:4,settings:snapshot,savedAt:new Date().toISOString()} };
     for (const key of changed) payload[key]=snapshot[key];
+    // Convert stored user profiles in the SAME transaction as the new schema.
+    const savesCivicProfiles=pendingCivicProfileMigration;
+    if(savesCivicProfiles)payload[PROFILE_STORE_KEY]=customProfiles.map(p=>({
+      id:p.id,name:p.name,settings:normalizeSnapshot(p.settings)
+    }));
     changed.forEach(key=>dirtyKeys.delete(key));
     settingsSaving=true;
     saveStatus("Saving settings...");
@@ -1963,6 +3725,7 @@
     catch(error) {write=Promise.reject(error);}
     lastSaveOperation=Promise.resolve(write).then(()=>{
       settingsSaving=false;
+      if(savesCivicProfiles)pendingCivicProfileMigration=false;
       saveStatus("All settings saved ✓");
       if (saveQueued || dirtyKeys.size) {saveQueued=false;return flushChanges();}
     }).catch(error=>{
@@ -1976,10 +3739,17 @@
     return lastSaveOperation;
   }
   function changeSetting(key, value, persistent=true) {
+    // UI controls use the active analog skin's independent X/Y, sizes and zoom.
+    key=scopedGaugeKey(key);
     if (!(key in DEFAULTS)) return;
     const normalized = normalize(key, value);
     if (settings[key] === normalized) return;
     settings[key] = normalized;
+    if (key === "hudStyle") {
+      // An explicit HUD-style choice is a MANUAL OVERRIDE. It must not change
+      // the selected car, saved mileage or that car's permanent style mapping.
+      analogLastSpeedUnit=null; // rebuild correct single-/dual-speed scales
+    }
     if (key === "shiftMode") shiftGuide.reset();
     if (["showTelemetryWarnings","showIcons","showTyreIcon","showEngineIcon","showSuspIcon","hudEnabled"].includes(key)) {
       clearIndicators();resetTyreBrakeState();oldTelemetry=null;engineRedSince=0;
@@ -2127,7 +3897,24 @@
   }
   function downloadProfile(name, snapshot) {
     const cleanName=safeName(name)||"Current_Settings";
-    const payload = {format:PROFILE_FORMAT,version:2,name:cleanName,style:settings.hudStyle,settings:normalizeSnapshot(snapshot)};
+    const normalized=normalizeSnapshot(snapshot);
+    const layout=prefix=>({
+      turbo:{x:normalized[prefix+"TurboOffsetX"],y:normalized[prefix+"TurboOffsetY"],sizePct:normalized[prefix+"TurboSizePct"]},
+      rpm:{x:normalized[prefix+"RpmOffsetX"],y:normalized[prefix+"RpmOffsetY"],sizePct:normalized[prefix+"RpmSizePct"]},
+      speed:{x:normalized[prefix+"SpeedOffsetX"],y:normalized[prefix+"SpeedOffsetY"],sizePct:normalized[prefix+"SpeedSizePct"]},
+      hudScalePct:normalized[prefix==="corolla"?"corollaHudScalePct":prefix==="civic"?"civicHudScalePct":"analogHudScalePct"]
+    });
+    // Human-readable layout makes X/Y immediately visible in exported JSON.
+    // Flat settings remain the canonical import keys for backward compatibility.
+    const payload={format:PROFILE_FORMAT,version:2,name:cleanName,style:normalized.hudStyle,
+      civicCoordinateOrigin:"zero-v0973",coordinateOrigin:"zero-v0973",
+      layouts:{modernHudScalePct:normalized.hudScale,gtrAnalog:layout("analog"),toyotaCorollaRetro:{...layout("corolla"),
+        wholeFrame:{x:normalized.corollaFrameOffsetX,y:normalized.corollaFrameOffsetY,
+          scalePct:normalized.corollaFrameScalePct}},hondaCivicSi:{...layout("civic"),
+        wholeFrame:{x:normalized.civicFrameOffsetX,y:normalized.civicFrameOffsetY,
+          scalePct:normalized.civicFrameScalePct}}},
+      mazdaRx7:{...layout('rx7'),nitro:{x:normalized.rx7NitroOffsetX,y:normalized.rx7NitroOffsetY,sizePct:normalized.rx7NitroSizePct}},
+      carHudStyles:{...carHudStyleLinks},settings:normalized};
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
     const url=URL.createObjectURL(blob);
     const link=document.createElement("a");
@@ -2147,7 +3934,7 @@
     // Wait until current save finishes, then export the same live setings.
     await flushChanges();
     const name=downloadProfile("Current_Settings",getActiveSnapshot());
-    profileMessage(`Downloaded CURRENT settings: ${name}. All colors and controls included.`);
+    profileMessage(`Downloaded CURRENT settings: ${name}. X/Y positions, frame sizes and all three analog layouts included.`);
   }
   async function importProfile(file) {
     if (!file) return;
@@ -2161,11 +3948,40 @@
     if (!parsed.settings || typeof parsed.settings!=="object" || Array.isArray(parsed.settings)) {
       throw new Error("Profile has no valid settings object.");
     }
-    const merged={...getActiveSnapshot(),...parsed.settings};
+    // Import both v0.9.73 zero-origin exports and older profiles unchanged
+    // visually. Older data is converted only ONCE at the import boundary.
+    const newOrigin=parsed.coordinateOrigin==="zero-v0973"||parsed.civicCoordinateOrigin==="zero-v0973";
+    const legacyCivic=parsed.civicCoordinateOrigin!=="zero-v0952" && !newOrigin;
+    const importedSettings=newOrigin?parsed.settings:migrateToZeroOrigin(parsed.settings,legacyCivic);
+    const merged={...getActiveSnapshot(),...importedSettings};
+    if(parsed.settings.hudStyle==="analog" && !Object.hasOwn(parsed.settings,"analogHudScalePct") && Object.hasOwn(parsed.settings,"hudScale")){
+      merged.analogHudScalePct=parsed.settings.hudScale;
+    }
+    // v0.9.38 and earlier kept X/Y for both analog designs in analog* fields.
+    // Older Corolla exports are migrated once into the new Corolla-only slots.
+    // Use fields from settings, not decorative layouts, if both are supplied.
+    if(parsed.settings.hudStyle==="corolla" &&
+      !COROLLA_POSITION_KEYS.some(key=>Object.prototype.hasOwnProperty.call(parsed.settings,key))){
+      for(const key of ANALOG_POSITION_KEYS){
+        if(Object.prototype.hasOwnProperty.call(parsed.settings,key)){
+          const target="corolla"+key.slice(6);
+          merged[target]=Number(parsed.settings[key])-(newOrigin?0:originValue(target));
+        }
+      }
+      for(const key of ANALOG_SIZE_KEYS){
+        if(Object.prototype.hasOwnProperty.call(parsed.settings,key))merged["corolla"+key.slice(6)]=parsed.settings[key];
+      }
+      if(Object.prototype.hasOwnProperty.call(parsed.settings,"hudScale"))merged.corollaHudScalePct=parsed.settings.hudScale;
+    }
     const validated=normalizeSnapshot(merged);
     const name=await addProfile(parsed.name,validated);
     await applySnapshot(validated);
-    profileMessage(`Imported, saved and applied ALL settings: ${name}.`);
+    if(parsed.carHudStyles && typeof parsed.carHudStyles==="object" && !Array.isArray(parsed.carHudStyles)){
+      carHudStyleLinks=cleanCarHudStyles(parsed.carHudStyles);
+      await saveCarHudStyles();
+      updateOdometerDisplay();
+    }
+    profileMessage(`Imported settings, car/HUD links, and all frame and circle X/Y and sizes: ${name}.`);
   }
   function resetDefaults() {
     for (const [k, value] of Object.entries(DEFAULTS)) {
@@ -2309,7 +4125,7 @@
     menuHost.style.display = menuOpen ? "block" : "none";
     syncThrottleGuard();
     if (menuOpen) {syncMenu();applyMenuPlacement();}
-    else flushChanges();
+    else {shortcutCaptureAction=null;flushChanges();}
   }
 
   function isInput(target) {
@@ -2335,30 +4151,33 @@
     // increasing the ODO during asynchronous browser.storage writes: checking
     // !odometerDirty afterwards falsely reports failure on every drive.
     const expectedSettings=getActiveSnapshot();
+    const expectedCarStyles={...carHudStyleLinks};
     const expectedCar=selectedOdometerCar;
     const expectedKm=expectedCar?odometerKm:0;
     for(const key of Object.keys(DEFAULTS))dirtyKeys.add(key);
     showSaveToast("Saving HUD + mileage…");
     void (async()=>{
-      await Promise.all([flushChanges(),saveOdometer(true)]);
+      await Promise.all([flushChanges(),saveOdometer(true),saveCarHudStyles()]);
       // Read back from the browser rather than trusting dirty flags. Newer
       // changes after pressing Save are allowed to remain pending.
-      let stored=await hudStorage.get([ACTIVE_SETTINGS_KEY,ODOMETER_PRIMARY_STORE_KEY,ODOMETER_STORE_KEY,ODOMETER_SELECTED_KEY]);
+      let stored=await hudStorage.get([ACTIVE_SETTINGS_KEY,ODOMETER_PRIMARY_STORE_KEY,ODOMETER_STORE_KEY,ODOMETER_SELECTED_KEY,CAR_HUD_STYLE_STORE_KEY]);
       const matches=values=>{
         const storedSettings=values?.[ACTIVE_SETTINGS_KEY]?.settings;
         const storedOdo=values?.[ODOMETER_PRIMARY_STORE_KEY] || values?.[ODOMETER_STORE_KEY];
         const settingsOk=storedSettings && Object.entries(expectedSettings).every(([key,value])=>storedSettings[key]===value);
+        const storedCarStyles=values?.[CAR_HUD_STYLE_STORE_KEY]?.styles;
+        const linksOk=storedCarStyles && JSON.stringify(storedCarStyles)===JSON.stringify(expectedCarStyles);
         const odoKm=expectedCar?Number(storedOdo?.cars?.[expectedCar]):0;
         const odoOk=[2,3].includes(storedOdo?.version) && storedOdo.selectedCar===expectedCar &&
           values?.[ODOMETER_SELECTED_KEY]===expectedCar &&
           (!expectedCar || (Number.isFinite(odoKm)&&odoKm+1e-7>=expectedKm));
-        return Boolean(settingsOk&&odoOk);
+        return Boolean(settingsOk&&odoOk&&linksOk);
       };
       if(!matches(stored)){
         // A previous write or another explicit Save may have overlapped.
         // Flush once more before considering the result incomplete.
-        await Promise.all([flushChanges(),saveOdometer(true)]);
-        stored=await hudStorage.get([ACTIVE_SETTINGS_KEY,ODOMETER_PRIMARY_STORE_KEY,ODOMETER_STORE_KEY,ODOMETER_SELECTED_KEY]);
+        await Promise.all([flushChanges(),saveOdometer(true),saveCarHudStyles()]);
+        stored=await hudStorage.get([ACTIVE_SETTINGS_KEY,ODOMETER_PRIMARY_STORE_KEY,ODOMETER_STORE_KEY,ODOMETER_SELECTED_KEY,CAR_HUD_STYLE_STORE_KEY]);
       }
       if(matches(stored)){
         showSaveToast("HUD settings + car mileage saved ✓");
@@ -2373,22 +4192,41 @@
     });
   }
   function handleShortcut(event) {
-    if (menuOpen && event.key === "Escape") {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      toggleMenu(false);
-      return;
+    if (shortcutCaptureAction) {
+      if(event.repeat)return;
+      if(event.code==="Escape"){
+        event.preventDefault();event.stopImmediatePropagation();
+        shortcutCaptureAction=null;syncMenu();saveStatus("Shortcut recording cancelled.");return;
+      }
+      if(["ControlLeft","ControlRight","AltLeft","AltRight","ShiftLeft","ShiftRight","MetaLeft","MetaRight"].includes(event.code))return;
+      event.preventDefault();event.stopImmediatePropagation();
+      const shortcut=Hotkeys.fromEvent(event);
+      if(!shortcut){saveStatus("Invalid shortcut. For letters/numbers hold Ctrl or Alt; Esc cancels.",true);return;}
+      const action=shortcutCaptureAction;
+      if(SHORTCUT_KEYS.some(key=>key!==action && settings[key]===shortcut)){
+        saveStatus("That shortcut is already assigned to another HUD action.",true);return;
+      }
+      if(action!=="shortcutMenu" && shortcut===Hotkeys.TKL_MENU_FALLBACK){
+        saveStatus("Ctrl + Alt + M is reserved as a backup menu shortcut.",true);return;
+      }
+      shortcutCaptureAction=null;
+      changeSetting(action,shortcut);
+      syncMenu();saveStatus("Keyboard shortcut saved: "+Hotkeys.display(shortcut));return;
     }
-    if (event.repeat || event.ctrlKey || event.metaKey || event.altKey || isInput(event.target)) return;
-    const plus = event.code === "NumpadAdd" || (event.location === 3 && event.key === "+");
-    const minus = event.code === "NumpadSubtract" || (event.location === 3 && event.key === "-");
-    const multiply = event.code === "NumpadMultiply" || (event.location === 3 && event.key === "*");
-    if (!plus && !minus && !multiply) return;
-    event.preventDefault();
-    event.stopImmediatePropagation(); // Prevent competing game key commands.
-    if (multiply)saveAllCurrentSettings();
-    else if (plus) toggleMenu();
-    else changeSetting("hudEnabled", !settings.hudEnabled);
+    if (menuOpen && event.key === "Escape") {
+      event.preventDefault();event.stopImmediatePropagation();toggleMenu(false);return;
+    }
+    const actualTarget=typeof event.composedPath==="function" ? event.composedPath()[0] : event.target;
+    if (event.repeat || event.metaKey || isInput(actualTarget)) return;
+    const pressed=Hotkeys.fromEvent(event);
+    if(!pressed)return;
+    let action=SHORTCUT_KEYS.find(key=>settings[key]===pressed);
+    if(!action && pressed===Hotkeys.TKL_MENU_FALLBACK)action="shortcutMenu";
+    if(!action)return;
+    event.preventDefault();event.stopImmediatePropagation();
+    if(action==="shortcutSaveAll")saveAllCurrentSettings();
+    else if(action==="shortcutMenu")toggleMenu();
+    else changeSetting("hudEnabled",!settings.hudEnabled);
   }
   window.addEventListener("keydown", handleShortcut, true);
   menuShadow.addEventListener("keydown", event => {
@@ -2404,7 +4242,35 @@
   mget("done").addEventListener("click", () => toggleMenu(false));
   mget("reset").addEventListener("click", resetDefaults);
   mget("saveNow").addEventListener("click",saveAllCurrentSettings);
+  for(const key of SHORTCUT_KEYS)mget(`${key}Bind`).addEventListener("click",()=>{
+    shortcutCaptureAction=key;
+    syncMenu();saveStatus("Press the new shortcut for "+key+" (Esc to cancel).");
+  });
+  mget("shortcutResetDefaults").addEventListener("click",()=>{
+    shortcutCaptureAction=null;
+    for(const key of SHORTCUT_KEYS)changeSetting(key,Hotkeys.DEFAULTS[key]);
+    syncMenu();saveStatus("Keyboard shortcuts reset to original Numpad defaults. ODO and HUD untouched.");
+  });
+
   mget("odometerCarSelect").addEventListener("change",e=>selectOdometerCar(e.target.value));
+  mget("carAssignCurrentHud").addEventListener("click",()=>{
+    const car=selectedOdometerCar;
+    if(!ODOMETER_CAR_IDS.has(car))return odometerStatus("Select a car first.",true);
+    carHudStyleLinks[car]=settings.hudStyle;
+    updateOdometerDisplay();
+    void saveCarHudStyles().then(()=>odometerStatus("HUD assignment saved for this car model."))
+      .catch(error=>odometerStatus("Failed to save HUD assignment: "+error.message,true));
+  });
+  mget("carResetAssignedHud").addEventListener("click",()=>{
+    const car=selectedOdometerCar;
+    if(!ODOMETER_CAR_IDS.has(car))return;
+    delete carHudStyleLinks[car];
+    const style=carHudStyleFor(car);
+    if(settings.hudStyle!==style)changeSetting("hudStyle",style);
+    updateOdometerDisplay();
+    void saveCarHudStyles().then(()=>odometerStatus("Factory HUD restored for selected car."))
+      .catch(error=>odometerStatus("Failed to reset car HUD assignment: "+error.message,true));
+  });
   mget("odometerSaveNow").addEventListener("click",()=>{
     void saveOdometer(true).then(()=>{
       if(!odometerDirty)odometerStatus("ODO checkpoint saved in extension storage.");
@@ -2435,6 +4301,12 @@
     el.addEventListener(el.type === "range" || el.type === "color" ? "input" : "change", () =>
       changeSetting(key, el.type === "checkbox" ? el.checked : el.value));
   }
+  // Per-style precise HUD Scale entry (not limited to slider presets).
+  mget("hudScaleNumber").addEventListener("change",()=>{
+    const field=mget("hudScaleNumber");
+    if(field.value.trim()!=="" && Number.isFinite(Number(field.value)))changeSetting("hudScale",field.value);
+    else syncMenu();
+  });
   // Precise X/Y input is independent of slider dragging and persists like any setting.
   for(const key of ANALOG_POSITION_KEYS){
     const number=mget(`${key}Number`);
@@ -2443,9 +4315,26 @@
       else syncMenu();
     });
   }
+  mget('rx7NitroReset').addEventListener('click',()=>{
+    for(const key of ['rx7NitroOffsetX','rx7NitroOffsetY','rx7NitroSizePct'])changeSetting(key,DEFAULTS[key]);
+    saveStatus('RX-7 Nitro position/size restored.');
+  });
   mget("analogResetPositions").addEventListener("click",()=>{
-    for(const key of ANALOG_POSITION_KEYS)changeSetting(key,DEFAULTS[key]);
+    for(const key of ANALOG_POSITION_KEYS)changeSetting(key,DEFAULTS[scopedGaugeKey(key)]);
     saveStatus("Original analog circle positions restored. Other settings unchanged.");
+  });
+  mget("analogResetSizes").addEventListener("click",()=>{
+    const civic=settings.hudStyle==="civic";
+    for(const key of ANALOG_SIZE_KEYS)changeSetting(key,civic?DEFAULTS[scopedGaugeKey(key)]:100);
+    saveStatus(civic?"Civic sizes reset to factory 85% Nitro/Turbo, 95% RPM and Speed.":"All circle sizes reset to 100%. Positions and other settings preserved.");
+  });
+  mget("civicFrameReset").addEventListener("click",()=>{
+    for(const key of CIVIC_FRAME_KEYS)changeSetting(key,DEFAULTS[key]);
+    saveStatus("Civic frame scale/X/Y restored; other layouts and ODO unchanged.");
+  });
+  mget("corollaFrameReset").addEventListener("click",()=>{
+    for(const key of COROLLA_FRAME_KEYS)changeSetting(key,DEFAULTS[key]);
+    saveStatus("Corolla whole-frame scale/X/Y restored; circle sizes, ODO and GT-R unchanged.");
   });
 
   mget("turboStartRpmInput").addEventListener("change", event => {
@@ -2454,6 +4343,37 @@
     else syncMenu();
   });
 
+  // GT-R + COROLLA GEAR — one rolling numeral inside the same gear window.
+  // Animation runs only when the displayed gear changes.
+  let analogLastGear=null,analogGearFrame=0;
+  function analogRollingGearUpdate(newGear){
+    const gear=String(newGear??"N");
+    if(gear===analogLastGear)return;
+    const previous=analogLastGear;
+    analogLastGear=gear;
+    if(analogGearFrame){cancelAnimationFrame(analogGearFrame);analogGearFrame=0;}
+    const roller=analogUi.gearRoll;
+    const finish=()=>{
+      analogUi.gear.textContent=gear;
+      analogUi.gearNext.textContent=gear;
+      roller.setAttribute("transform","translate(0 0)");
+      analogGearFrame=0;
+    };
+    if(previous===null||!settings.showGear||settings.hudPerformanceMode==="eco"){
+      finish();return;
+    }
+    analogUi.gear.textContent=previous;
+    analogUi.gearNext.textContent=gear;
+    const began=performance.now(),duration=285;
+    const frame=now=>{
+      if(analogLastGear!==gear){analogGearFrame=0;return;}
+      const t=Math.min(1,(now-began)/duration);
+      const eased=1-(1-t)*(1-t)*(1-t);
+      roller.setAttribute("transform",`translate(0 ${(-22*eased).toFixed(2)})`);
+      if(t<1)analogGearFrame=requestAnimationFrame(frame);else finish();
+    };
+    analogGearFrame=requestAnimationFrame(frame);
+  }
   function render(now) {
     renderQueued = false;
     if (!latest || !settings.hudEnabled || !received || latest.state?.driving === false) return;
@@ -2472,15 +4392,24 @@
     const redline = Number.isFinite(d.rpmRedline) && d.rpmRedline > 0 ? d.rpmRedline : max;
     const scaleMax = Math.ceil(Math.max(max,redline) / 1000) * 1000;
     if (settings.showRpm && settings.hudMode === "full" && settings.hudStyle === "modern") updateRpmScale(scaleMax);
-    const analogActive=settings.hudStyle==="analog"&&settings.hudMode==="full";
+    const analogActive=["analog","corolla"].includes(settings.hudStyle)&&settings.hudMode==="full";
+    const civicActive=settings.hudStyle==="civic"&&settings.hudMode==="full";
+    const rx7Active=settings.hudStyle==="rx7"&&settings.hudMode==="full";
+    if(!analogActive)analogLastGear=null;
     if (analogActive) {
       if(settings.showSpeed){analogScaleForSpeed(settings.speedUnit);
-        analogNeedle(analogUi.speedNeedle,selectedSpeed,settings.speedUnit==="mph"?250:400,595,164);}
+        // Corolla needle follows the true 0-400 km/h range; both printed
+        // scales stay synchronized regardless of the user's digital unit.
+        analogNeedle(analogUi.speedNeedle,settings.hudStyle==="corolla"?kmh:selectedSpeed,
+          settings.hudStyle==="corolla"?400:(settings.speedUnit==="mph"?250:400),595,164);}
       if(settings.showRpm){analogScaleForRpm(scaleMax,redline);analogNeedle(analogUi.rpmNeedle,rpm,scaleMax,304,199);}
-      if(settings.showGear)setText(analogUi.gear,gearText(d.gear));
+      if(settings.showGear){
+        analogRollingGearUpdate(gearText(d.gear));
+      }
     }
     const nitro = Number.isFinite(d.nitrous) ? clamp(d.nitrous, 0, NITRO_CAPACITY) : 0;
     const gear = gearText(d.gear);
+    if(civicActive){civicUpdate(rpm,scaleMax,redline,kmh,nitro,gear);civ2Update(rpm,scaleMax,redline,kmh,nitro,gear);}
     if (settings.showSpeed) setText(ui.speed,Math.round(selectedSpeed).toLocaleString("en-US"));
     if (settings.showGear) {
       setText(ui.gear,gear);setText(ui.compactGear,gear);
@@ -2503,8 +4432,11 @@
       turboTarget=load*spool;
       updateTurbo(now);
     }
+    if(rx7Active)rx7Update(rpm,scaleMax,redline,kmh,nitro,gear);
     if (settings.showShift) {
       const state=shiftGuide.update(d,now,settings);
+      if(civicActive){const leds=civicGet("civic-shift-lights");leds.classList.toggle("near",state.state==="near");leds.classList.toggle("shift",state.state==="shift");civ2Ui.shift.classList.toggle("near",state.state==="near");civ2Ui.shift.classList.toggle("shift",state.state==="shift");}
+      if(rx7Active){rx7Ui.shift.classList.toggle("near",state.state==="near");rx7Ui.shift.classList.toggle("shift",state.state==="shift");}
       if (state.state!==lastShiftState) {
         ui.shiftStrip.classList.toggle("near",state.state==="near");
         ui.shiftStrip.classList.toggle("shift",state.state==="shift");
@@ -2525,6 +4457,7 @@
         setText(analogUi.nitroText,`${pct}%`);
         analogUi.nitroA.setAttribute("width",(first*42).toFixed(1));
         analogUi.nitroB.setAttribute("width",(second*42).toFixed(1));
+        analogUi.corollaNitroFill.setAttribute("width",(pct/100*141).toFixed(1));
       }
     }
   }
@@ -2582,16 +4515,27 @@
   try {
     hudStorage.get(null).then(saved => {
       saved=saved && typeof saved==="object" ? saved : {};
+      const persistedCarStyles=saved[CAR_HUD_STYLE_STORE_KEY];
+      carHudStyleLinks=cleanCarHudStyles(persistedCarStyles?.version===1?persistedCarStyles.styles:null);
+      const savedSchema=saved[ACTIVE_SETTINGS_KEY]?.schema;
+      const hasOldCivicOrigin=savedSchema!==3&&savedSchema!==4;
+      const hasPriorPositions=Object.keys(ZERO_POSITION_BASELINE).some(key=>
+        Object.prototype.hasOwnProperty.call(saved,key));
+      const migrateLayoutZeroOrigin=savedSchema===2||savedSchema===3||
+        (savedSchema===undefined && hasPriorPositions);
       if (Array.isArray(saved[PROFILE_STORE_KEY])) {
         const cleaned=[];
         for (const profile of saved[PROFILE_STORE_KEY].slice(0,PROFILE_LIMIT)) {
           try {
             if (typeof profile.id!=="string" || !profile.id.startsWith("user:")) continue;
             const name=safeName(profile.name);if(!name)continue;
-            cleaned.push({id:profile.id.slice(0,96),name,settings:normalizeSnapshot(profile.settings)});
+            const source=migrateLayoutZeroOrigin
+              ?migrateToZeroOrigin(profile.settings,hasOldCivicOrigin):profile.settings;
+            cleaned.push({id:profile.id.slice(0,96),name,settings:normalizeSnapshot(source)});
           } catch(_error) { /* Ignore damaged profile, never execute imported data. */ }
         }
         customProfiles=cleaned;
+        if(migrateLayoutZeroOrigin && cleaned.length)pendingCivicProfileMigration=true;
         updateProfileMenu();
       }
       const storedPrimary=saved[ODOMETER_PRIMARY_STORE_KEY];
@@ -2640,11 +4584,32 @@
       updateOdometerDisplay();
       if(odometerDirty)void saveOdometer(true);
       const active=saved[ACTIVE_SETTINGS_KEY];
-      const complete=active && active.schema===2 && active.settings && typeof active.settings==="object" && !Array.isArray(active.settings) ? active.settings : null;
+      const complete=active && [2,3,4].includes(active.schema) && active.settings && typeof active.settings==="object" && !Array.isArray(active.settings) ? active.settings : null;
       const merged = {...DEFAULTS, ...saved, ...(complete || {})};
+    // Preserve the Corolla layout from installations before the new
+    // skin-specific settings existed, without resetting any other HUD values.
+    const prior=complete||saved;
+    // v0.9.73: translate old saved X/Y relative to the new zero baselines.
+    // This leaves already-installed HUDs in exactly their previous positions.
+    if(migrateLayoutZeroOrigin)Object.assign(merged,migrateToZeroOrigin(prior,hasOldCivicOrigin));
+    // v0.9.48: older GT-R installations shared hudScale with Modern.
+    // Copy their last GT-R zoom once only, without changing other skins.
+    if(prior.hudStyle==="analog" && prior.analogHudScalePct===undefined && prior.hudScale!==undefined){
+      merged.analogHudScalePct=prior.hudScale;
+    }
+    if(prior.hudStyle==="corolla" && !COROLLA_POSITION_KEYS.some(key=>
+      Object.prototype.hasOwnProperty.call(prior,key))){
+      for(const key of ANALOG_POSITION_KEYS)if(prior[key]!==undefined){
+        const target="corolla"+key.slice(6);
+        merged[target]=Number(prior[key])-(migrateLayoutZeroOrigin?originValue(target):0);
+      }
+      for(const key of ANALOG_SIZE_KEYS)if(prior[key]!==undefined)
+        merged["corolla"+key.slice(6)]=prior[key];
+      if(prior.hudScale!==undefined)merged.corollaHudScalePct=prior.hudScale;
+    }
       // The popup can be used while no game tab is open. In that case flat keys
       // are newer than the complete snapshot, so keep popup-owned options.
-      for(const key of ["hudEnabled","hudMode","shiftMode","manualGreenLead"]) {
+      for(const key of ["hudEnabled","hudMode","shiftMode","manualGreenLead",...SHORTCUT_KEYS]) {
         if(Object.prototype.hasOwnProperty.call(saved,key)) merged[key]=saved[key];
       }
       // Migrate v0.7 single opacity into new independent controls on first v0.8 load.
@@ -2675,11 +4640,28 @@
           if(Number(merged[key])===oldValue){merged[key]=DEFAULTS[key];migrated22Keys.push(key);}
         }
       }
+      // v0.9.42 turbo timing update: move the previous 0.3s stock rise
+      // setting to 1.0s. Respect deliberate custom values other than 300ms.
+      const migrateTurboTiming = saved._v0942_turbo_timing !== true;
+      if(migrateTurboTiming && Number(merged.turboResponseMs)===300){
+        merged.turboResponseMs=1000;
+      }
       for (const key of Object.keys(DEFAULTS)) {
         // A user may have changed a slider while the asynchronous initial read ran.
         if (!dirtyKeys.has(key))settings[key]=normalize(key,merged[key]);
       }
       settingsReady=true;
+      if(migrateLayoutZeroOrigin || pendingCivicProfileMigration){
+        Object.keys(ZERO_POSITION_BASELINE).forEach(key=>dirtyKeys.add(key));
+        // The whole snapshot and saved profiles are migrated atomically.
+        persistSoon();
+      }
+      if(migrateTurboTiming){
+        if(!dirtyKeys.has("turboResponseMs"))dirtyKeys.add("turboResponseMs");
+        if(!dirtyKeys.has("turboReleaseMs"))dirtyKeys.add("turboReleaseMs");
+        void hudStorage.set({_v0942_turbo_timing:true}).catch(error =>
+          console.warn("[NFSU2 HUD] v0.9.42 turbo migration marker",error));
+      }
       if(saved._v0922_timers_collision!==true){
         migrated22Keys.forEach(key=>dirtyKeys.add(key));
         void hudStorage.set({_v0922_timers_collision:true}).catch(error=>console.warn("[NFSU2 HUD] v0.9.22 migration marker",error));
