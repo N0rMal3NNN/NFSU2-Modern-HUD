@@ -1,6 +1,6 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.9.73 — Five HUD Styles (Chromium + Firefox)**
+**Current version: v0.9.77 — Five HUD Styles (Chromium + Firefox)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Customize your dashboard and see live driving data using the game's read-only Car Feed without modifying game files, game physics, or 3D rendering.
 
@@ -18,7 +18,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **Firefox menu compatibility fix:** improved settings styling and operation under strict CSP configurations.
 - **Existing HUD improvements:** Modern HUD RPM '10' label no longer overlaps COILOVER; GT-R Analog gains rolling GEAR digits.
 
-For full changes, read [v0.9.73 Release Notes](RELEASE_NOTES_v0.9.73.md) and [CHANGELOG](CHANGELOG.md).
+For full changes, read [v0.9.77 Release Notes](RELEASE_NOTES_v0.9.77.md) and [CHANGELOG](CHANGELOG.md).
 
 ## Screenshots
 
@@ -26,7 +26,7 @@ For full changes, read [v0.9.73 Release Notes](RELEASE_NOTES_v0.9.73.md) and [CH
 ![Honda Civic Si in NFSU2.xyz](assets/honda-civic-si-v0.9.73.jpg)
 
 ### Mazda RX-7 FD — new in v0.9.73
-![Mazda RX-7 FD in NFSU2.xyz](assets/mazda-rx7-v0.9.73.jpg)
+![Mazda RX-7 FD in NFSU2.xyz](assets/mazda-rx7-v0.9.77.jpg)
 
 
 ### GT-R Analog HUD in-game
@@ -89,7 +89,7 @@ Use the matching folder from the package: `NFSU2-HUD-Chromium` or `NFSU2-HUD-Fir
 
 ## Install / upgrade
 
-1. Download the **v0.9.73 ZIP** from [Direct download](downloads/NFSU2_Modern_HUD_v0.9.73_MultiBrowser.zip), and extract it.
+1. Download the **v0.9.77 ZIP** from [Direct download](downloads/NFSU2_Modern_HUD_v0.9.77_MultiBrowser.zip), and extract it.
 2. **For upgrades**, replace the files within your *existing installed extension folder* instead of loading the updated code from a different folder. Back up/export your settings first.
 3. Reload the extension in your browser's extension manager, then refresh NFSU2.xyz.
 4. Press `Numpad +` to customize, choose a car model under **Odometer — Mileage by Car**, and use `Numpad *` to save all.

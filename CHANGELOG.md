@@ -1,8 +1,12 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.9.73.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.9.77.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.9.77 — Public Multi-Browser Build
+
+This download includes the five HUD styles and features described below, with packages for Chromium and Firefox.
 
 ## v0.9.73 — Three New Analog HUDs, TKL Shortcuts & Compatibility
 

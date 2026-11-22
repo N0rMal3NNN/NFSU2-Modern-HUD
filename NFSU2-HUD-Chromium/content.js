@@ -919,8 +919,10 @@
 .rx7v2-warning svg{width:32px;height:32px;fill:none;stroke:#dedee0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;flex:0 0 32px}
 .rx7v2-warning-lamp{box-sizing:border-box;width:15px;height:15px;border-radius:3px;background:#33343a;border:1px solid #858389;flex:0 0 15px}
 #rx7-tyre{margin-left:0}
-#rx7-engine{margin-left:18px}
-#rx7-susp{margin-left:36px}
+/* RX-7 owner-marked positions: move ENGINE to blue dot, SUSP to red dot.
+   Keep TYRES and all frame/gauge/shift coordinates exactly as v0.9.73. */
+#rx7-engine{margin-left:25px;transform:translateY(-30px)}
+#rx7-susp{margin-left:53px;transform:translateY(-140px)}
 .rx7v2-warning.warning-yellow .rx7v2-warning-lamp{background:#ffd058;box-shadow:0 0 6px #e7a82a}
 .rx7v2-warning.warning-red .rx7v2-warning-lamp,.rx7v2-warning.damage-critical .rx7v2-warning-lamp{background:#ff5567;box-shadow:0 0 6px #ff3b4e}
 .rx7v2-badge{position:absolute;left:474px;bottom:56px;transform:translateX(-50%);font:700 14px Arial,sans-serif;letter-spacing:4px;color:#f3ebe6;text-shadow:0 0 7px rgba(255,123,41,.7);z-index:2}
