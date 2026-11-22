@@ -20,6 +20,15 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 For full changes, read [v0.9.77 Release Notes](RELEASE_NOTES_v0.9.77.md) and [CHANGELOG](CHANGELOG.md).
 
+## Download / Choose a version
+
+**Latest public version: v0.9.77** (Chromium + Firefox in one ZIP)
+
+- **[Download Latest — Multi-Browser ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip)** — a permanent link to the current published build.
+- **[Choose Version — Version Archive](DOWNLOADS.md)** — download a particular version, including older releases.
+
+**Important:** GitHub's green **Code → Download ZIP** option downloads the *entire source repository*, not just the browser extension. To install the extension, use **Download Latest** above. When a new release is published, the stable Download Latest file is replaced while the numbered ZIPs remain available in the archive.
+
 ## Screenshots
 
 ### Honda Civic Si — new in v0.9.73
@@ -89,7 +98,7 @@ Use the matching folder from the package: `NFSU2-HUD-Chromium` or `NFSU2-HUD-Fir
 
 ## Install / upgrade
 
-1. Download the **v0.9.77 ZIP** from [Direct download](downloads/NFSU2_Modern_HUD_v0.9.77_MultiBrowser.zip), and extract it.
+1. Download the newest ZIP using [Download Latest](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip) (or [choose a specific version](DOWNLOADS.md)), and extract it.
 2. **For upgrades**, replace the files within your *existing installed extension folder* instead of loading the updated code from a different folder. Back up/export your settings first.
 3. Reload the extension in your browser's extension manager, then refresh NFSU2.xyz.
 4. Press `Numpad +` to customize, choose a car model under **Odometer — Mileage by Car**, and use `Numpad *` to save all.
