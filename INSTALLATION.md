@@ -10,9 +10,11 @@ Google Chrome, Microsoft Edge, Brave, Opera/Opera GX, Vivaldi, compatible Chromi
 
 The release ZIP includes separate folders for Chromium (`NFSU2-HUD-Chromium`) and Firefox (`NFSU2-HUD-Firefox`). **Do not load both folders in the same browser.**
 
+**Downloads:** [Download Latest](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip) · [Choose Version](DOWNLOADS.md). The green GitHub **Code → Download ZIP** button downloads the full source repository, not the extension release package.
+
 ## First installation — Chrome / Edge / Brave / Opera / Chromium
 
-1. Download the latest extension ZIP from [direct ZIP download](downloads/NFSU2_Modern_HUD_v0.9.77_MultiBrowser.zip).
+1. Download the latest extension ZIP from [Download Latest](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip), or [choose a specific version](DOWNLOADS.md).
 2. Extract the archive to a **permanent** folder that you will keep for future updates.
 3. Open your browser's extension manager (for example `chrome://extensions` or `edge://extensions`).
 4. Turn on **Developer mode**.
@@ -26,7 +28,7 @@ The release ZIP includes separate folders for Chromium (`NFSU2-HUD-Chromium`) an
 
 1. Open HUD Settings and **export your settings profile** as a backup. Note the current mileage for any cars you care about; profile JSON does **not** include mileage.
 2. Close or stop the game tab and your driving session.
-3. Extract the new v0.9.77 ZIP to a temporary location.
+3. Extract your downloaded Multi-Browser ZIP to a temporary location.
 4. **Copy the updated files from `NFSU2-HUD-Chromium` into the exact previously installed `NFSU2-HUD-Chromium` directory**, replacing the old files in place. Keep the folder path unchanged.
 5. Open the extension manager and press **Reload** on the existing extension.
 6. Refresh the NFSU2.xyz game page. Check that your previous settings, selected car and mileage return.
