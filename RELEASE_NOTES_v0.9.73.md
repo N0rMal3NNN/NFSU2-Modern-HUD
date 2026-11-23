@@ -58,11 +58,11 @@ No numeric keypad? You can now customize the extension's controls on **TKL (tenk
 
 *The Numpad defaults remain unchanged unless you explicitly rebind them. Ctrl + Alt + M is reserved for the menu and cannot be assigned to other HUD actions.*
 
-## Browser Compatibility: Firefox Settings Menu Fix
+## Settings Menu Compatibility with Strict CSP
 
-- **Fixed HUD settings/menu rendering in Firefox** on pages with strict Content Security Policy (CSP), where extension-owned styles could previously be blocked and leave parts of the menu unstyled or difficult to use.
-- The settings UI now restores its styles through browser-compatible Shadow DOM stylesheets and DOM style properties; the draggable/resizable panel works in both Firefox and Chromium-family browsers.
-- **Chromium, Firefox and TKL keyboard users** retain the same HUD controls, saved profiles and local ODO behavior.
+- **Fixed HUD settings/menu rendering** on pages with strict Content Security Policy (CSP), where extension-owned styles could previously be blocked and leave parts of the menu unstyled or difficult to use.
+- The settings UI now restores its styles through browser-compatible Shadow DOM stylesheets and DOM style properties; the draggable/resizable panel works in Chromium-family browsers.
+- **Chromium browser and TKL keyboard users** retain the same HUD controls, saved profiles and local ODO behavior.
 
 ## Improvements to existing HUD styles (v0.9.31 → v0.9.73)
 
@@ -77,7 +77,7 @@ No numeric keypad? You can now customize the extension's controls on **TKL (tenk
 ### Settings and compatibility
 - Improved import/migration of older JSON layout profiles without shifting previously saved gauges.
 - Kept existing per-car odometer data, Car Feed functionality, saved profiles and original Numpad defaults; added optional custom shortcuts without removing those defaults by default.
-- Chromium-family and Firefox builds continue to be included.
+- The Chromium-compatible desktop browser build remains available.
 
 ## Real in-game screenshots
 
@@ -91,8 +91,8 @@ No numeric keypad? You can now customize the extension's controls on **TKL (tenk
 
 ## Installation / upgrade
 
-1. [Download the **v0.9.73 Multi-Browser ZIP**](downloads/NFSU2_Modern_HUD_v0.9.73_MultiBrowser.zip) and extract it.
-2. Use `NFSU2-HUD-Chromium/` for Chrome, Edge, Brave or Opera, or `NFSU2-HUD-Firefox/` for Firefox.
+1. [Download the **v0.9.73 Chromium ZIP**](downloads/NFSU2_Modern_HUD_v0.9.73_Chromium.zip) and extract it.
+2. Use `NFSU2-HUD-Chromium/` for Chrome, Edge, Brave or Opera.
 3. For an existing installation, replace the files **inside the same installed extension folder**, reload the extension, and refresh NFSU2.xyz. Back up/export your settings first.
 4. Keep your existing extension storage so saved settings and model-specific mileage remain accessible.
 

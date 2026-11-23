@@ -544,7 +544,7 @@
     return DEFAULTS[key];
   }
 
-  // v0.9.46: Firefox can refuse inline <style> in an extension-created Shadow DOM
+  // v0.9.46: strict-CSP pages can refuse inline <style> in an extension-created Shadow DOM
   // under the game's Content Security Policy. Convert these extension-owned rules
   // to constructed stylesheets. Keep the source CSS local; no injected page scripts.
   function ensureShadowStyles(root) {
@@ -568,7 +568,7 @@
   }
   // v0.10.5: split out so setHtml() can use it for every panel / dial that is built after the first ensureShadowStyles() call.
   function restoreInlineStyles(root) {
-    // style= markup is also blocked by strict CSP in Firefox. Restore the
+    // style= markup is also blocked by strict CSP in strict-CSP pages. Restore the
     // extension's own inline declarations with setProperty (not cssText), which
     // remains permitted for DOM API styles under CSP.
     for (const element of root.querySelectorAll("[style]")) {
@@ -599,7 +599,7 @@
 
   // Original, lightweight dashboard warning symbols for BOTH HUD skins.
   // The outline drawings are inline SVG: no raster assets, external requests or filters.
-  // v0.10.5: markup goes through setHtml() (DOMParser + adopt) instead of direct .innerHTML assignments, so the Mozilla add-on linter has nothing to flag.
+  // v0.10.5: markup goes through setHtml() (DOMParser + adopt) instead of direct .innerHTML assignments, so the extension source linter has nothing to flag.
   // Every string passed in is the extension's own static template or numeric dial geometry; no page / Car Feed text is ever inserted as HTML.
   // SVG targets (dial scales, theme defs) are parsed inside an <svg> wrapper so the new nodes get the SVG namespace, exactly like innerHTML does.
   const hudHtmlParser = new DOMParser();
@@ -608,7 +608,7 @@
     const doc = hudHtmlParser.parseFromString("<!doctype html><body>" + (svgCtx ? "<svg>" + html + "</svg>" : html), "text/html");
     const src = svgCtx ? doc.body.firstChild : doc.body;
     el.replaceChildren(...src.childNodes);
-    restoreInlineStyles(el); // Firefox CSP blocks style= attributes in parsed markup; re-apply them through the CSSOM
+    restoreInlineStyles(el); // strict-CSP pages CSP blocks style= attributes in parsed markup; re-apply them through the CSSOM
   }
 
   const warningSymbols = Object.freeze({
@@ -6723,7 +6723,7 @@
   dragHandle.addEventListener("pointerup",finishDrag);
   dragHandle.addEventListener("pointercancel",finishDrag);
   // Bottom-left resize grip: expands leftwards from the default upper-right location.
-  // Its custom handler works in Firefox and Chromium without a native CSS resize corner.
+  // Its custom handler works in Chromium without a native CSS resize corner.
   const menuResizeGrip=mget("menuResizeGrip");
   let menuResize=null;
   menuResizeGrip.addEventListener("pointerdown",event=>{

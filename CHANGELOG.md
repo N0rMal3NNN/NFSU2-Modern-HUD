@@ -6,22 +6,22 @@ This cumulative changelog describes the updates **since the first public GitHub 
 
 ## v0.10.7 — RX-7 Warning Layout, Gauge Labels and Status Lamp Fixes
 
-Public maintenance release following v0.10.4. Both Chromium and Firefox are included.
+Public maintenance release following v0.10.4. This release is distributed for Chromium-based desktop browsers.
 
 - **RX-7 status indicators:** four lamps and icons aligned as two columns around the RPM gauge: TYRES/ENGINE left, SUSP/HANDBRAKE right. Icons and lamps are 10% larger; all remain clear of the instrument rings. With Handbrake disabled, the other three retain the same positions.
 - **Gauge label spacing:** corrected numeric-label overlaps with tick marks in the RX-7 Nitro, Turbo and RPM gauges, as well as the GT-R, Corolla, Civic, Nissan 350Z, Evo/STi and Supra/RX-8 speed gauges, in KM/H and MPH.
 - **GT-R Analog and Corolla Retro:** replaced TYRES/ENGINE/SUSP/HAND text captions with individual warning lamps (dim normally, amber for warnings, red for critical/handbrake). Modern Digital keeps its captions.
-- **Firefox compatibility (included from v0.10.5):** improved GEAR/ODO and dial label rendering under strict Content Security Policy, replacing dynamic `innerHTML` assignments with safe DOM-based updates.
+- **Strict-CSP compatibility (included from v0.10.5):** improved GEAR/ODO and dial label rendering under strict Content Security Policy, replacing dynamic `innerHTML` assignments with safe DOM-based updates.
 - **RX-7 intermediate v0.10.6:** reworked status positions to avoid overlapping neighboring dial rings. The final v0.10.7 two-by-two layout supersedes this intermediate arrangement.
 - All seven previously published gameplay screenshots remain unchanged. No new screenshots in this release.
 
-[Download v0.10.7](downloads/NFSU2_Modern_HUD_v0.10.7_MultiBrowser.zip) · [Release notes](RELEASE_NOTES_v0.10.7.md)
+[Download v0.10.7](downloads/NFSU2_Modern_HUD_v0.10.7_Chromium.zip) · [Release notes](RELEASE_NOTES_v0.10.7.md)
 
 ---
 
 ## v0.10.4 — Four New HUD Styles, 3D Glass, Independent Panels & Improved Screen Shake
 
-Public cumulative release following **v0.9.77**. Release artifact: `downloads/NFSU2_Modern_HUD_v0.10.4_MultiBrowser.zip` (Chromium + Firefox).
+Public cumulative release following **v0.9.77**. Release artifact: `downloads/NFSU2_Modern_HUD_v0.10.4_Chromium.zip` (Chromium).
 
 ### New dashboards
 - Audi A3 / TT instrument cluster with automatic A3/TT variant or manual override.
@@ -52,9 +52,9 @@ Screenshots: seven original gameplay images supplied by the project owner; see R
 ---
 
 
-## v0.9.77 — Public Multi-Browser Build
+## v0.9.77 — Public Chromium Build
 
-This download includes the five HUD styles and features described below, with packages for Chromium and Firefox.
+This download includes the five HUD styles and features described below, for Chromium-based desktop browsers.
 
 ## v0.9.73 — Three New Analog HUDs, TKL Shortcuts & Compatibility
 
@@ -73,7 +73,7 @@ Compared with the previous public release **v0.9.31**.
 
 ### Improvements and fixes to previously public features
 - Corrected the Modern HUD final RPM label ('10') overlapping the COILOVER indicator.
-- Fixed Firefox settings menu rendering in strict CSP environments and improved cross-browser styling compatibility.
+- Improved settings menu rendering in strict CSP environments and improved cross-browser styling compatibility.
 - Preserved per-model ODO storage, keyboard default bindings, saved profiles, Car Feed integration and previously shipped effects.
 
 ## v0.9.31 — Modern HUD Layout & ODO Spacing
@@ -214,12 +214,12 @@ Compared with the previous public release **v0.9.31**.
 
 ---
 
-## v0.9.9 — First Public Release (Multi-Browser)
+## v0.9.9 — First Public Chromium Release
 
 ### Added
-- Browser-specific packages for Chrome/Edge/Brave/Opera/Opera GX/Vivaldi and Mozilla Firefox.
+- Browser extension for Chrome, Edge, Brave, Opera / Opera GX and Vivaldi.
 - Cross-browser local settings storage adapter, and improved profile import/export compatibility.
-- Multi-browser extension installation structure.
+- Chromium extension installation structure.
 
 ### Note
 - Complete live gameplay/browsers testing remained in progress.

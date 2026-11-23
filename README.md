@@ -1,6 +1,6 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.10.7 — Car-inspired HUDs (Chromium + Firefox)**
+**Current version: v0.10.7 — Car-inspired HUDs (Chromium-based desktop browsers)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics or 3D rendering.
 
@@ -8,9 +8,9 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest version: v0.10.7** — contains separate **Chromium** and **Firefox** extension folders.
+**Latest version: v0.10.7.** The release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
 
-- **[Download Latest — Multi-Browser ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip)** — permanent link to the newest published ZIP.
+- **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
 - **[Installation & Upgrade Guide](INSTALLATION.md)** — important for keeping locally saved settings and odometer values.
 
@@ -21,7 +21,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **RX-7:** warning icons now use an aligned two-by-two layout around the RPM dial (TYRES/ENGINE on the left, SUSP/Handbrake on the right). Icons and lamps are 10% larger, with clear space around the gauges.
 - **Dial readability:** numeric tick labels have been adjusted across the analog HUDs, including RX-7, GT-R, Corolla, Civic, Audi, Nissan, Evo/STi and Supra/RX-8, in KM/H and MPH views.
 - **GT-R and Corolla:** TYRES/ENGINE/SUSP/HAND text captions are replaced by glowing warning lamps; the Modern Digital HUD retains its captions.
-- **Firefox:** fixes for strict CSP styling, GEAR/ODO positioning and dynamic gauge rendering (from the intermediate v0.10.5 update).
+- **Strict-CSP compatibility:** improved gauge rendering, GEAR/ODO positioning and menu styling (introduced in v0.10.5).
 - The Pedals HUD, Vignette, independent Status HUD, odometer, shortcut customization and Limp Mode remain available.
 
 **Existing screenshots are unchanged.** Full details: [v0.10.7 Release Notes](RELEASE_NOTES_v0.10.7.md).
@@ -115,9 +115,9 @@ Custom bindings for the main three actions support **tenkeyless (TKL) and laptop
 ## Supported desktop browsers
 
 - **Chromium family:** Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and compatible Chromium browsers.
-- **Mozilla Firefox:** Firefox 140+; loading a temporary developer add-on is not equivalent to a signed permanent installation.
+- **Supported desktop browsers:** Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and other compatible Chromium-based desktop browsers.
 
-The ZIP includes **`NFSU2-HUD-Chromium/`** and **`NFSU2-HUD-Firefox/`**. Load only the folder for your browser. See the [installation guide](INSTALLATION.md).
+The ZIP contains **only `NFSU2-HUD-Chromium/`**. Install it in a compatible Chromium-based desktop browser. See the [installation guide](INSTALLATION.md).
 
 ## Privacy, safety and limitations
 

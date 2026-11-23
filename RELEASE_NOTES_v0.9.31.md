@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD v0.9.31 — Major Update
 
-**Update from v0.9.9 • Modern + GT-R Analog • Chromium + Firefox**
+**Update from v0.9.9 • Modern + GT-R Analog • Chromium-based desktop browsers**
 
 The largest Modern HUD update since the first public release. This release rolls up all additions, improvements and fixes from **v0.9.10 through v0.9.31**.
 
@@ -28,8 +28,8 @@ The largest Modern HUD update since the first public release. This release rolls
 
 ## Installation / upgrade
 
-1. Download the **v0.9.31 Multi-Browser ZIP** attached to this release.
-2. Extract it and choose `NFSU2-HUD-Chromium` (Chrome/Edge/Brave/Opera/Vivaldi) or `NFSU2-HUD-Firefox` (Firefox 140+).
+1. Download the **v0.9.31 Chromium ZIP** attached to this release.
+2. Extract it and choose `NFSU2-HUD-Chromium` (Chrome/Edge/Brave/Opera/Vivaldi).
 3. **If updating**, replace the files inside the **same folder used by your existing installed extension** and reload the existing extension. Installing from a different unpacked folder may change the extension ID and hide your old locally stored ODO data.
 4. Refresh NFSU2.xyz. Press **Numpad +** for Settings, choose the car model in **Odometer — Mileage by Car**, and use **Numpad `*`** for Save All.
 
@@ -39,7 +39,6 @@ See [INSTALLATION.md](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/blob/main/I
 
 - Odometer distance is **estimated and stored only in this browser extension**, not in the game's save. Mileage is **by car model**, not individual owned car. Settings JSON profiles **do not contain mileage**.
 - The game exposes limited read-only telemetry: some damage, impact and other indicators are approximations, not official mechanical readings.
-- Firefox development installations may be temporary; permanent installation requires signing.
 - Testing is based primarily on local/simulated telemetry. Please report real-game behavior and FPS problems.
 
 **Unofficial fan project; not affiliated with or endorsed by NFSU2.xyz.**
