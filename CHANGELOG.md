@@ -1,8 +1,41 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.9.77.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.10.4.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.10.4 — Four New HUD Styles, 3D Glass, Independent Panels & Improved Screen Shake
+
+Public cumulative release following **v0.9.77**. Release artifact: `downloads/NFSU2_Modern_HUD_v0.10.4_MultiBrowser.zip` (Chromium + Firefox).
+
+### New dashboards
+- Audi A3 / TT instrument cluster with automatic A3/TT variant or manual override.
+- Nissan 350Z / Infiniti G35 linked three-dial layout and model-specific colors/materials.
+- Mitsubishi Lancer Evolution VIII / Subaru Impreza WRX STi instrument style, with Evo white/red and STi blue/gold variants.
+- Toyota Supra / Mazda RX-8 cowled instrument style, with model-specific analog/digital speed presentation.
+- Honda Civic refreshed with an EP3-inspired three-dial cream-face cluster. Existing Modern, GT-R, Corolla and RX-7 styles preserved.
+
+### New visual customization
+- Adjustable 3D-style glass/reflection/wear layer for analog HUDs, plus GT-R fitted Housing.
+- Separate Colors & Materials for analog HUD styles: needles, numbers/ticks, redline, ODO, housing and dial face; matte/satin/glossy/chrome/brushed metal/carbon/leather.
+- More consistent needle reach, rolling ODO digits across styles, better warning icon sizing and improved shift lamps.
+
+### Independent HUDs
+- Standalone TYRES/ENGINE/SUSP status panel, later including handbrake, with independent ON/OFF, size, X/Y, opacity, colors and horizontal/vertical layout.
+- New Pedals HUD: live THR/BRK visual bars, three placement options, independent scale, layout and colors.
+- Handbrake warning symbol added to all nine main styles and Standalone HUD; active while holding `Space` during driving. It follows the key, **not direct Car Feed handbrake state**.
+
+### Impact, Limp Mode and usability
+- **Screen Shake fix:** light collisions may shake visible HUDs; shake works on main/Standalone/Pedals elements and provides Last Collision diagnostics.
+- **New Screen Shake option:** allow shake even if Windows/browser Reduce Motion is enabled.
+- Independent Limp Mode and status display with the main custom speedometer OFF; engine misfire has a 55% chance of a 1.5s input cut.
+- Optional corner-darkening Vignette within Speed Sensation, with adjustable intensity.
+- Searchable/categorized settings, more precise layout controls and preserved shortcut customization.
+
+Screenshots: seven original gameplay images supplied by the project owner; see README and `RELEASE_NOTES_v0.10.4.md`.
+
+---
+
 
 ## v0.9.77 — Public Multi-Browser Build
 
