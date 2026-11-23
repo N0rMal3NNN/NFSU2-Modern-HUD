@@ -91,7 +91,7 @@ No numeric keypad? You can now customize the extension's controls on **TKL (tenk
 
 ## Installation / upgrade
 
-1. [Download the **v0.9.73 Chromium ZIP**](downloads/NFSU2_Modern_HUD_v0.9.77_Chromium.zip) and extract it.
+1. [Download the **v0.9.77 Chromium ZIP**](downloads/NFSU2_Modern_HUD_v0.9.77_Chromium.zip) and extract it.
 2. Use `NFSU2-HUD-Chromium/` for Chrome, Edge, Brave or Opera.
 3. For an existing installation, replace the files **inside the same installed extension folder**, reload the extension, and refresh NFSU2.xyz. Back up/export your settings first.
 4. Keep your existing extension storage so saved settings and model-specific mileage remain accessible.

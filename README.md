@@ -114,8 +114,7 @@ Custom bindings for the main three actions support **tenkeyless (TKL) and laptop
 
 ## Supported desktop browsers
 
-- **Chromium family:** Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and compatible Chromium browsers.
-- **Supported desktop browsers:** Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and other compatible Chromium-based desktop browsers.
+- **Supported:** Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and other compatible Chromium-based desktop browsers.
 
 The ZIP contains **only `NFSU2-HUD-Chromium/`**. Install it in a compatible Chromium-based desktop browser. See the [installation guide](INSTALLATION.md).
 
