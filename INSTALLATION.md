@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.10.4 — Chromium + Firefox**
+**Release: v0.10.7 — Chromium + Firefox**
 
 Unofficial NFSU2.xyz community browser HUD. The ZIP contains separate `NFSU2-HUD-Chromium/` and `NFSU2-HUD-Firefox/` folders. Install **only the matching folder** in your browser.
 
