@@ -1,8 +1,23 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.10.4.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.10.7.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.10.7 — RX-7 Warning Layout, Gauge Labels and Status Lamp Fixes
+
+Public maintenance release following v0.10.4. Both Chromium and Firefox are included.
+
+- **RX-7 status indicators:** four lamps and icons aligned as two columns around the RPM gauge: TYRES/ENGINE left, SUSP/HANDBRAKE right. Icons and lamps are 10% larger; all remain clear of the instrument rings. With Handbrake disabled, the other three retain the same positions.
+- **Gauge label spacing:** corrected numeric-label overlaps with tick marks in the RX-7 Nitro, Turbo and RPM gauges, as well as the GT-R, Corolla, Civic, Nissan 350Z, Evo/STi and Supra/RX-8 speed gauges, in KM/H and MPH.
+- **GT-R Analog and Corolla Retro:** replaced TYRES/ENGINE/SUSP/HAND text captions with individual warning lamps (dim normally, amber for warnings, red for critical/handbrake). Modern Digital keeps its captions.
+- **Firefox compatibility (included from v0.10.5):** improved GEAR/ODO and dial label rendering under strict Content Security Policy, replacing dynamic `innerHTML` assignments with safe DOM-based updates.
+- **RX-7 intermediate v0.10.6:** reworked status positions to avoid overlapping neighboring dial rings. The final v0.10.7 two-by-two layout supersedes this intermediate arrangement.
+- All seven previously published gameplay screenshots remain unchanged. No new screenshots in this release.
+
+[Download v0.10.7](downloads/NFSU2_Modern_HUD_v0.10.7_MultiBrowser.zip) · [Release notes](RELEASE_NOTES_v0.10.7.md)
+
+---
 
 ## v0.10.4 — Four New HUD Styles, 3D Glass, Independent Panels & Improved Screen Shake
 

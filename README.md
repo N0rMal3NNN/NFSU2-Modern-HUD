@@ -1,6 +1,6 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.10.4 — Car-inspired HUDs (Chromium + Firefox)**
+**Current version: v0.10.7 — Car-inspired HUDs (Chromium + Firefox)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics or 3D rendering.
 
@@ -8,7 +8,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest version: v0.10.4** — contains separate **Chromium** and **Firefox** extension folders.
+**Latest version: v0.10.7** — contains separate **Chromium** and **Firefox** extension folders.
 
 - **[Download Latest — Multi-Browser ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip)** — permanent link to the newest published ZIP.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
@@ -16,7 +16,17 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 **Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
 
-## What's new since public v0.9.77?
+## v0.10.7 — RX-7 layout, dial numbers and status lamp fixes
+
+- **RX-7:** warning icons now use an aligned two-by-two layout around the RPM dial (TYRES/ENGINE on the left, SUSP/Handbrake on the right). Icons and lamps are 10% larger, with clear space around the gauges.
+- **Dial readability:** numeric tick labels have been adjusted across the analog HUDs, including RX-7, GT-R, Corolla, Civic, Audi, Nissan, Evo/STi and Supra/RX-8, in KM/H and MPH views.
+- **GT-R and Corolla:** TYRES/ENGINE/SUSP/HAND text captions are replaced by glowing warning lamps; the Modern Digital HUD retains its captions.
+- **Firefox:** fixes for strict CSP styling, GEAR/ODO positioning and dynamic gauge rendering (from the intermediate v0.10.5 update).
+- The Pedals HUD, Vignette, independent Status HUD, odometer, shortcut customization and Limp Mode remain available.
+
+**Existing screenshots are unchanged.** Full details: [v0.10.7 Release Notes](RELEASE_NOTES_v0.10.7.md).
+
+## Feature highlights since public v0.9.77
 
 - **Four more dashboard styles** (nine total): **Audi A3 / TT**, **Nissan 350Z / Infiniti G35**, **Mitsubishi Evo VIII / Subaru WRX STi**, **Toyota Supra / Mazda RX-8**. Each shared dashboard offers model-specific variants; automatic selection is linked to the car manually selected in the odometer menu.
 - **Honda Civic overhaul:** reworked **EP3-inspired** cluster with cream dials, deep rings, a revised housing and simulated VTEC indicator. Existing Modern, GT-R, Corolla and RX-7 styles remain available.
@@ -30,7 +40,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **Limp Mode:** improved independent status handling and Engine Misfire simulation (**55% chance of a 1.5-second cut**; other cuts keep the existing shorter duration pattern).
 - **Usability:** searchable/categorized settings, ODO digit-roll animation across styles, adjusted analog needle proportions, improved warning icon sizes and shift indicators, and independent panel keyboard shortcuts.
 
-For details, see **[v0.10.4 Release Notes](RELEASE_NOTES_v0.10.4.md)** and [Changelog](CHANGELOG.md).
+For details, see **[v0.10.7 Release Notes](RELEASE_NOTES_v0.10.7.md)**, [v0.10.4 release notes](RELEASE_NOTES_v0.10.4.md) and [Changelog](CHANGELOG.md).
 
 ## Screenshots — all seven supplied by the project owner
 
