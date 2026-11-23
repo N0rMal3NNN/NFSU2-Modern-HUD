@@ -1,125 +1,122 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.9.77 — Five HUD Styles (Chromium + Firefox)**
+**Current version: v0.10.4 — Car-inspired HUDs (Chromium + Firefox)**
 
-A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Customize your dashboard and see live driving data using the game's read-only Car Feed without modifying game files, game physics, or 3D rendering.
+A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics or 3D rendering.
 
-> **Independent fan project.** Not affiliated with, approved by, or endorsed by NFSU2.xyz. The extension is designed for desktop browsers; some indicators and collision effects are estimates from limited telemetry. Full live-play testing on every browser and hardware configuration is still ongoing.
+> **Independent fan project:** not affiliated with, approved by or endorsed by NFSU2.xyz. Some warnings, turbo, VTEC, mileage and damage signals are estimates or simulations based on the Car Feed; not guaranteed direct game sensors. Live-play behavior and FPS vary by browser and machine.
 
-## What's new since v0.9.31?
+## Download
 
-**Three brand-new analog HUD styles** join the existing Modern and GT-R dashboards: **Toyota Corolla Retro (AE86-inspired)**, **Honda Civic Si (EM1-inspired)** and **Mazda RX-7 FD**.
+**Latest version: v0.10.4** — contains separate **Chromium** and **Firefox** extension folders.
 
-- **Toyota Corolla Retro:** classic connected instrument cluster, mechanical GEAR and ODO animation, integrated warnings.
-- **Honda Civic Si:** ivory-faced dials, combined Nitro/Turbo instrument, RPM-based **VTEC simulation at 5,600 RPM**, green shift-ready LEDs and rolling GEAR/ODO.
-- **Mazda RX-7 FD:** asymmetric carbon instrument housing, independent Turbo/Nitro/RPM/Speed instruments, single KM/H or MPH scale and green shift guide.
-- **Custom keyboard shortcuts for TKL / laptop keyboards:** rebind Menu, HUD Toggle and SAVE ALL in the HUD menu or extension popup; **Ctrl + Alt + M** always opens or closes the menu.
-- **Expanded analog customization:** independent per-style size/X/Y controls, larger HUD scale range, and zero-based position defaults. Existing saved positions are migrated automatically.
-- **Firefox menu compatibility fix:** improved settings styling and operation under strict CSP configurations.
-- **Existing HUD improvements:** Modern HUD RPM '10' label no longer overlaps COILOVER; GT-R Analog gains rolling GEAR digits.
+- **[Download Latest — Multi-Browser ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip)** — permanent link to the newest published ZIP.
+- **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
+- **[Installation & Upgrade Guide](INSTALLATION.md)** — important for keeping locally saved settings and odometer values.
 
-For full changes, read [v0.9.77 Release Notes](RELEASE_NOTES_v0.9.77.md) and [CHANGELOG](CHANGELOG.md).
+**Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
 
-## Download / Choose a version
+## What's new since public v0.9.77?
 
-**Latest public version: v0.9.77** (Chromium + Firefox in one ZIP)
+- **Four more dashboard styles** (nine total): **Audi A3 / TT**, **Nissan 350Z / Infiniti G35**, **Mitsubishi Evo VIII / Subaru WRX STi**, **Toyota Supra / Mazda RX-8**. Each shared dashboard offers model-specific variants; automatic selection is linked to the car manually selected in the odometer menu.
+- **Honda Civic overhaul:** reworked **EP3-inspired** cluster with cream dials, deep rings, a revised housing and simulated VTEC indicator. Existing Modern, GT-R, Corolla and RX-7 styles remain available.
+- **Realistic 3D-style Glass overlay** on analog clusters: adjustable reflections, subtle wear and visual depth, with a visibility slider. **GT-R Housing** optionally wraps around the instruments.
+- **Colors & Materials for analog skins:** customize needles, numbers/ticks, redline, ODO text/background, housing, dial face and materials (Matte, Satin, Glossy, Chrome, Brushed Metal, Carbon Fibre and Leather). Each style has its own saved choices.
+- **Standalone Status HUD:** independent TYRES / ENGINE / SUSPENSION panel with angled alert lights, horizontal/vertical layout, custom frame/background/light colors, opacity, X/Y and scale. It works while the main speedometer is turned off.
+- **Independent Pedals HUD:** live throttle and brake bars, with independent, under-speedometer and within-Status-HUD placements; optional horizontal/vertical layout, scale, position and colors.
+- **Handbrake (Space) status:** fourth warning symbol in all nine speedometer styles and Standalone HUD. The lamp follows the **Space key while driving**, not a direct Car Feed handbrake sensor; it can be hidden in the Show section.
+- **Screen Shake / collision-feedback improvements:** light impacts can visibly shake the HUD; shake also affects visible Standalone and Pedals panels; diagnostics show what occurred; optional override for Windows/browser **Reduce Motion** settings.
+- **Speed Sensation:** optional **corner-darkening Vignette** with adjustable intensity, alongside the existing peripheral speed streaks and optional blue fog.
+- **Limp Mode:** improved independent status handling and Engine Misfire simulation (**55% chance of a 1.5-second cut**; other cuts keep the existing shorter duration pattern).
+- **Usability:** searchable/categorized settings, ODO digit-roll animation across styles, adjusted analog needle proportions, improved warning icon sizes and shift indicators, and independent panel keyboard shortcuts.
 
-- **[Download Latest — Multi-Browser ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip)** — a permanent link to the current published build.
-- **[Choose Version — Version Archive](DOWNLOADS.md)** — download a particular version, including older releases.
+For details, see **[v0.10.4 Release Notes](RELEASE_NOTES_v0.10.4.md)** and [Changelog](CHANGELOG.md).
 
-**Important:** GitHub's green **Code → Download ZIP** option downloads the *entire source repository*, not just the browser extension. To install the extension, use **Download Latest** above. When a new release is published, the stable Download Latest file is replaced while the numbered ZIPs remain available in the archive.
+## Screenshots — all seven supplied by the project owner
 
-## Screenshots
+These are **real NFSU2.xyz gameplay screenshots**, not generated/mock-up imagery. Images are copied directly from the owner-provided files.
 
-### Honda Civic Si — new in v0.9.73
-![Honda Civic Si in NFSU2.xyz](assets/honda-civic-si-v0.9.73.jpg)
+### Audi TT — drift gameplay
+![Audi TT dashboard during a drift run](assets/audi-tt-drift-v0.10.4.webp)
 
-### Mazda RX-7 FD — new in v0.9.73
-![Mazda RX-7 FD in NFSU2.xyz](assets/mazda-rx7-v0.9.77.jpg)
+### Mitsubishi Lancer Evolution VIII — white cluster
+![Mitsubishi Evolution VIII HUD](assets/mitsubishi-evo-viii-v0.10.4.webp)
 
+### Nissan 350Z — cockpit driving
+![Nissan 350Z cluster in cockpit view](assets/nissan-350z-cockpit-v0.10.4.webp)
 
-### GT-R Analog HUD in-game
-![GT-R Analog HUD in-game](assets/gameplay-gtr-analog-v0.9.31.jpg)
+### Infiniti G35 — drift gameplay
+![Infiniti G35 cluster while drifting](assets/infiniti-g35-drift-v0.10.4.webp)
 
-### Resizable multi-column settings menu
-![Resizable settings menu](assets/settings-multicolumn-v0.9.31.jpg)
+### Toyota Supra — analog cluster
+![Toyota Supra HUD in gameplay](assets/toyota-supra-v0.10.4.webp)
 
-### Modern Digital HUD in-game
-![Modern Digital HUD](assets/modern-hud-gameplay-v0.9.31.jpg)
+### Audi A3 — Pedals HUD and handbrake indicator
+![Audi A3 with independent throttle-brake overlay](assets/audi-a3-pedals-v0.10.4.webp)
 
-*These are real screenshots supplied by the project owner. The settings screenshot shows the v0.9.29 menu; v0.9.73 retains the responsive multi-column feature.*
+### Audi A3 — night racing
+![Audi A3 with pedals bar during night gameplay](assets/audi-a3-night-v0.10.4.webp)
 
+## HUD styles inspired by real cars
 
-## Features
+| HUD style | Highlights |
+|---|---|
+| **Modern Digital** | Digital speed, RPM, nitrous, gear, shift and flexible theme colors |
+| **GT-R Analog** | Classic three-dial Turbo / RPM / Speed dashboard, optional fitted housing and compact ODO |
+| **Toyota Corolla Retro** | Retro linked instruments, rolling GEAR/ODO and warning indicators |
+| **Honda Civic (EP3-inspired)** | Cream-faced three-instrument cluster, integrated Nitro/Turbo, VTEC simulation and shift indicators |
+| **Mazda RX-7 FD** | Asymmetric rotary-inspired cluster with dedicated Turbo and Nitro instruments |
+| **Audi A3 / TT** | Two large dials and upper Turbo/Nitro gauges; model-dependent badge and ring/needle styling |
+| **Nissan 350Z / Infiniti G35** | Three-dial contoured housing; model-specific materials, needles and LCD palette |
+| **Mitsubishi Evo VIII / Subaru WRX STi** | Evo white/red or STi blue/gold instrument faces and slim central gauge strip |
+| **Toyota Supra / Mazda RX-8** | Deep paired dials; Supra analog look or RX-8 integrated digital speed readout |
 
-### Five implemented HUD styles
+A shared style may include an **Auto / vehicle-specific variant** selector. The odometer model is chosen manually; the extension does not read the car identity directly from Car Feed.
 
-- **Modern Digital HUD:** speed, RPM, nitrous, gear, shift indicator, turbo/engine-load visualization, and optional warning symbols; flexible colors, layouts and transparency.
-- **GT-R Analog HUD:** three circular gauges (Turbo Load / RPM / Speed), gear and warning indicators, plus a compact odometer in the speed dial.
-- **Toyota Corolla Retro:** AE86-style classic analog cluster with roll GEAR, rolling ODO and status indicators.
-- **Honda Civic Si:** carbon chassis, white analog dials, Nitro/Turbo dual gauge, simulated VTEC and shift LEDs.
-- **Mazda RX-7 FD:** asymmetric carbon cluster, independent analog Turbo/Nitro gauges, RPM, Speed and warning lights.
-- **Speed units:** KM/H and MPH. Digital speed is not capped at the analog gauge's displayed maximum.
-- **Customization:** positions, scale, visibility, display mode, performance settings, dashboard theme and color profiles.
-- **Warnings:** tyre slip/traction, engine redline/misfire, suspension/impacts, estimated braking events. Some warning states are derived from telemetry rather than true manufacturer sensors.
-- **Limp Mode (optional):** simulated damage and repair with optional throttle/input restriction; does not modify vehicle performance in game memory or physics.
-- **Save and transfer settings:** local active settings plus up to 25 custom profiles, import/export profile JSON. **Profile JSON does not export car mileage.**
+## Independent panels and visual customization
 
-### Odometer — important behavior
+- **Standalone Status HUD:** `Ctrl + Alt + N` or `Numpad /` toggles its own ON/OFF state. Configure layout, X/Y position, scale, colors and transparency separately from the main speedometer.
+- **Pedals HUD:** optional THR / BRK live bars. Can be displayed independently, below the custom speedometer, or inside the Standalone Status HUD. Uses available throttle/brake Car Feed signals, with engine load as fallback for throttle.
+- **Handbrake icon:** lamp lights when `Space` is held during active driving. This is **keyboard tracking**, not physical handbrake telemetry; remapped controller/steering-wheel handbrakes are not detected by it.
+- **Glass and materials:** analog styling is per HUD, and performance depends on graphics settings. Modern HUD has its own digital theme controls.
+- **Collision effects:** visual feedback (flash, warnings and shake) is estimated from available events / speed change. Shake may be configured to work even with system Reduce Motion enabled.
 
-Mileage is **estimated from speed and elapsed time** while driving, not taken from the original game's permanent odometer. It is stored **locally in your browser extension**, independently from NFSU2.xyz saves. Choose your current **car model manually**; the extension does not detect it automatically. Two different owned cars of the same model **share one mileage total**. Selection of the last car is restored when storage and the installed extension identity are preserved.
+## Odometer — important
 
-- Example display: `00000032.1` means 32 km + 100 metres.
-- Autosave at every **0.1 km (100 metres)**, periodic additional saves while driving, and when leaving the tab.
-- `Numpad *` and **Save current settings now** save HUD settings **and** odometer data.
-- ODO reset affects **only the selected model** and asks for confirmation.
-- Maximum representable mileage: **9,999,999.9 km**.
-- **Keep the same installed extension folder** when upgrading. A new unpacked installation may receive a different extension ID and cannot see the old installation's data automatically.
+- Estimated from vehicle speed and elapsed driving time; **not the native game's odometer**.
+- Choose a car model manually. Mileage is stored locally **per model**, not per owned vehicle: two copies of the same model share a total.
+- Stored in the extension's local browser storage; **not included in the game's cloud save or settings JSON export**.
+- Displays tenths of a kilometre (`00000032.1` = 32.1 km), autosaves each 0.1 km / 100 m with additional periodic saves, and rolls individual digits across HUD styles.
+- Saving settings with `Numpad *` also saves local odometer data. Reset is per selected model and requires confirmation.
+- To preserve saved mileage, **replace files inside the same existing unpacked extension folder**, then reload; do not uninstall/reinstall in a different folder.
 
 ## Keyboard shortcuts
 
-**New:** custom rebindable keys for TKL and laptop keyboards, configurable in the HUD menu and extension popup. **Ctrl + Alt + M** is an always-available menu fallback.
-
-
-| Shortcut | Action |
+| Default key | Action |
 |---|---|
-| **Numpad +** | Open/close HUD settings (customizable) |
-| **Numpad −** | Enable/disable the entire custom HUD (customizable) |
-| **Numpad `*`** | Save all active settings and odometer totals (customizable) |
+| `Numpad +` | Open / close the settings panel; may be rebound |
+| `Ctrl + Alt + M` | Always-available fallback to open / close settings |
+| `Numpad -` | Turn the main custom HUD ON / OFF; may be rebound |
+| `Numpad *` | SAVE ALL settings + odometer; may be rebound |
+| `Ctrl + Alt + N` or `Numpad /` | Turn the Standalone Status HUD ON / OFF |
 
-Default Numpad shortcuts can be rebound for TKL keyboards; Ctrl + Alt + M remains available for the menu. They do not replace the game's native save function.
+Custom bindings for the main three actions support **tenkeyless (TKL) and laptop keyboards** via the HUD settings menu or extension popup.
 
-## Supported browsers
+## Supported desktop browsers
 
-- **Chromium:** Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi and other compatible Chromium browsers (including Arc where extension loading is supported).
-- **Mozilla Firefox:** Firefox 140+; temporary developer installation unless a Mozilla-signed extension is provided.
+- **Chromium family:** Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and compatible Chromium browsers.
+- **Mozilla Firefox:** Firefox 140+; loading a temporary developer add-on is not equivalent to a signed permanent installation.
 
-Use the matching folder from the package: `NFSU2-HUD-Chromium` or `NFSU2-HUD-Firefox`.
-
-## Install / upgrade
-
-1. Download the newest ZIP using [Download Latest](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip) (or [choose a specific version](DOWNLOADS.md)), and extract it.
-2. **For upgrades**, replace the files within your *existing installed extension folder* instead of loading the updated code from a different folder. Back up/export your settings first.
-3. Reload the extension in your browser's extension manager, then refresh NFSU2.xyz.
-4. Press `Numpad +` to customize, choose a car model under **Odometer — Mileage by Car**, and use `Numpad *` to save all.
-
-Detailed instructions: [INSTALLATION.md](INSTALLATION.md).
+The ZIP includes **`NFSU2-HUD-Chromium/`** and **`NFSU2-HUD-Firefox/`**. Load only the folder for your browser. See the [installation guide](INSTALLATION.md).
 
 ## Privacy, safety and limitations
 
-- No game asset editing, direct game-physics modifications, or game-file patching.
-- The extension asks for the browser's `storage` permission and runs on `nfsu2.xyz` / `www.nfsu2.xyz`.
-- Settings and ODO data reside in the extension's local browser storage; they do **not** automatically sync between browsers, devices, or game profiles.
-- Custom HUD profiles include display settings, **not** stored mileage.
-- Car Feed data may be stale, missing, or imperfect. Damage, turbo load, ABS/traction and severe-stop detection are not guaranteed direct mechanical telemetry.
-- Optional Limp Mode input restriction can temporarily intercept driving controls when enabled; disable it if unwanted. The extension should never be relied on for competitive accuracy.
-- Visual effects and update rates are designed to be modest, but live FPS performance varies; test on your own setup.
+- Uses the public/read-only Car Feed and extension-local UI / storage. No changes to game assets, game memory or in-game physics.
+- Collision, turbo, tyre, suspension and engine-warning indicators can be approximations rather than real ECU/mechanical sensor values.
+- Optional Limp Mode may temporarily intercept driving input on your own browser when enabled; it does not change the game's physical simulation.
+- Speed Sensation, Glass and collision effects may affect FPS on some hardware; tune intensity/performance in Settings.
+- Saved settings and ODO data do not automatically sync across browsers, devices, extension identities, or game accounts.
 
-## Roadmap
+## Project
 
-- **Future v1.0 ideas (not implemented):** additional original dashboard skins and extended customization.
-- Drift Feedback and Rain / Water Drops effects are **not on the active roadmap**.
-
-## Project and attribution
-
-Created as a community dashboard customization project for NFSU2.xyz. All dashboard symbols introduced in recent builds are original SVG designs rather than extracted stock-image assets. No affiliation with the game's developers or publishers is implied.
+Built by the community for NFSU2.xyz. This is an independent, unofficial fan-made dashboard customization project. All seven screenshots in this README were provided by the project owner.
