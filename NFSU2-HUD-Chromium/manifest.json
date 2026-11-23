@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "NFSU2.xyz Modern HUD",
-  "version": "0.9.77",
-  "description": "Five HUD styles, precision gauge controls, custom TKL shortcuts, Firefox menu improvements.",
+  "version": "0.10.4",
+  "description": "Car-inspired HUDs for GT-R, Corolla, Civic, RX-7, Audi A3/TT, 350Z/G35, Evo/STi and Supra/RX-8; live telemetry and customization.",
   "permissions": [
     "storage"
   ],

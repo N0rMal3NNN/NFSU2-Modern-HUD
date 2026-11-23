@@ -1,7 +1,7 @@
 /* Keyboard misfire filter for NFSU2 Modern HUD.
  * The browser key events are the only thing we touch here, never game physics.
  * In the running phase ALL driving keys are passed through (WASD and arrows).
- * Misfires are short and uneven, so its not a fixed 2s / 3s clock.
+ * Misfires are uneven: 55% last 1.5s and the rest keep the older short cut pattern.
  * Real key releases always go through; synthetic releases may be ignored by games.
  */
 (() => {
@@ -13,11 +13,16 @@
   const PRESSED = new Map();
   const SYNTHETIC = new WeakSet();
 
-  // Uneven power-loss pulses: longer runs, mostly small dips, rare deeper dips.
+  // Natural Engine Misfire: independently choose the duration for EACH new cut.
+  // 55%: exactly 1500ms; 45%: the original irregular 200–520ms pattern,
+  //       including the former 16% probability of a 650–1000ms deep cut.
+  // The normal drive intervals and Continuous CUT option are unchanged.
   const DRIVE_MIN_MS = 1900, DRIVE_MAX_MS = 5100;
   const CUT_MIN_MS = 200, CUT_MAX_MS = 520;
   const DEEP_CUT_MIN_MS = 650, DEEP_CUT_MAX_MS = 1000;
   const DEEP_CUT_CHANCE = 0.16;
+  const LONG_MISFIRE_CHANCE = 0.55;
+  const LONG_MISFIRE_MS = 1500;
   let active = false, scope = "throttle", pattern = "stutter", emergency = false;
   let phase = "drive", phaseUntil = 0, lastHeartbeat = 0;
   let heldAtActivation = new Set();
@@ -44,9 +49,13 @@
     (typeof document.hasFocus !== "function" || document.hasFocus());
   const randDuration = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
   const randomDrive = () => randDuration(DRIVE_MIN_MS, DRIVE_MAX_MS);
-  const randomCut = () => Math.random() < DEEP_CUT_CHANCE
+  const originalRandomCut = () => Math.random() < DEEP_CUT_CHANCE
     ? randDuration(DEEP_CUT_MIN_MS, DEEP_CUT_MAX_MS)
     : randDuration(CUT_MIN_MS, CUT_MAX_MS);
+  // Make this choice once when a new misfire begins, not on every heartbeat.
+  const randomCut = () => Math.random() < LONG_MISFIRE_CHANCE
+    ? LONG_MISFIRE_MS
+    : originalRandomCut();
 
   function releaseHeldKeys() {
     // Fake key UP only; a fabricated key DOWN could accelarate the car by itself.
