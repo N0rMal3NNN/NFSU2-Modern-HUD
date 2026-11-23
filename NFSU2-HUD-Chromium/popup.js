@@ -1,5 +1,5 @@
 "use strict";
-// Shared adapter handles Firefox (browser.* promises) and Chromium (chrome.* callbacks).
+// Shared adapter supports promise-based browser.* and callback-based chrome.* storage APIs.
 const hudStorage = globalThis.__nfsu2HudStorage;
 const enabled = document.querySelector("#enabled");
 const modes = [...document.querySelectorAll('input[name="mode"]')];

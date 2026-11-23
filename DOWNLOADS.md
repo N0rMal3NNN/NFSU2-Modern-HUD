@@ -1,34 +1,36 @@
 # NFSU2 Modern HUD — Downloads & Version Archive
 
-**Download Latest** always points to the newest published version. **Choose a version** keeps past releases available. Each ZIP contains separate `NFSU2-HUD-Chromium/` and `NFSU2-HUD-Firefox/` folders.
+**Supported desktop browsers:** Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and other compatible Chromium-based desktop browsers. The extension is distributed exclusively for compatible Chromium-based browsers.
 
-## Latest version
+## Download Latest
 
-**v0.10.7** — **[Download Latest (Chromium + Firefox)](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip)**
+**Current version: v0.10.7**
 
-The stable URL is preserved across releases. Its ZIP bytes must match the newest numbered archive exactly.
+**[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)**
+
+This permanent URL always points to the most recent public Chromium-only build. Each ZIP contains one `NFSU2-HUD-Chromium/` extension folder.
 
 ## Choose a version
 
-| Version | Download | Release notes |
+| Version | Download | Release information |
 |---|---|---|
-| **v0.10.7 — latest** | [Download v0.10.7](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_v0.10.7_MultiBrowser.zip) | [What's new](RELEASE_NOTES_v0.10.7.md) |
-| v0.10.4 | [Download v0.10.4](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_v0.10.4_MultiBrowser.zip) | [What's new](RELEASE_NOTES_v0.10.4.md) |
-| v0.9.77 | [Download v0.9.77](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_v0.9.77_MultiBrowser.zip) | [Release notes](RELEASE_NOTES_v0.9.77.md) |
-| v0.9.73 | [Download v0.9.73](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_v0.9.73_MultiBrowser.zip) | [Release notes](RELEASE_NOTES_v0.9.73.md) |
+| **v0.10.7 — latest** | [Download v0.10.7](downloads/NFSU2_Modern_HUD_v0.10.7_Chromium.zip) | [What's new](RELEASE_NOTES_v0.10.7.md) |
+| v0.10.4 | [Download v0.10.4](downloads/NFSU2_Modern_HUD_v0.10.4_Chromium.zip) | [What's new](RELEASE_NOTES_v0.10.4.md) |
+| v0.9.77 | [Download v0.9.77](downloads/NFSU2_Modern_HUD_v0.9.77_Chromium.zip) | [Release notes](RELEASE_NOTES_v0.9.77.md) |
+| v0.9.73 | [Download v0.9.73](downloads/NFSU2_Modern_HUD_v0.9.73_Chromium.zip) | [Release notes](RELEASE_NOTES_v0.9.73.md) |
 
-Development/test ZIPs between these releases are not necessarily public release archives.
-
-**Important:** the green GitHub **Code → Download ZIP** command downloads the whole repository, **not** the standalone extension package. Please use the links above.
+All archived downloads have been repackaged to contain only the Chromium extension. The version numbers refer to the original functional releases.
 
 ## Installation and preserving mileage
 
-[Read the installation & upgrade guide](INSTALLATION.md). Keep the original installed extension folder and extension identity where possible: odometer totals are local to the extension, and are **not included** in exported JSON settings profiles.
+[Installation and upgrade instructions](INSTALLATION.md). Extract the archive and load the **`NFSU2-HUD-Chromium/`** folder using the browser's extension manager. When upgrading, use the same installed folder and browser profile to preserve your extension-local settings and odometer records. Profile JSON does not include mileage.
 
-## Release maintenance checklist
+GitHub's green **Code → Download ZIP** downloads the full repository rather than the current release archive. Use **Download Latest** above.
 
-1. Add the numbered archive `downloads/NFSU2_Modern_HUD_v0.10.7_MultiBrowser.zip`.
-2. Replace `downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip` with the **identical bytes**.
-3. Keep older numbered packages unchanged.
-4. Update README, release notes, CHANGELOG and INSTALLATION to v0.10.7.
-5. Verify screenshot paths and both manifests in the release ZIP.
+## Maintainer release checklist
+
+1. Add `downloads/NFSU2_Modern_HUD_vX.Y.Z_Chromium.zip`.
+2. Update `downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip` with identical bytes.
+3. Update README, installation instructions, release notes and this version archive.
+4. Retain previous Chromium-only numbered archives.
+5. Verify ZIP integrity and that the stable and numbered current archives match.

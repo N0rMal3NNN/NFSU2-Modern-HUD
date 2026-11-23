@@ -1,8 +1,8 @@
 # NFSU2.xyz Modern HUD v0.10.7 — Maintenance Update
 
-**Chromium + Firefox | Release following public v0.10.4**
+**Chromium-based desktop browsers | Release following public v0.10.4**
 
-This release improves analog-gauge readability, RX-7 status placement, dashboard warning lamps and Firefox compatibility. It keeps the previous nine HUD styles, independent panels, configurable Screen Shake, materials, 3D Glass, read-only Car Feed, estimated odometer and Limp Mode.
+This release improves analog-gauge readability, RX-7 status placement, dashboard warning lamps and strict-CSP compatibility. It keeps the previous nine HUD styles, independent panels, configurable Screen Shake, materials, 3D Glass, read-only Car Feed, estimated odometer and Limp Mode.
 
 ## RX-7: four warning icons in a two-by-two layout
 
@@ -26,9 +26,9 @@ TYRES, ENGINE, SUSP and HAND captions beneath the analog warnings have been repl
 
 GT-R uses rounded pill lamps; Corolla uses small rectangular lamps. Modern Digital retains its text labels.
 
-## Firefox / Chromium compatibility fixes
+## Strict Content Security Policy compatibility fixes
 
-Includes intermediate v0.10.5 improvements to the Firefox strict-CSP UI and dial rendering, including GEAR/ODO positioning and replacing direct dynamic `innerHTML` writes with extension-owned DOM updates.
+Includes intermediate v0.10.5 improvements to strict-CSP UI and dial rendering, including GEAR/ODO positioning and replacing direct dynamic `innerHTML` writes with extension-owned DOM updates.
 
 ## Unchanged features
 
@@ -38,8 +38,8 @@ No new gameplay images are part of this update. [Existing screenshots](README.md
 
 ## Download and upgrade
 
-**[Download Latest](downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip)** · **[Choose Version](DOWNLOADS.md)**
+**[Download Latest](downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** · **[Choose Version](DOWNLOADS.md)**
 
-The package contains `NFSU2-HUD-Chromium/` and `NFSU2-HUD-Firefox/`. Copy the updated files over the **same existing installed extension folder**, reload in your browser's extension manager, then refresh NFSU2.xyz. Preserve the extension identity to keep its browser-local odometer data; exported settings profiles do not contain mileage.
+The Chromium-only ZIP contains one `NFSU2-HUD-Chromium/` extension folder. Replace files inside the **same installed extension folder**, reload the extension and refresh NFSU2.xyz. Keep the extension identity to preserve browser-local odometer data; exported settings profiles do not contain mileage.
 
 Unofficial fan-made extension; not affiliated with NFSU2.xyz. Some warning and performance effects are estimates based on Car Feed data and must be evaluated in the game.

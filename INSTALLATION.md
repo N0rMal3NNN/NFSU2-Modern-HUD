@@ -1,21 +1,21 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.10.7 — Chromium + Firefox**
+**Release: v0.10.7 — Chromium-based desktop browsers**
 
-Unofficial NFSU2.xyz community browser HUD. The ZIP contains separate `NFSU2-HUD-Chromium/` and `NFSU2-HUD-Firefox/` folders. Install **only the matching folder** in your browser.
+Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
-**Downloads:** [Download Latest](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip) · [Choose Version](DOWNLOADS.md). GitHub's green **Code → Download ZIP** button downloads the whole repository, not the latest extension package.
+**Downloads:** [Download Latest](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip) · [Choose Version](DOWNLOADS.md). GitHub's green **Code → Download ZIP** button downloads the entire source repository, not the latest extension package.
 
 ## Supported desktop browsers
 
-Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi and compatible Chromium browsers; Mozilla Firefox 140+ for testing/compatible releases.
+Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and other compatible Chromium-based desktop browsers.
 
 ## Fresh installation — Chromium family
 
-1. Download the latest multi-browser ZIP using the link above and extract it to a **permanent folder**.
+1. Download the latest Chromium ZIP using the link above and extract it to a **permanent folder**.
 2. Open `chrome://extensions`, `edge://extensions`, or your browser's extension manager.
 3. Turn on **Developer mode** and choose **Load unpacked**.
-4. Select the **`NFSU2-HUD-Chromium`** folder containing `manifest.json`, not the parent folder or Firefox folder.
+4. Select the **`NFSU2-HUD-Chromium`** folder containing `manifest.json`, not the parent folder.
 5. Open or refresh `https://nfsu2.xyz`.
 6. Press `Numpad +` (or `Ctrl + Alt + M`) to open HUD Settings. Enable the dashboard(s) you want.
 7. In **Odometer — Mileage by Car**, manually choose your current car model. Mileage starts at 0 for models without saved distance.
@@ -32,14 +32,6 @@ Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi and compatible Chromium
 6. Verify that settings, car selection and local ODO values are still present. Use the SAVE ALL shortcut (`Numpad *` by default) once checked.
 
 A different extension ID may not have access to the previous extension's locally saved mileage. The game's own save does not include these values.
-
-## Firefox — temporary developer testing
-
-1. Extract the ZIP and open `about:debugging#/runtime/this-firefox`.
-2. Choose **Load Temporary Add-on** and select `manifest.json` from **`NFSU2-HUD-Firefox`**.
-3. Open the game and press `Numpad +` or `Ctrl + Alt + M`.
-
-**Temporary Firefox add-ons do not persist across browser restarts.** Do not assume extension-local ODO data will survive re-adding. A Mozilla-signed add-on is required for normal persistent distribution.
 
 ## Useful shortcuts
 

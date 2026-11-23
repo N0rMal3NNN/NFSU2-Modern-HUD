@@ -68,12 +68,12 @@ Optional corner-darkening **Vignette** with an adjustable percentage complements
 
 ## Installation / upgrading
 
-- [Download Latest — Chromium + Firefox](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_MultiBrowser.zip)
+- [Download Latest — Chromium](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)
 - [Choose a version](DOWNLOADS.md) · [Installation instructions](INSTALLATION.md)
-- Load `NFSU2-HUD-Chromium/` in Chrome/Edge/Brave/Opera or `NFSU2-HUD-Firefox/` in Firefox.
+- Load `NFSU2-HUD-Chromium/` in Chrome, Edge, Brave, Opera, Vivaldi or another compatible Chromium-based desktop browser.
 - When upgrading, **replace files inside your current installed extension folder**. Don't uninstall and load the update from a new directory if you want the old extension identity / local ODO storage to remain accessible.
 - Settings JSON exports do **not** contain car mileage. Back up settings and note important mileage before upgrading.
 
 ## Notes and limitations
 
-Unofficial read-only Car Feed overlay. Some warnings, turbo/VTEC, impact conditions, speed sensation and odometer measurements are simulations or local estimates, not verified in-game ECU data. Chrome/Firefox availability and real-game performance vary. This release description lists cumulative user-facing changes since the last published v0.9.77 and does not list every development-build adjustment.
+Unofficial read-only Car Feed overlay. Some warnings, turbo/VTEC, impact conditions, speed sensation and odometer measurements are simulations or local estimates, not verified in-game ECU data. Compatibility and real-game performance vary among Chromium-based desktop browsers. This release description lists cumulative user-facing changes since the last published v0.9.77 and does not list every development-build adjustment.
