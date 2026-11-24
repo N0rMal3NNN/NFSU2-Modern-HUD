@@ -47,6 +47,13 @@ The same v0.11.10 HUD for touch devices. It is a **BETA**.
 - **Windshield cracks are limited to 2 on screen by default** (choose 2, 3, 4 or Standard in the menu) so a small phone screen does not fill up.
 - **Android / Car Feed Debug** section in the menu: a local-only diagnostic report you can copy if something does not work.
 
+<p align="center">
+  <img src="assets/iphone-userscript-hud-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): NFSU2 Modern HUD speedometer at the bottom right of the mobile game screen">
+  <img src="assets/iphone-userscript-cigarette-cracks-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): Cigarette and windshield cracks effects on the mobile game screen">
+</p>
+
+*iPhone (Safari + Userscripts): the HUD at the bottom right (left) and the Cigarette and Windshield Glass effects (right). These screenshots were supplied by the project owner and come from an earlier BETA build; in BETA 4 only the small ⚙ button is shown until you tap it.*
+
 The userscript keeps its own settings and odometer; they are not shared with the desktop extension. Step-by-step instructions for iPhone and Android: [Phones and tablets: Userscript BETA 4](INSTALLATION.md#phones-and-tablets-userscript-beta-4). Release information: [v0.11.10 Release Notes](RELEASE_NOTES_v0.11.10.md#userscript-beta-4-for-phones-and-tablets).
 
 Thanks to **RacerXC** — the first Android beta tester!
