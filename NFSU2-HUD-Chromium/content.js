@@ -1,4 +1,4 @@
-/* NFSU2 Modern HUD v0.11.7 — multi-wheel Car Feed slip confirmation; v0.11.6 — further stricter tyre slip detection; v0.11.5 — stricter tyre slip detection; v0.11.4 — Cigarette (3D, forward-pointing, with ember glow + animated smoke; position / size / smoke / puff / speed lean / behind or in front of the HUD); v0.11.3 — Helmet View: second 3D model 'Open-Face Sport' + model selector, 'Opening size 100%' is drawn 5 % larger; v0.11.2 — Helmet View (two 3D-shaded helmets: GT Full-Face / Open-Face Sport; behind the HUD or in front of it (covers part of it); optional shake on impact); v0.11.1 — Windshield glass: custom sun-strip colour, varied cracks (line / star / web), new defaults (OFF); v0.11.0 — Windshield glass (wiper marks, sun strip, impact cracks, Limp shatter); v0.10.8 — TYRES lamp needs 5 % more spin/slide; Chromium-only (Chrome, Edge, Brave, Opera, Vivaldi); v0.10.7 — RX-7 four icons 2+2 around the RPM dial; numerals never sit on a tick; status lamps instead of TYRES/ENGINE/SUSP/HAND captions (GT-R, Corolla); Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
+/* NFSU2 Modern HUD v0.11.10 — per-style whole-HUD X/Y and live-only standalone indicators; v0.11.9 — native menu keyboard input protection; v0.11.8 — independent windshield collision detection; v0.11.7 — multi-wheel Car Feed slip confirmation; v0.11.6 — further stricter tyre slip detection; v0.11.5 — stricter tyre slip detection; v0.11.4 — Cigarette (3D, forward-pointing, with ember glow + animated smoke; position / size / smoke / puff / speed lean / behind or in front of the HUD); v0.11.3 — Helmet View: second 3D model 'Open-Face Sport' + model selector, 'Opening size 100%' is drawn 5 % larger; v0.11.2 — Helmet View (two 3D-shaded helmets: GT Full-Face / Open-Face Sport; behind the HUD or in front of it (covers part of it); optional shake on impact); v0.11.1 — Windshield glass: custom sun-strip colour, varied cracks (line / star / web), new defaults (OFF); v0.11.0 — Windshield glass (wiper marks, sun strip, impact cracks, Limp shatter); v0.10.8 — TYRES lamp needs 5 % more spin/slide; Chromium-only (Chrome, Edge, Brave, Opera, Vivaldi); v0.10.7 — RX-7 four icons 2+2 around the RPM dial; numerals never sit on a tick; status lamps instead of TYRES/ENGINE/SUSP/HAND captions (GT-R, Corolla); Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
  * Numpad + opens/closes an in-game settings panel.
  * Numpad - toggles the ENTIRE custom Modern HUD (not the game's own HUD).
  * No modification to NFSU2's game code, rendering buffers, or physics.
@@ -203,6 +203,8 @@
     hudEnabled: true, hudMode: "full", hudStyle: "modern", speedUnit: "kmh", speedDepth: "subtle",
     hudPerformanceMode: "balanced", shiftMode: "auto", manualGreenLead: 100,
     shortcutMenu: Hotkeys.DEFAULTS.shortcutMenu, shortcutToggleHud: Hotkeys.DEFAULTS.shortcutToggleHud, shortcutSaveAll: Hotkeys.DEFAULTS.shortcutSaveAll,
+    // Whole-HUD offsets in CSS pixels, separately saved for each skin.
+    hudOffsetX: 0, hudOffsetY: 0, analogHudOffsetX: 0, analogHudOffsetY: 0, corollaHudOffsetX: 0, corollaHudOffsetY: 0, civicHudOffsetX: 0, civicHudOffsetY: 0, rx7HudOffsetX: 0, rx7HudOffsetY: 0, audiHudOffsetX: 0, audiHudOffsetY: 0, nissanHudOffsetX: 0, nissanHudOffsetY: 0, rallyHudOffsetX: 0, rallyHudOffsetY: 0, sportHudOffsetX: 0, sportHudOffsetY: 0,
     hudPosition: "bottom-right", hudScale: 100, analogHudScalePct: 100, hudBackgroundOpacity: 90, hudTextOpacity: 100, hudUpdateFps: 20,
     showSpeed: true, showRpm: true, showGear: true, showNitro: true, showShift: true,
     showIcons: true, showTyreIcon: true, showEngineIcon: true, showSuspIcon: true, showHandbrakeIcon: true,
@@ -220,7 +222,7 @@
     windshieldEnabled: false, windshieldReflEnabled: true, windshieldReflPct: 100, windshieldDustEnabled: true, windshieldDustPct: 100, windshieldWiperEnabled: true, windshieldWiperPct: 0, windshieldSunEnabled: true, windshieldSunPct: 50, windshieldSunColor: "#184A96",
     helmetEnabled: false, helmetModel: "gt", helmetOpacityPct: 100, helmetSizePct: 100, helmetOverHud: false, helmetShakeEnabled: true, helmetShakePct: 50,
     cigaretteEnabled: false, cigarettePosition: "center", cigaretteSizePct: 100, cigaretteSmokeEnabled: true, cigaretteSmokePct: 60, cigarettePuffEnabled: true, cigaretteSmokeLean: false, cigaretteOverHud: false,
-    windshieldCracksPct: 25, windshieldHitDv: 10.0, windshieldFadeSeconds: 120, windshieldLimpPct: 80, windshieldClearZonePct: 80,
+    windshieldCracksPct: 25, windshieldHitDv: 3.0, windshieldFadeSeconds: 120, windshieldLimpPct: 80, windshieldClearZonePct: 80,
     speedSensationEnabled: true, speedSensationIntensity: 100, speedSensationFogEnabled: true, speedSensationFogPercent: 12, speedSensationStartKmh: 190,
     impactFeedbackEnabled: true, impactFeedbackIntensity: 70, impactFeedbackFlash: true, impactFeedbackShake: true,
     collisionMinSpeedKmh: 130, collisionMinDv: 3.5,
@@ -372,6 +374,7 @@
   const scopedGaugeKey=key=>{
     // Modern, GT-R, Corolla and Civic now each store a separate exact zoom.
     if(key==="hudScale")return settings.hudStyle==="modern"?"hudScale":settings.hudStyle+"HudScalePct";
+    if(key==="hudOffsetX"||key==="hudOffsetY")return settings.hudStyle==="modern"?key:settings.hudStyle+"HudOffset"+key.slice(-1);
     return ["corolla","civic","rx7","audi","nissan","rally","sport"].includes(settings.hudStyle) &&
       (ANALOG_POSITION_KEYS.includes(key)||ANALOG_SIZE_KEYS.includes(key))
        ? settings.hudStyle+key.slice(6) : key;
@@ -532,6 +535,7 @@
     if (key === "shiftMode") return val === "manual" ? "manual" : "auto";
     if (key === "manualGreenLead") return [0, 100, 250].includes(Number(val)) ? Number(val) : 100;
     if (key === "hudPosition") return allowedPositions.has(val) ? val : DEFAULTS[key];
+    if (key === "hudOffsetX" || key === "hudOffsetY" || /^(analog|corolla|civic|rx7|audi|nissan|rally|sport)HudOffset[XY]$/.test(key)) return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)), -20000, 20000) : DEFAULTS[key];
     if (["hudScale","analogHudScalePct","corollaHudScalePct","civicHudScalePct","rx7HudScalePct","audiHudScalePct","nissanHudScalePct","rallyHudScalePct","sportHudScalePct"].includes(key)) return Number.isFinite(Number(val)) ? clamp(Math.round(Number(val)),10,500) : DEFAULTS[key];
     if(key === "statusHudLayout")return val==="vertical"?"vertical":"horizontal";
     if(key === "statusHudScale")return Number.isFinite(Number(val))?clamp(Math.round(Number(val)),40,220):DEFAULTS[key];
@@ -2973,7 +2977,7 @@
       @media(max-height:650px){.panel{max-height:calc(100vh - 10px);}}
     </style>
     <section class="panel" id="settingsPanel" aria-label="Modern HUD in-game settings" role="dialog" aria-modal="false">
-      <div class="top" id="dragHandle" title="Drag menu with mouse"><h2>Modern HUD <span style="color:#72d4dd">v0.9.81</span></h2><button class="x" id="close" type="button" aria-label="Close settings">×</button></div>
+      <div class="top" id="dragHandle" title="Drag menu with mouse"><h2>Modern HUD <span style="color:#72d4dd">v0.11.10</span></h2><button class="x" id="close" type="button" aria-label="Close settings">×</button></div>
       <p>Drag the header to move the menu. Drag the bottom-left corner to resize its width and height. Changes apply live and are saved.</p>
       <div class="menu-nav">
         <label>Find a setting<input type="search" id="menuSearch" autocomplete="off" placeholder="e.g. opacity, ODO, shift..."></label>
@@ -3060,6 +3064,14 @@
       <fieldset><legend>Position / Size / Transparency</legend>
         <label for="hudPosition">HUD Position</label>
         <select id="hudPosition"><option value="bottom-right">Bottom Right</option><option value="bottom-left">Bottom Left</option><option value="top-right">Top Right</option><option value="top-left">Top Left</option></select>
+        <div class="space" style="margin-top:10px"><label for="hudOffsetX">HUD X Position (left / right)</label><span class="value" id="hudOffsetXValue">0 px</span></div>
+        <input type="range" id="hudOffsetX" min="-1000" max="1000" step="1" aria-label="Move entire HUD along X axis">
+        <div class="space" style="margin:6px 0 0"><label for="hudOffsetXNumber">Precise X (px)</label><input type="number" id="hudOffsetXNumber" min="-20000" max="20000" step="1" value="0" inputmode="decimal"></div>
+        <div class="space" style="margin-top:10px"><label for="hudOffsetY">HUD Y Position (up / down)</label><span class="value" id="hudOffsetYValue">0 px</span></div>
+        <input type="range" id="hudOffsetY" min="-1000" max="1000" step="1" aria-label="Move entire HUD along Y axis">
+        <div class="space" style="margin:6px 0 0"><label for="hudOffsetYNumber">Precise Y (px)</label><input type="number" id="hudOffsetYNumber" min="-20000" max="20000" step="1" value="0" inputmode="decimal"></div>
+        <button id="hudResetOffset" type="button" style="width:100%;margin-top:8px">Reset HUD X/Y Position</button>
+        <div class="help">Move the entire speedometer relative to the selected corner. Negative X moves left; negative Y moves up. Positive values move right/down. Each HUD style remembers its own X/Y. Saved with SAVE ALL and JSON.</div>
         <div class="space" style="margin-top:12px"><label for="hudScale">HUD Scale</label><span class="value" id="hudScaleValue">100%</span></div>
         <input type="range" id="hudScale" min="10" max="500" step="1" aria-label="HUD scale percentage slider">
         <div class="space" style="margin:8px 0 0"><label for="hudScaleNumber">Custom HUD scale (%)</label><input type="number" id="hudScaleNumber" min="10" max="500" step="1" value="100" aria-label="Precise HUD scale percentage"></div>
@@ -3142,7 +3154,7 @@
         <div style="margin-top:6px"><button id="windshieldSunColorReset" type="button" style="width:100%">Reset sun strip color (blue)</button></div>
         <div class="space"><label for="windshieldCracksPct">Impact cracks intensity</label><span class="value" id="windshieldCracksPctValue">25%</span></div>
         <input type="range" id="windshieldCracksPct" min="0" max="100" step="5">
-        <div class="space"><label for="windshieldHitDv">Crack on impacts from</label><span class="value" id="windshieldHitDvValue">10.0 m/s</span></div>
+        <div class="space"><label for="windshieldHitDv">Crack on impacts from</label><span class="value" id="windshieldHitDvValue">3.0 m/s</span></div>
         <input type="range" id="windshieldHitDv" min="3" max="20" step="0.5">
         <div class="space"><label for="windshieldFadeSeconds">Cracks fade away after (no new hit)</label><span class="value" id="windshieldFadeSecondsValue">120 s</span></div>
         <input type="range" id="windshieldFadeSeconds" min="20" max="600" step="10">
@@ -3151,7 +3163,7 @@
         <div class="space"><label for="windshieldClearZonePct">Visibility protection (clear centre)</label><span class="value" id="windshieldClearZonePctValue">80%</span></div>
         <input type="range" id="windshieldClearZonePct" min="0" max="100" step="5">
         <div style="margin-top:9px;display:flex;gap:6px"><button id="windshieldPreviewHit" type="button" style="flex:1">Preview crack</button><button id="windshieldPreviewLimp" type="button" style="flex:1">Preview Limp</button><button id="windshieldClear" type="button" style="flex:1">Clear cracks</button></div>
-        <div class="help">Crack size follows the impact strength (3 levels, up to 5 cracks at once) and uses the same collision filter as Impact Feedback (minimum speed / velocity change above). Cracks never appear in the clear centre zone.</div>
+        <div class="help">Cracks use their own impact-strength threshold, independent of Impact Feedback speed and velocity filters. Medium cracks start at 2× the selected threshold; large cracks at 4×. A conservative sudden-speed-loss fallback is used when impact telemetry is missing. Up to 5 cracks at once; the clear centre zone is protected.</div>
       </fieldset>
       <fieldset><legend>Visual Effects — Impact Feedback</legend>
         <label class="line"><input type="checkbox" id="impactFeedbackEnabled"> Enable Impact Feedback</label>
@@ -3553,8 +3565,15 @@
       item.setAttribute('aria-label',`${name} status: ${state==='red'?'critical':state==='yellow'?'warning':'normal'}`);
     }
   }
+  // The standalone warnings must not appear before live driving telemetry,
+  // in paused/menu states, or after the game stops sending samples.
+  function syncStandaloneVisibility(now=performance.now()){
+    const live=received && latest?.car===true && latest?.state?.driving!==false && latest?.state?.paused!==true && now-lastSpeedFxFeedAt<=2500 && document.visibilityState!=="hidden";
+    const display=settings.statusHudEnabled && live ? "block" : "none";
+    if(statusHost.style.display!==display)statusHost.style.display=display;
+  }
   function updateStandaloneAppearance(){
-    statusHost.style.display=settings.statusHudEnabled && latest?.state?.driving!==false?'block':'none';
+    syncStandaloneVisibility();
     statusHost.style.transform=`translate(calc(-50% + ${settings.statusHudX}px),${settings.statusHudY}px) scale(${settings.statusHudScale/100})`;
     statusHost.style.transformOrigin='center bottom';
     const statusVertical=settings.statusHudLayout==='vertical';
@@ -5750,6 +5769,7 @@
     }
   }
   const speedFxWatchdog=setInterval(()=>{
+    syncStandaloneVisibility();
     if(speedFx.classList.contains("active")) updateSpeedSensation();
     if(vigOn) updateVignette(); // feed stopped / paused / preview ended while the vignette is on -> update it
     wshUpdateVisibility();      // v0.11.0 windshield: show only while the Car Feed is live and driving
@@ -6053,14 +6073,41 @@
     }
     wshUpdateVisibility();
   }
+  // Windshield has its own samples and thresholds. Do not change the shared
+  // collision observer: Impact Feedback, helmet, suspension and Limp keep their rules.
+  let wshImpactPrevious=null;
+  function windshieldImpactSample(previous,d,now){
+    const speed=Number.isFinite(d?.speed)?Math.abs(d.speed):null; // m/s
+    const count=Number.isFinite(d?.events?.impacts)?d.events.impacts:null;
+    const next={speed,count,at:now};
+    if(!previous)return {next,dv:0};
+    const age=now-previous.at;
+    if(age<=0||age>420||(count!==null&&previous.count!==null&&count<previous.count))return {next,dv:0};
+    const freshImpact=count!==null&&previous.count!==null&&count>previous.count;
+    const rawDv=freshImpact&&Number.isFinite(d.events?.impactDv)?Math.abs(d.events.impactDv):0;
+    const drop=speed!==null&&previous.speed!==null?Math.max(0,previous.speed-speed):0;
+    // Only an abrupt, substantial speed loss can substitute for impact telemetry.
+    // 12 m/s (~43 km/h), at least 25% of speed and >=60 m/s²: ordinary braking,
+    // light high-speed scrapes and small feed fluctuations should not qualify.
+    const abrupt=previous.speed!==null&&drop>=12&&drop>=previous.speed*.25&&drop/(age/1000)>=60;
+    // A fresh positive impact measurement takes priority; do not inflate a
+    // reported minor bump with an unrelated speed change.
+    const dv=rawDv>0?rawDv:abrupt?drop:0;
+    return {next,dv};
+  }
+  function windshieldCrackStage(dv,threshold){
+    return dv<threshold?0:dv>=threshold*4?3:dv>=threshold*2?2:1;
+  }
   function processWindshieldHit(d,now){
-    if(!settings.windshieldEnabled||d?.state?.driving===false||document.visibilityState==="hidden")return;
-    const s=currentFrameCollision;
-    if(!s||!collisionPassesFilter(s))return;
-    const t=settings.windshieldHitDv;
-    if(s.dv<t||now-wsh.lastHitAt<650)return;
+    if(!settings.windshieldEnabled||d?.state?.driving===false||d?.state?.paused===true||document.visibilityState==="hidden"){
+      wshImpactPrevious=null;return;
+    }
+    const sample=windshieldImpactSample(wshImpactPrevious,d,now);
+    wshImpactPrevious=sample.next;
+    const stage=windshieldCrackStage(sample.dv,settings.windshieldHitDv);
+    if(!stage||wsh.limp||now-wsh.lastHitAt<650)return;
     wsh.lastHitAt=now;
-    wshAddCrack(s.dv>=t*2.6?3:s.dv>=t*1.6?2:1);
+    wshAddCrack(stage);
   }
   function wshStartPreview(ms){
     wsh.previewUntil=performance.now()+ms;wshUpdateVisibility();
@@ -6887,6 +6934,8 @@
     host.style.bottom = isBottom ? `${23+pedalsUnderReserve()}px` : "auto";
     host.style.left = isRight ? "auto" : "18px";
     host.style.right = isRight ? "18px" : "auto";
+    // Translate the outer host, not the scaled dial or its impact animation.
+    host.style.transform = `translate(${gaugeValue("hudOffsetX")}px, ${gaugeValue("hudOffsetY")}px)`;
     hud.style.transform = `scale(${gaugeValue("hudScale") / 100})`;
     hud.style.transformOrigin = `${isBottom ? "bottom" : "top"} ${isRight ? "right" : "left"}`;
     hud.style.opacity = "1";
@@ -6946,6 +6995,16 @@
       input.value=String(value);
     }
   }
+  function syncHudOffsetControls(){
+    for(const key of ["hudOffsetX","hudOffsetY"]){
+      const value=gaugeValue(key), slider=mget(key);
+      const extent=key.endsWith("X")?innerWidth:innerHeight;
+      const limit=Math.min(20000,Math.max(100,Math.ceil(extent),Math.abs(value)));
+      slider.min=String(-limit);slider.max=String(limit);slider.value=String(value);
+      mget(key+"Number").value=String(value);
+      mget(key+"Value").textContent=`${value} px`;
+    }
+  }
   function syncMenu() {
     for(const key of ['statusHudScale','statusHudOpacity']){
       mget(key+'Value').textContent=`${settings[key]}%`;
@@ -6985,6 +7044,7 @@
       else field.value = String(scopedGaugeKey(key)!==key?gaugeValue(key):val);
     }
     for(const key of ['rx7NitroOffsetX','rx7NitroOffsetY','rx7NitroSizePct'])mget(key+'Value').textContent=`${settings[key]}${key.endsWith('Pct')?'%':' px'}`;
+    syncHudOffsetControls();
     mget("hudScaleValue").textContent = `${gaugeValue("hudScale")}%`;
     mget("hudScaleNumber").value = String(gaugeValue("hudScale"));
     mget("hudBackgroundOpacityValue").textContent = `${settings.hudBackgroundOpacity}%`;
@@ -7481,7 +7541,7 @@
   };
   menuResizeGrip.addEventListener("pointerup",finishResize);
   menuResizeGrip.addEventListener("pointercancel",finishResize);
-  window.addEventListener("resize",()=>{if(menuOpen)applyMenuPlacement();},{passive:true});
+  window.addEventListener("resize",()=>{if(menuOpen){applyMenuPlacement();syncHudOffsetControls();}},{passive:true});
   mget("damageReset").addEventListener("click",()=>resetDamage({preserveCounters:true}));
 
   function toggleMenu(force) {
@@ -7489,7 +7549,7 @@
     menuHost.style.display = menuOpen ? "block" : "none";
     syncThrottleGuard();
     if (menuOpen) {syncMenu();applyMenuPlacement();}
-    else {shortcutCaptureAction=null;flushChanges();}
+    else {menuShadow.activeElement?.blur();shortcutCaptureAction=null;flushChanges();}
   }
 
   function isInput(target) {
@@ -7497,6 +7557,15 @@
     if (!el) return false;
     return Boolean(el.closest("input,textarea,select,[contenteditable='true'],[role='textbox']"));
   }
+  // The closed shadow root retargets page-level keyboard events to menuHost.
+  // Read the real focused control here, instead of exposing the private root.
+  function menuHasKeyboardInput() {
+    return menuOpen && !shortcutCaptureAction && document.activeElement===menuHost && isInput(menuShadow.activeElement);
+  }
+  throttleGuard?.setMenuKeyboardGuard({
+    isEditing:menuHasKeyboardInput,
+    onEscape:()=>toggleMenu(false)
+  });
   const saveToast=document.createElement("div");
   saveToast.id="nfsu2-modern-hud-save-toast";
   saveToast.style.cssText="position:fixed;right:20px;top:65px;z-index:2147483646;pointer-events:none;display:none;padding:8px 13px;border:1px solid #518a85;background:rgba(8,27,31,.92);border-radius:9px;color:#b8ffe7;font:700 13px system-ui,Arial,sans-serif;";
@@ -7584,7 +7653,7 @@
       event.preventDefault();event.stopImmediatePropagation();toggleMenu(false);return;
     }
     const actualTarget=typeof event.composedPath==="function" ? event.composedPath()[0] : event.target;
-    if (event.repeat || event.metaKey || isInput(actualTarget)) return;
+    if (event.repeat || event.metaKey || menuHasKeyboardInput() || isInput(actualTarget)) return;
     const pressed=Hotkeys.fromEvent(event);
     if(!pressed)return;
     if(pressed==="Ctrl+Alt+KeyN" || pressed==="NumpadDivide"){
@@ -7605,7 +7674,10 @@
     if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); toggleMenu(false); }
     // Keys typed into menu controls are not forwarded to the game.
     else event.stopPropagation();
-  }, true);
+  });
+  // Bubble-phase isolation is a fallback for non-editing menu controls.
+  menuShadow.addEventListener("keypress", event=>event.stopPropagation());
+  // Previously forwarded key releases must still reach the game.
   // Menu interactions must not accidentally trigger mouse steering/boost in the game.
   for (const type of ["pointerdown", "pointerup", "click", "mousedown", "mouseup", "wheel", "touchstart", "touchend"]) {
     menuShadow.addEventListener(type, event => event.stopPropagation());
@@ -7701,6 +7773,18 @@
     el.addEventListener(el.type === "range" || el.type === "color" ? "input" : "change", () =>
       changeSetting(key, el.type === "checkbox" ? el.checked : el.value));
   }
+  // Whole-HUD positions are independent from the local dial offsets.
+  for(const key of ["hudOffsetX","hudOffsetY"]){
+    const field=mget(key+"Number");
+    field.addEventListener("change",()=>{
+      if(field.value.trim()!=="" && Number.isFinite(Number(field.value)))changeSetting(key,field.value);
+      syncHudOffsetControls();
+    });
+  }
+  mget("hudResetOffset").addEventListener("click",()=>{
+    changeSetting("hudOffsetX",0);changeSetting("hudOffsetY",0);
+    syncHudOffsetControls();
+  });
   // Per-style precise HUD Scale entry (not limited to slider presets).
   mget("hudScaleNumber").addEventListener("change",()=>{
     const field=mget("hudScaleNumber");
@@ -7891,6 +7975,7 @@
         observedImpactCounter=null;observedImpact=null;
         observedLandingCounter=null;observedLanding=null;precedingCarSpeedKmh=0;precedingSpeedSampleAt=0;
         currentFrameCollision=null;currentFrameLanding=null;lastRawCollisionAt=-Infinity;
+        wshImpactPrevious=null;wsh.lastHitAt=-Infinity;
         lastHudWorldDriving=false;
         syncThrottleGuard();
         applyVisibility();
@@ -7901,6 +7986,7 @@
     latest = m;
     received = true;
     lastSpeedFxFeedAt = performance.now();
+    syncStandaloneVisibility(lastSpeedFxFeedAt);
     const now=performance.now();
     sampleOdometer(m,now);
     observeCollision(m,now);
@@ -8161,6 +8247,7 @@
   applyAppearance();
   syncMenu();
   document.addEventListener("visibilitychange",()=>{
+    syncStandaloneVisibility();
     syncThrottleGuard();
     updateSpeedSensation();
     if(document.visibilityState === "hidden"){
@@ -8168,6 +8255,7 @@
       void saveOdometer();
       impactFlashAnimation?.cancel();impactShakeAnimation?.cancel();resetImpactFeedbackCounter();
       precedingSpeedSampleAt=0;currentFrameCollision=null;currentFrameLanding=null;
+      wshImpactPrevious=null;
     }
     if (document.visibilityState === "hidden" && dirtyKeys.size)void flushChanges();
     if (document.visibilityState === "visible") {
