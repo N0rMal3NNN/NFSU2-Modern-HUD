@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NFSU2.xyz Modern HUD",
-  "version": "0.11.7",
+  "version": "0.11.10",
   "description": "Five HUD styles and redesigned standalone 2026 status panel with angled LEDs, TKL shortcuts, Limp Mode.",
   "permissions": [
     "storage"

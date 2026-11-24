@@ -1,8 +1,52 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.7.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.10 (desktop extension) and Userscript BETA 4 (phones and tablets).**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.11.10 — Windshield, HUD Position and Menu Keyboard Update + Userscript BETA 4
+
+Cumulative public Chromium release covering development versions v0.11.8, v0.11.9 and v0.11.10, and the first public phone/tablet userscript.
+
+### HUD X/Y Position (v0.11.10)
+- New **HUD X Position** and **HUD Y Position** (slider ±1000 px plus precise pixel fields) and a Reset button.
+- Each HUD style remembers its own X/Y; saved with SAVE ALL and in the settings JSON.
+- Independent of the existing per-dial offsets; applied to the outer HUD container, separately from the HUD scale.
+
+### Standalone Status HUD (v0.11.10)
+- The TYRES / ENGINE / SUSP panel appears only while live driving telemetry is arriving; hidden before the feed starts, while paused and after the feed stops.
+
+### Menu keyboard input (v0.11.9)
+- Typing, selecting, copy/paste and navigation in HUD settings fields are handled natively by the browser while a menu field has focus; game controls and HUD shortcuts do not interfere.
+- `Esc` closes the menu from an edit field.
+
+### Windshield collision detection (v0.11.8)
+- Windshield cracks use their own impact samples and threshold, independent of Impact Feedback, Helmet, suspension and Limp Mode.
+- Default *Crack on impacts from* is now 3.0 m/s (range 3–20 m/s); saved values are preserved.
+- Medium cracks at 2× and large cracks at 4× the threshold, up to 5 cracks at once.
+- A conservative sudden-speed-loss fallback is used only when impact telemetry is missing.
+- No cracks are created while the game is paused.
+
+### Userscript BETA 4 — iPhone and Android (v0.11.10.4)
+- Userscript based on the v0.11.10 code for **Safari + Userscripts (iPhone / iPad)** and **Microsoft Edge + Tampermonkey (Android)**.
+- One small **⚙** button; HUD, ON/OFF and SAVE stay hidden until it is pressed.
+- The ⚙ can be moved with a finger and remembers its position **separately for Portrait and Landscape**.
+- **Android support:** Car Feed connection through the page window used by Tampermonkey, with a bounded automatic reconnect when the feed goes stale; messages from other windows are rejected.
+- **Android / Car Feed Debug** section in the menu: local-only report with Copy and Reconnect buttons.
+- Overlays (HUD, windshield, helmet, cigarette, menu and the ⚙) stay visible when the game goes fullscreen.
+- Windshield cracks: new **Max cracks on screen** option — **2 (phone default)**, 3, 4 or Standard (up to 5). The oldest crack is removed first; the desktop extension keeps Standard (5).
+- Touch-friendly settings menu with live changes and auto-save; the ⚙ is hidden while the menu is open and stays available when the HUD is OFF.
+- Smaller, performance-friendly mobile defaults (HUD scales, *Eco* mode); desktop defaults are unchanged.
+- Separate settings and odometer storage from the desktop extension. This is a BETA.
+- First Android beta tester: **RacerXC**.
+
+### Compatibility
+- Desktop extension: Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi and other Chromium-based desktop browsers.
+- Userscript BETA 4: iPhone / iPad — Safari + Userscripts (working); Android — Microsoft Edge + Tampermonkey (working, tested with RacerXC). Other Android browsers and managers are not tested.
+
+[Download v0.11.10](downloads/NFSU2_Modern_HUD_v0_11_10_Chromium.zip) | [Userscript BETA 4](downloads/NFSU2_Userscripts_BETA_4.zip) | [Release Notes](RELEASE_NOTES_v0.11.10.md)
+
+---
 
 ## v0.11.7 — Cigarette, Helmet & Driving Immersion Update
 

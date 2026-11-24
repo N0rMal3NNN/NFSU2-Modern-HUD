@@ -1,6 +1,6 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.11.7 — Cigarette, Helmet & Driving Immersion Update (Chromium)**
+**Current version: v0.11.10 — Windshield, HUD Position and Menu Keyboard Update (Chromium) · Userscript BETA 4 for phones (iPhone & Android)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics.
 
@@ -8,13 +8,48 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest version: v0.11.7.** The release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
+**Latest version: v0.11.10.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
 
 - **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
 - **[Installation & Upgrade Guide](INSTALLATION.md)** — important for keeping locally saved settings and odometer values.
+- **📱 [Download Userscript BETA 4 — phones & tablets](downloads/NFSU2_Userscripts_BETA_4.zip)** — iPhone: Safari + Userscripts · Android: Edge + Tampermonkey. See [Phone install](INSTALLATION.md#phones-and-tablets-userscript-beta-4).
 
 **Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
+
+---
+
+## v0.11.10 — Windshield, HUD Position and Menu Keyboard Update
+
+Cumulative update since v0.11.7 (versions v0.11.8, v0.11.9 and v0.11.10).
+
+- **HUD X / Y Position (v0.11.10):** move the entire speedometer with sliders or precise pixel fields. Every HUD style remembers its own position; a Reset button is included.
+- **Standalone Status HUD (v0.11.10):** the TYRES / ENGINE / SUSP panel now appears only during live driving telemetry (not before the game starts, while paused, or after the feed stops).
+- **Menu keyboard input (v0.11.9):** typing and editing in the HUD settings fields is handled natively by the browser, without interference from game controls or HUD shortcuts.
+- **Independent windshield collision detection (v0.11.8):** cracks use their own impact samples and threshold (default 3.0 m/s, adjustable 3–20 m/s), independent of Impact Feedback, Helmet, suspension and Limp Mode.
+
+Full details: [v0.11.10 Release Notes](RELEASE_NOTES_v0.11.10.md).
+
+### 📱 Userscript BETA 4 — iPhone and Android
+
+The same v0.11.10 HUD for touch devices. It is a **BETA**.
+
+| Device | Browser + userscript manager | Status |
+|---|---|---|
+| iPhone / iPad | **Safari + Userscripts** | Working — tested by the project owner |
+| Android | **Microsoft Edge + Tampermonkey** | Working — tested by the project owner and by **RacerXC**, the first Android beta tester |
+| Other Android browsers / managers | — | Not tested |
+
+- **One small ⚙ button** — nothing else covers the screen.
+- **Move it with your finger.**
+- **It remembers its position separately for Portrait and Landscape.**
+- **HUD, ON/OFF and SAVE stay hidden until you press the ⚙.**
+- **Windshield cracks are limited to 2 on screen by default** (choose 2, 3, 4 or Standard in the menu) so a small phone screen does not fill up.
+- **Android / Car Feed Debug** section in the menu: a local-only diagnostic report you can copy if something does not work.
+
+The userscript keeps its own settings and odometer; they are not shared with the desktop extension. Step-by-step instructions for iPhone and Android: [Phones and tablets: Userscript BETA 4](INSTALLATION.md#phones-and-tablets-userscript-beta-4). Release information: [v0.11.10 Release Notes](RELEASE_NOTES_v0.11.10.md#userscript-beta-4-for-phones-and-tablets).
+
+Thanks to **RacerXC** — the first Android beta tester!
 
 ---
 
@@ -232,7 +267,9 @@ Custom bindings for the main three actions support tenkeyless (TKL) and laptop k
 
 ---
 
-## 🌐 Supported Desktop Browsers
+## 🌐 Supported Browsers
+
+**Desktop extension (Chromium ZIP):**
 
 - Google Chrome
 - Microsoft Edge
@@ -243,6 +280,8 @@ Custom bindings for the main three actions support tenkeyless (TKL) and laptop k
 - Other compatible Chromium-based desktop browsers
 
 The ZIP contains only `NFSU2-HUD-Chromium/`.
+
+**Phones and tablets (Userscript BETA 4):** iPhone / iPad — Safari + Userscripts (working); Android — Microsoft Edge + Tampermonkey (working, tested with RacerXC). Other Android browsers and managers are not tested.
 
 See the [Installation & Upgrade Guide](INSTALLATION.md).
 
@@ -255,7 +294,7 @@ See the [Installation & Upgrade Guide](INSTALLATION.md).
 - Collision, turbo, tyre, suspension and engine-warning indicators can be approximations rather than real ECU/mechanical sensor values.
 - Optional Limp Mode may temporarily intercept driving input on your own browser when enabled; it does not change the game's physical simulation.
 - Visual effects may affect FPS on some hardware; tune intensity/performance in Settings.
-- Saved settings and ODO data do not automatically sync across browsers, devices, extension identities, or game accounts.
+- Saved settings and ODO data do not automatically sync across browsers, devices, extension identities, userscript managers or game accounts. The phone userscript and the desktop extension keep separate data.
 
 ---
 

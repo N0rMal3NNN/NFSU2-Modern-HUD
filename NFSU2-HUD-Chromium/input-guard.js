@@ -26,6 +26,25 @@
   let active = false, scope = "throttle", pattern = "stutter", emergency = false;
   let phase = "drive", phaseUntil = 0, lastHeartbeat = 0;
   let heldAtActivation = new Set();
+  // Menu focus is resolved inside the closed shadow root by content.js.
+  // At document_start intercept before the page can cancel native text editing.
+  let menuKeyboard = null;
+  const gameKeysDown = new Set(), menuKeysDown = new Set();
+  const keyIdentity = e => e.code || e.key || '';
+  function menuEditing() { return Boolean(menuKeyboard?.isEditing()); }
+  function protectMenuKeydown(e) {
+    if (!menuEditing()) return false;
+    const key = keyIdentity(e);
+    if (key) menuKeysDown.add(key);
+    // Never preventDefault for editing: Chromium must perform insertion,
+    // selection, clipboard shortcuts, deletion, navigation and IME itself.
+    e.stopImmediatePropagation();
+    if (e.key === 'Escape' && !e.isComposing) {
+      e.preventDefault();
+      if (!e.repeat) menuKeyboard?.onEscape();
+    }
+    return true;
+  }
 
   function codeOf(e) {
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) return e.key;
@@ -103,6 +122,7 @@
       window.dispatchEvent(new CustomEvent("nfsu2-hud-emergency-release"));
       e.preventDefault(); e.stopImmediatePropagation(); return;
     }
+    if (protectMenuKeydown(e)) return;
     const code = codeOf(e);
     const isEditable = editable(e);
     const shouldStop = blocked() && !e.ctrlKey && !e.altKey && !e.metaKey && !isEditable && selected(code);
@@ -112,16 +132,30 @@
       else if (!shouldStop) old.forwarded = true;
     }
     // DRIVE: allow W/A/S/D and all arrows, including repeats, without exceptions.
-    if (!shouldStop) return;
+    if (!shouldStop) {
+      const key = keyIdentity(e);
+      if (key) gameKeysDown.add(key);
+      return;
+    }
     e.preventDefault(); e.stopImmediatePropagation();
   }
   function onKeyup(e) {
     if (SYNTHETIC.has(e)) return;
     const code = codeOf(e);
     PRESSED.delete(code); heldAtActivation.delete(code);
-    // Never block a real keyup, even when engine misfire is active.
+    const key = keyIdentity(e);
+    const wasForwarded = gameKeysDown.delete(key);
+    const wasMenuKey = menuKeysDown.delete(key);
+    // Release any key already forwarded before focus entered the menu.
+    // A menu-only release must not trigger game controls after Tab/blur.
+    if (!wasForwarded && (wasMenuKey || menuEditing())) e.stopImmediatePropagation();
+    // Never block a real keyup for a previously forwarded driving key.
   }
   const controller = Object.freeze({
+    setMenuKeyboardGuard({isEditing, onEscape} = {}) {
+      menuKeyboard = typeof isEditing === 'function' && typeof onEscape === 'function'
+        ? {isEditing, onEscape} : null;
+    },
     configure({active:nextActive=false, scope:nextScope="throttle", pattern:nextPattern="stutter"} = {}) {
       const wasActive = active, oldPattern = pattern, oldScope = scope;
       active = Boolean(nextActive);
@@ -153,10 +187,15 @@
   Object.defineProperty(window, "__nfsu2ThrottleGuard", { value:controller, configurable:false });
   window.addEventListener("keydown", onKeydown, true);
   window.addEventListener("keyup", onKeyup, true);
+  window.addEventListener("keypress", e => {
+    if (menuEditing()) e.stopImmediatePropagation();
+  }, true);
   for (const type of ["blur", "pagehide"]) {
-    window.addEventListener(type, () => {
+    window.addEventListener(type, e => {
+      if (type === "blur" && e.target !== window) return;
       active = false; phase = "drive"; phaseUntil = 0;
       PRESSED.clear(); heldAtActivation.clear();
+      gameKeysDown.clear(); menuKeysDown.clear();
     }, true);
   }
 })();
