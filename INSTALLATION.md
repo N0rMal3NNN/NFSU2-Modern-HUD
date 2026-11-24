@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.11.7 — Chromium-based desktop browsers**
+**Release: v0.11.10 — Chromium-based desktop browsers · Userscript BETA 4 for phones and tablets**
 
 Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
@@ -9,6 +9,8 @@ Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU
 ## Supported desktop browsers
 
 Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and other compatible Chromium-based desktop browsers.
+
+For phones and tablets (iPhone: Safari + Userscripts; Android: Edge + Tampermonkey), jump to [Phones and tablets: Userscript BETA 4](#phones-and-tablets-userscript-beta-4).
 
 ## Fresh installation — Chromium family
 
@@ -33,6 +35,10 @@ Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and other compa
 
 A different extension ID may not have access to the previous extension's locally saved mileage. The game's own save does not include these values.
 
+## HUD position — v0.11.10
+
+In the main HUD settings, **HUD X Position** and **HUD Y Position** move the entire speedometer relative to its selected corner (sliders ±1000 px or precise pixel fields). Negative X moves left, negative Y moves up. Every HUD style remembers its own position; **Reset HUD X/Y Position** returns the current style to 0/0. The values are saved with SAVE ALL and the settings JSON.
+
 ## Useful shortcuts
 
 | Default | Function |
@@ -56,16 +62,69 @@ Use the keyboard-shortcuts editor for **TKL / laptop** keyboards. The **Handbrak
 - **Speed Sensation:** optional streaks, Blue Fog and corner-darkening Vignette settings.
 - **Limp Mode:** optional local input restriction. It can run and display while the main custom speedometer is hidden.
 
-## Cockpit overlays — v0.11.7
+## Cockpit overlays — v0.11.7 and later
 
 After installation, open the HUD Settings (default `Numpad +` or `Ctrl + Alt + M`). The optional effects are grouped under **Visual Effects**.
 
 - **Cigarette:** enable it, then choose bottom-left/center/right position, size (50–150%), Smoke animation ON/OFF, smoke amount, Ember puff, Smoke leans with speed, and whether it appears in front of the HUD. **Preview cigarette** works without driving.
 - **Helmet View:** enable it and choose **GT Full-Face** or **Open-Face Sport**. Change opacity, opening size (90–130%), placement in front of/behind the HUD, impact shake ON/OFF and intensity. **Preview shake** demonstrates the effect.
-- **Windshield Glass:** independent effects for reflection, dust, wiper marks, a custom-color sun strip, impact cracks, Limp shattered glass and central visibility protection.
+- **Windshield Glass:** independent effects for reflection, dust, wiper marks, a custom-color sun strip, impact cracks, Limp shattered glass and central visibility protection. Since v0.11.8 the cracks use their own impact threshold (*Crack on impacts from*, default 3.0 m/s, range 3–20 m/s).
 - **TYRES indicator:** the activation threshold is now `Wheel slip warning` slider × **1.155**, an extra 10% vs the v0.11.4 build. The slider itself remains adjustable; BRAKE/ABS is not affected.
 
 The cigarette, helmet and windshield effects start **OFF** for new installations. Existing saved settings are preserved when upgrading. They require a live Car Feed to display during driving and do not modify the game's car physics.
+
+## Phones and tablets: Userscript BETA 4
+
+The userscript runs the same v0.11.10 HUD on touch devices. It is a **BETA** (v0.11.10.4).
+
+| Device | Browser + userscript manager | Status |
+|---|---|---|
+| iPhone / iPad | **Safari + Userscripts** | Working — tested by the project owner |
+| Android | **Microsoft Edge + Tampermonkey** | Working — tested by the project owner and by **RacerXC**, the first Android beta tester |
+| Other Android browsers / managers | — | Not tested |
+
+**Download:** [Userscript BETA 4 ZIP](downloads/NFSU2_Userscripts_BETA_4.zip) (contains `NFSU2_Modern_HUD_v0_11_10_US_BETA_4.user.js`) or the raw file [`userscript/NFSU2_Modern_HUD.user.js`](userscript/NFSU2_Modern_HUD.user.js). Extract the ZIP first; the manager needs the `.user.js` file, not the ZIP.
+
+### iPhone / iPad — Safari + Userscripts
+
+An iPhone needs the **Userscripts** app and the **Safari** browser. Userscripts is a Safari extension, so other browsers on iOS do not run it. The Userscripts project lists iOS 15.1 or later as the minimum version.
+
+1. Install **Userscripts** from the App Store and open the app once.
+2. Open **Settings → Safari → Extensions → Userscripts** and turn it **ON**. Set the permission to **Allow** (the Userscripts project recommends *Always Allow* for *All Websites*; at least allow `nfsu2.xyz`). You can also open this from Safari with the **AA** button in the address bar.
+3. Userscripts keeps its scripts in a folder. Current versions create a default folder automatically; if the app asks, tap **Set Userscripts Directory** and choose a folder.
+4. Put the script into that folder: download and extract the BETA 4 ZIP, then copy `NFSU2_Modern_HUD_v0_11_10_US_BETA_4.user.js` into the Userscripts folder with the **Files** app.
+   - *Alternative (from the Userscripts documentation):* open the raw `.user.js` link `https://raw.githubusercontent.com/N0rMal3NNN/NFSU2-Modern-HUD/main/userscript/NFSU2_Modern_HUD.user.js` in Safari, tap **AA → Userscripts** and confirm the install prompt. This path was not tested with this script.
+5. Open **`https://nfsu2.xyz`** in **Safari**. Tap **AA → Userscripts** to check that the script is listed and active (version `0.11.10.4`). A small **⚙** button appears in the top-left corner. If it does not, reload the page.
+
+### Android — Microsoft Edge + Tampermonkey
+
+1. **Install Microsoft Edge** from Google Play.
+2. **Install Tampermonkey:** open Edge, open the browser menu, choose **Extensions**, search for **Tampermonkey** by Jan Biniok and install it. Make sure **Enable** and **Allow User Scripts** are turned **ON**.
+3. **WebGPU (only if required):** if the game fails to start with a WebGPU error, open `edge://flags/#enable-unsafe-webgpu`, set **Unsafe WebGPU Support** to **Enabled** and restart Edge. ⚠️ This is an experimental browser setting that may affect security and stability. Enable it only if it is necessary.
+4. **Install Modern HUD:** download and extract the BETA 4 ZIP, open the **Tampermonkey Dashboard**, go to **Utilities → Import from file**, select the `.user.js` file and install it. Check that the installed version is **0.11.10.4**.
+5. Open **`https://nfsu2.xyz`**, enter Free Roam or start a race and use the floating **⚙** button to open the HUD settings. Adjust the HUD size and X/Y positions so that the HUD does not overlap the mobile driving controls.
+
+### Using the ⚙ button
+
+- **Tap** it to show three buttons: **HUD** (settings), **ON/OFF** (speedometer) and **SAVE** (settings + odometer). Tap the ⚙ again, or tap anywhere else, to hide them.
+- **Drag** it with your finger to move it. Its position is remembered **separately for Portrait and Landscape**.
+- **HUD** opens the touch-friendly settings menu; close it with ×. The ⚙ is hidden while the menu is open.
+- The ⚙ stays available when the speedometer is OFF, so you can turn it back on.
+
+### Good to know
+
+- The custom HUD appears only during active gameplay (Free Roam or a race), when the game is sending the Car Feed.
+- The userscript keeps its **own settings and odometer** in the userscript manager's storage. They are **not shared** with the desktop extension and do not sync between devices.
+- The mobile defaults use smaller HUD sizes, *Eco* performance mode and at most **2 windshield cracks on screen** (*Windshield Glass → Max cracks on screen*: 2, 3, 4 or Standard); adjust them in Settings.
+- Cigarette, Helmet View and Windshield Glass start **OFF**; they can reduce FPS on weaker phones.
+- Keyboard shortcuts are for desktop; on a phone use the ⚙ button.
+- To update, import or copy the newer `.user.js` over the old one in your userscript manager.
+
+### Problems? Use the Debug report
+
+Open the HUD settings and find **Android / Car Feed Debug**. It shows a local-only diagnostic report (script manager, Car Feed requests and packets, whether the car is detected and driving, and the last error). No data is sent anywhere. Drive in Free Roam or a race first, then use **Copy Debug Report** and send the report with your phone model, OS/browser version and Tampermonkey/Userscripts version. **Reconnect Car Feed** asks the game for the feed again.
+
+**No ⚙ button:** make sure the userscript manager is enabled for `nfsu2.xyz`, the script is turned on and the page was reloaded. The ⚙ appears only on touch devices.
 
 ## Odometer
 
