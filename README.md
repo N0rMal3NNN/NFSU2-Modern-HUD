@@ -1,6 +1,6 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.10.7 — Car-inspired HUDs (Chromium-based desktop browsers)**
+**Current version: v0.11.5 — Car-inspired HUDs (Chromium-based desktop browsers)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics or 3D rendering.
 
@@ -8,13 +8,31 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest version: v0.10.7.** The release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
+**Latest version: v0.11.5.** The release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
 
 - **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
 - **[Installation & Upgrade Guide](INSTALLATION.md)** — important for keeping locally saved settings and odometer values.
 
 **Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
+
+## v0.11.5 — Cigarette, Helmet View & Windshield Glass
+
+The latest update adds optional immersive **cockpit overlays**, all configurable in the in-game HUD settings. They are visual effects only; the game files, vehicle physics and Car Feed remain unchanged.
+
+- **3D Cigarette:** Enable/disable (OFF by default), position (bottom-left, bottom-center or bottom-right), size **50–150%**, animated smoke ON/OFF and amount **0–100%**, ember puff effect, optional smoke bending with driving speed, and display **in front of or behind the HUD**. Includes a **7-second preview**.
+- **Helmet View:** Choose **GT Full-Face** or **Open-Face Sport**. Helmet ON/OFF (OFF by default), opacity **0–100%**, opening size **90–130%**, layer order (in front of/behind the HUD), impact shake ON/OFF and intensity **0–100%**, and a shake preview.
+- **Windshield Glass:** Optional full-screen reflection, dust, wiper traces and sun strip (custom color), plus impact cracks and a Limp Mode shattered-glass effect. Visibility protection keeps the center of the screen clearer; individual effects have separate controls. Windshield Glass is OFF by default.
+- **TYRES warning sensitivity:** **10% more slip/spin than in v0.11.4**, on top of the earlier +5% change (total threshold multiplier **×1.155** vs the slider). The default **3.4 m/s** slider triggers at **3.927 m/s** rather than 3.57 m/s. Applies to lateral slip, wheelspin and one-wheel extreme slip, in every HUD including Standalone. Brake/ABS logic is unchanged.
+- **Chromium only:** Google Chrome, Edge, Brave, Opera / Opera GX, Vivaldi and compatible Chromium-based desktop browsers.
+
+The cigarette and helmet appear while driving with a live Car Feed and are hidden when paused or inactive. Their visual order can be customized. More details: [v0.11.5 Release Notes](RELEASE_NOTES_v0.11.5.md).
+
+### Cigarette overlay — cockpit gameplay
+![Cigarette overlay in cockpit gameplay](assets/cigarette-cockpit-v0.11.5.webp)
+
+### Helmet View — cockpit gameplay
+![Helmet View overlay in cockpit gameplay](assets/helmet-view-v0.11.5.webp)
 
 ## v0.10.7 — RX-7 layout, dial numbers and status lamp fixes
 
@@ -24,7 +42,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **Strict-CSP compatibility:** improved gauge rendering, GEAR/ODO positioning and menu styling (introduced in v0.10.5).
 - The Pedals HUD, Vignette, independent Status HUD, odometer, shortcut customization and Limp Mode remain available.
 
-**Existing screenshots are unchanged.** Full details: [v0.10.7 Release Notes](RELEASE_NOTES_v0.10.7.md).
+**Earlier v0.10.7 screenshots are retained.** Full details: [v0.10.7 Release Notes](RELEASE_NOTES_v0.10.7.md).
 
 ## Feature highlights since public v0.9.77
 
@@ -42,7 +60,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 For details, see **[v0.10.7 Release Notes](RELEASE_NOTES_v0.10.7.md)**, [v0.10.4 release notes](RELEASE_NOTES_v0.10.4.md) and [Changelog](CHANGELOG.md).
 
-## Screenshots — all seven supplied by the project owner
+## Previous gameplay screenshots — seven supplied by the project owner
 
 These are **real NFSU2.xyz gameplay screenshots**, not generated/mock-up imagery. Images are copied directly from the owner-provided files.
 
@@ -128,4 +146,4 @@ The ZIP contains **only `NFSU2-HUD-Chromium/`**. Install it in a compatible Chro
 
 ## Project
 
-Built by the community for NFSU2.xyz. This is an independent, unofficial fan-made dashboard customization project. All seven screenshots in this README were provided by the project owner.
+Built by the community for NFSU2.xyz. This is an independent, unofficial fan-made dashboard customization project. All gameplay screenshots in this README were provided by the project owner.

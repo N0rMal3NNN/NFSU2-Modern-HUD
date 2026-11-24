@@ -4,7 +4,7 @@
 
 ## Download Latest
 
-**Current version: v0.10.7**
+**Current version: v0.11.5**
 
 **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)**
 
@@ -14,7 +14,8 @@ This permanent URL always points to the most recent public Chromium-only build. 
 
 | Version | Download | Release information |
 |---|---|---|
-| **v0.10.7 — latest** | [Download v0.10.7](downloads/NFSU2_Modern_HUD_v0.10.7_Chromium.zip) | [What's new](RELEASE_NOTES_v0.10.7.md) |
+| **v0.11.5 — latest** | [Download v0.11.5](downloads/NFSU2_Modern_HUD_v0.11.5_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.5.md) |
+| v0.10.7 | [Download v0.10.7](downloads/NFSU2_Modern_HUD_v0.10.7_Chromium.zip) | [What's new](RELEASE_NOTES_v0.10.7.md) |
 | v0.10.4 | [Download v0.10.4](downloads/NFSU2_Modern_HUD_v0.10.4_Chromium.zip) | [What's new](RELEASE_NOTES_v0.10.4.md) |
 | v0.9.77 | [Download v0.9.77](downloads/NFSU2_Modern_HUD_v0.9.77_Chromium.zip) | [Release notes](RELEASE_NOTES_v0.9.77.md) |
 | v0.9.73 | [Download v0.9.73](downloads/NFSU2_Modern_HUD_v0.9.73_Chromium.zip) | [Release notes](RELEASE_NOTES_v0.9.73.md) |

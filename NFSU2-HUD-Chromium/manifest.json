@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "NFSU2.xyz Modern HUD",
-  "version": "0.10.7",
-  "description": "Car-inspired HUDs for GT-R, Corolla, Civic, RX-7, Audi A3/TT, 350Z/G35, Evo/STi and Supra/RX-8; live telemetry and customization.",
+  "version": "0.11.5",
+  "description": "Car-inspired HUDs for GT-R, Corolla, Civic, RX-7, Audi, 350Z/G35, Evo/STi and Supra/RX-8, with helmet, cigarette and glass effects.",
   "permissions": [
     "storage"
   ],

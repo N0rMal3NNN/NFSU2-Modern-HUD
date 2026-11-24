@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.10.7 — Chromium-based desktop browsers**
+**Release: v0.11.5 — Chromium-based desktop browsers**
 
 Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
@@ -55,6 +55,17 @@ Use the keyboard-shortcuts editor for **TKL / laptop** keyboards. The **Handbrak
 - **Impact feedback:** HUD Shake and impact settings, including optional override for Reduce Motion and Last Collision diagnostics.
 - **Speed Sensation:** optional streaks, Blue Fog and corner-darkening Vignette settings.
 - **Limp Mode:** optional local input restriction. It can run and display while the main custom speedometer is hidden.
+
+## New in v0.11.5 — cockpit overlays
+
+After installation, open the HUD Settings (default `Numpad +` or `Ctrl + Alt + M`). The optional effects are grouped under **Visual Effects**.
+
+- **Cigarette:** enable it, then choose bottom-left/center/right position, size (50–150%), Smoke animation ON/OFF, smoke amount, Ember puff, Smoke leans with speed, and whether it appears in front of the HUD. **Preview cigarette** works without driving.
+- **Helmet View:** enable it and choose **GT Full-Face** or **Open-Face Sport**. Change opacity, opening size (90–130%), placement in front of/behind the HUD, impact shake ON/OFF and intensity. **Preview shake** demonstrates the effect.
+- **Windshield Glass:** independent effects for reflection, dust, wiper marks, a custom-color sun strip, impact cracks, Limp shattered glass and central visibility protection.
+- **TYRES indicator:** the activation threshold is now `Wheel slip warning` slider × **1.155**, an extra 10% vs the v0.11.4 build. The slider itself remains adjustable; BRAKE/ABS is not affected.
+
+The cigarette, helmet and windshield effects start **OFF** for new installations. Existing saved settings are preserved when upgrading. They require a live Car Feed to display during driving and do not modify the game's car physics.
 
 ## Odometer
 
