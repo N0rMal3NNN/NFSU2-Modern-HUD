@@ -140,7 +140,7 @@ For more details:
 
 Gameplay screenshots supplied by the project owner.
 
-### Audi TT — Drift Gameplay
+### Audi TT
 
 ![Audi TT dashboard during a drift run](assets/audi-tt-drift-v0.10.4.webp)
 
