@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.11.5 — Chromium-based desktop browsers**
+**Release: v0.11.7 — Chromium-based desktop browsers**
 
 Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
@@ -56,7 +56,7 @@ Use the keyboard-shortcuts editor for **TKL / laptop** keyboards. The **Handbrak
 - **Speed Sensation:** optional streaks, Blue Fog and corner-darkening Vignette settings.
 - **Limp Mode:** optional local input restriction. It can run and display while the main custom speedometer is hidden.
 
-## New in v0.11.5 — cockpit overlays
+## Cockpit overlays — v0.11.7
 
 After installation, open the HUD Settings (default `Numpad +` or `Ctrl + Alt + M`). The optional effects are grouped under **Visual Effects**.
 
