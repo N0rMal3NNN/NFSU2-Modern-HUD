@@ -1,8 +1,20 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.10.7.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.5.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.11.5 — Immersive Cockpit Overlays and TYRES Warning Retuning
+
+Public Chromium-only release bringing together the visual additions from development versions v0.10.8 through v0.11.4, plus one new TYRES tuning adjustment.
+
+- **Windshield Glass:** optional full-screen reflection, dust, wiper marks, sun strip with custom color, impact cracks, Limp shattered glass and central visibility protection. Independent effect toggles and intensities. Default OFF.
+- **Helmet View:** GT Full-Face and Open-Face Sport; model selector, opacity, opening size, placement in front of/behind HUD, impact shake toggle, intensity and preview. Default OFF.
+- **Cigarette overlay:** 3D-style cigarette with glowing ember and animated smoke; enable, position, size, smoke amount and toggle, automatic ember puff, optional speed-sensitive smoke, HUD layer placement and preview. Default OFF.
+- **TYRES sensitivity:** retained v0.10.8's +5% increase; now adds another **10% on top**. Slider is multiplied by **1.155**; 3.4 m/s setting gives an effective **3.927 m/s** slip/spin threshold. One-wheel extreme slip uses the same scaling. Existing hold-time filter, BRAKE and ABS unchanged.
+- All previous HUD styles, standalone panels, driving controls, odometer, profiles and Car Feed read-only behavior retained.
+
+Full details: [v0.11.5 release notes](RELEASE_NOTES_v0.11.5.md).
 
 ## v0.10.7 — RX-7 Warning Layout, Gauge Labels and Status Lamp Fixes
 
