@@ -42,6 +42,13 @@ All settings, HUD styles, profiles, cigarette, helmet and odometer data from v0.
 
 Step-by-step instructions for both platforms: [Phones and tablets: Userscript BETA 4](INSTALLATION.md#phones-and-tablets-userscript-beta-4).
 
+<p align="center">
+  <img src="assets/iphone-userscript-hud-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): NFSU2 Modern HUD speedometer at the bottom right of the mobile game screen">
+  <img src="assets/iphone-userscript-cigarette-cracks-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): Cigarette and windshield cracks effects on the mobile game screen">
+</p>
+
+*iPhone (Safari + Userscripts): the HUD at the bottom right (left) and the Cigarette and Windshield Glass effects (right). These screenshots were supplied by the project owner and come from an earlier BETA build; in BETA 4 only the small ⚙ button is shown until you tap it.*
+
 ### What is in BETA 4
 
 - **One small ⚙ button.** The phone screen is not covered by a toolbar.
