@@ -1,6 +1,6 @@
 /* NFSU2 Modern HUD 0.9.10 — cross-browser storage adapter.
- * Uses a promise-based browser.* API where available and the callback chrome.* API
- * otherwise. All callers receive a Promise, including profile imports/exports.
+ * Uses the native promise browser.* API in Firefox and the callback chrome.* API
+ * in Chromium. All callers receive a Promise, including profile imports/exports.
  * No remote requests, tracking, or external dependencies.
  */
 (() => {

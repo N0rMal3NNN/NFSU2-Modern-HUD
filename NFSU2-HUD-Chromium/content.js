@@ -1,4 +1,4 @@
-/* NFSU2 Modern HUD v0.11.4 — Cigarette (3D, forward-pointing, with ember glow + animated smoke; position / size / smoke / puff / speed lean / behind or in front of the HUD); v0.11.3 — Helmet View: second 3D model 'Open-Face Sport' + model selector, 'Opening size 100%' is drawn 5 % larger; v0.11.2 — Helmet View (two 3D-shaded helmets: GT Full-Face / Open-Face Sport; behind the HUD or in front of it (covers part of it); optional shake on impact); v0.11.1 — Windshield glass: custom sun-strip colour, varied cracks (line / star / web), new defaults (OFF); v0.11.0 — Windshield glass (wiper marks, sun strip, impact cracks, Limp shatter); v0.10.8 — TYRES lamp needs 5 % more spin/slide; Chromium-only (Chrome, Edge, Brave, Opera, Vivaldi); v0.10.7 — RX-7 four icons 2+2 around the RPM dial; numerals never sit on a tick; status lamps instead of TYRES/ENGINE/SUSP/HAND captions (GT-R, Corolla); Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
+/* NFSU2 Modern HUD v0.11.7 — multi-wheel Car Feed slip confirmation; v0.11.6 — further stricter tyre slip detection; v0.11.5 — stricter tyre slip detection; v0.11.4 — Cigarette (3D, forward-pointing, with ember glow + animated smoke; position / size / smoke / puff / speed lean / behind or in front of the HUD); v0.11.3 — Helmet View: second 3D model 'Open-Face Sport' + model selector, 'Opening size 100%' is drawn 5 % larger; v0.11.2 — Helmet View (two 3D-shaded helmets: GT Full-Face / Open-Face Sport; behind the HUD or in front of it (covers part of it); optional shake on impact); v0.11.1 — Windshield glass: custom sun-strip colour, varied cracks (line / star / web), new defaults (OFF); v0.11.0 — Windshield glass (wiper marks, sun strip, impact cracks, Limp shatter); v0.10.8 — TYRES lamp needs 5 % more spin/slide; Chromium-only (Chrome, Edge, Brave, Opera, Vivaldi); v0.10.7 — RX-7 four icons 2+2 around the RPM dial; numerals never sit on a tick; status lamps instead of TYRES/ENGINE/SUSP/HAND captions (GT-R, Corolla); Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
  * Numpad + opens/closes an in-game settings panel.
  * Numpad - toggles the ENTIRE custom Modern HUD (not the game's own HUD).
  * No modification to NFSU2's game code, rendering buffers, or physics.
@@ -157,7 +157,7 @@
   if (typeof ShiftGuide !== "function") return;
   const shiftGuide = new ShiftGuide();
   const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
-  const TYRE_SLIP_STRICTER = 1.155; // v0.11.5: +10% on top of the existing +5%; wheel spin / slide activation threshold
+  const TYRE_SLIP_STRICTER = 1.2705;   // TYRES lamp requires 10% more slip than v0.11.5 (27.05% above slider)
   const DEFAULT_COLORS = Object.freeze({
     colorPanelBg: "#0A1218", colorPanelBorder: "#B5DEE6", colorHeader: "#B3C3CA", colorLive: "#98DCD6",
     colorSpeed: "#F4F7F9", colorSpeedUnit: "#B3C3CA", colorGearLabel: "#B3C3CA", colorGear: "#72D4DD",
@@ -404,6 +404,8 @@
   let slipBeganAt = 0;
   let slipLastSeenAt = 0;
   let slipConfirmed = false;
+  let slipKind = "";
+  let slipSampleAt = 0;
   // ABS warning is only estimated from sudden braking at speed, not real ABS data.
   let previousBrakeInput = 0;
   let brakeStartedAt = 0;
@@ -3366,11 +3368,12 @@
       </fieldset>
       <fieldset><legend>Telemetry warnings — real read-only game data</legend>
         <label class="line"><input type="checkbox" id="showTelemetryWarnings"> Enable colored warning icons</label>
-        <div class="help">TYRE / SLIP: yellow only after sustained wheel slip, not a quick steering tap. BRAKE: normal / gradual braking, including ALL braking below 100 km/h. ABS: yellow only for a sudden high-speed brake press at 100+ km/h. ABS is an estimate, not a game-reported ABS state.</div>
+        <div class="help">TYRE / SLIP: uses grounded wheel Car Feed values. Multi-wheel lateral agreement or powered wheel spin must persist; single-wheel spikes and two-wheel lateral-only spikes are ignored. This is a conservative estimate, not a game-reported traction-loss flag. BRAKE: normal / gradual braking, including ALL braking below 100 km/h. ABS: yellow only for a sudden high-speed brake press at 100+ km/h. ABS is an estimate, not a game-reported ABS state.</div>
         <div class="space"><label for="tyreSlipThreshold">Wheel slip warning</label><span class="value" id="tyreSlipThresholdValue">3.4 m/s</span></div>
         <input id="tyreSlipThreshold" type="range" min="1" max="8" step="0.1">
         <div class="space"><label for="tyreSlipHoldMs">Slip confirmation time</label><span class="value" id="tyreSlipHoldMsValue">0.55 s</span></div>
         <input id="tyreSlipHoldMs" type="range" min="250" max="1000" step="50">
+        <div class="help" id="tyreFeedDiagnostic">Car Feed: waiting for driving samples.</div>
         <div class="space"><label for="absBrakeThreshold">ABS-style brake input (100+ km/h)</label><span class="value" id="absBrakeThresholdValue">80%</span></div>
         <input id="absBrakeThreshold" type="range" min="0.55" max="1" step="0.05">
         <div class="help">ENGINE: Manual turns red at redline; Automatic only after ~250 ms sustained at redline, and clears after an upshift.</div>
@@ -6712,6 +6715,8 @@
     slipBeganAt=0;
     slipLastSeenAt=0;
     slipConfirmed=false;
+    slipKind="";
+    slipSampleAt=0;
     previousBrakeInput=0;
     brakeStartedAt=0;
     brakeStartedValue=0;
@@ -6720,6 +6725,35 @@
   function clearIndicators() {
     currentIndicators = {tyre:"?",engine:"?",susp:"?"};
     setIndicator("tyre","","TYRES");setIndicator("engine","","ENGINE");setIndicator("susp","","COILOVER");
+  }
+  // Read-only Car Feed. No steering angle, yaw or guessed wheel order is required.
+  // A single wheel or a two-wheel lateral-only spike can happen in normal cornering.
+  function classifyTyreSlip(d, threshold) {
+    const wh=d.wheels||{};
+    const lat=Array.isArray(wh.slipLat)?wh.slipLat:[];
+    const lng=Array.isArray(wh.slipLong)?wh.slipLong:[];
+    const ground=Array.isArray(wh.ground)?wh.ground:[];
+    const speed=Number.isFinite(d.speed)?Math.abs(d.speed):0;
+    const lateralThreshold=Math.max(threshold,speed*0.055);
+    const brake=Number.isFinite(d.brake)?d.brake:0;
+    const throttle=Number.isFinite(d.throttle)?d.throttle:null;
+    let pos=0,neg=0,spin=0,combinedPos=0,combinedNeg=0,valid=0;
+    const displayLat=[],displayLong=[];
+    for(let i=0;i<4;i++){
+      const grounded=ground[i]===true||ground[i]===1;
+      const l=Number.isFinite(lat[i])?lat[i]:null;
+      const x=Number.isFinite(lng[i])?lng[i]:null;
+      displayLat.push(l===null?"–":l.toFixed(2));displayLong.push(x===null?"–":x.toFixed(2));
+      if(!grounded||(l===null&&x===null))continue;
+      valid++;
+      if(l!==null&&l>=lateralThreshold){pos++;if(x!==null&&x>=threshold*.65)combinedPos++;}
+      if(l!==null&&l<=-lateralThreshold){neg++;if(x!==null&&x>=threshold*.65)combinedNeg++;}
+      if(x!==null&&x>=threshold)spin++;
+    }
+    const lateral=valid>=3&&(pos>=3||neg>=3|| (pos>=2&&combinedPos>=2)||(neg>=2&&combinedNeg>=2));
+    const poweredSpin=valid>=2&&spin>=2&&brake<0.12&&(throttle===null||throttle>=0.15);
+    const kind=speed*3.6>=35?(lateral?"lateral slip":poweredSpin?"wheel spin":""):"";
+    return {kind,valid,lat:displayLat,long:displayLong,lateralThreshold};
   }
   function processTelemetry(d, now) {
     const onMain=settings.hudEnabled && settings.showIcons;
@@ -6733,25 +6767,26 @@
     if (!useTyre && !useEngine && !useSusp) {oldTelemetry=null;updateDamageHud(now);return;}
     const kmh=useTyre && Number.isFinite(d.speed) ? Math.abs(d.speed)*3.6 : 0;
     if (useTyre) {
-      const wh=d.wheels || {};
-      const lat=Array.isArray(wh.slipLat)?wh.slipLat:[];
-      const longitudinal=Array.isArray(wh.slipLong)?wh.slipLong:[];
-      const ground=Array.isArray(wh.ground)?wh.ground:[];
-      const threshold=settings.tyreSlipThreshold*TYRE_SLIP_STRICTER;   // v0.11.5: 1.05 * 1.10 = 1.155 versus slider; applies to lateral, spin and 1.8x extreme
-      let lateralWheels=0,spinningWheels=0,extremeSlip=false;
-      for(let i=0;i<4;i++) {
-        if(ground[i]===false)continue;
-        const lateral=Number.isFinite(lat[i])?Math.abs(lat[i]):0;
-        const spin=Number.isFinite(longitudinal[i])?Math.max(0,longitudinal[i]):0;
-        if(lateral>=threshold)lateralWheels++;
-        if(spin>=threshold)spinningWheels++;
-        if(lateral>=threshold*1.8||spin>=threshold*1.8)extremeSlip=true;
+      const threshold=settings.tyreSlipThreshold*TYRE_SLIP_STRICTER;
+      const sample=classifyTyreSlip(d,threshold);
+      const slippingNow=Boolean(sample.kind);
+      // Do not count missing samples, or switch between unrelated slip types, as sustained evidence.
+      if (!slipSampleAt || now-slipSampleAt>250 || (slippingNow && slipKind!==sample.kind)) {
+        slipBeganAt=0;slipLastSeenAt=0;slipConfirmed=false;slipKind="";
       }
-      const slippingNow=kmh>=35&&(lateralWheels>=2||spinningWheels>=2||extremeSlip);
-      if(slippingNow){if(!slipBeganAt)slipBeganAt=now;slipLastSeenAt=now;
+      slipSampleAt=now;
+      if(slippingNow){
+        if(!slipBeganAt)slipBeganAt=now;
+        slipKind=sample.kind;slipLastSeenAt=now;
         if(now-slipBeganAt>=settings.tyreSlipHoldMs)slipConfirmed=true;
-      } else if(!slipLastSeenAt || now-slipLastSeenAt>=140){slipBeganAt=0;slipLastSeenAt=0;slipConfirmed=false;}
+      } else if(!slipConfirmed || !slipLastSeenAt || now-slipLastSeenAt>=140 || sample.valid<2){
+        slipBeganAt=0;slipLastSeenAt=0;slipConfirmed=false;slipKind="";
+      }
       const sustainedSlip=slipConfirmed&&(slippingNow||now-slipLastSeenAt<140);
+      if(menuOpen){
+        const diag=mget("tyreFeedDiagnostic");
+        if(diag) setText(diag,`Car Feed: LAT [${sample.lat.join(", ")}] / LONG [${sample.long.join(", ")}] m/s | grounded ${sample.valid}/4 | lateral threshold ${sample.lateralThreshold.toFixed(2)} | ${sample.kind||"no confirmed pattern"}${sustainedSlip?" (warning)":""}`);
+      }
       const brake=Number.isFinite(d.brake)?clamp(d.brake,0,1):0;
       const pressed=brake>=0.12;
       if(pressed&&previousBrakeInput<0.12){brakeStartedAt=now;brakeStartedValue=previousBrakeInput;}

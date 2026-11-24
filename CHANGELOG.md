@@ -1,8 +1,68 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.5.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.7.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.11.7 — Cigarette, Helmet & Driving Immersion Update
+
+Public Chromium release combining immersive cockpit effects and improved tyre slip detection.
+
+### Cigarette
+- Glowing ember, ash and animated smoke.
+- Three selectable positions: Left, Center and Right.
+- Adjustable size (50–150%).
+- Adjustable smoke intensity (0–100%).
+- Smoke Animation ON/OFF.
+- Automatic Ember Puff effect.
+- Speed-sensitive smoke movement.
+- Customizable HUD layering.
+- 7-second preview.
+- Disabled by default.
+
+### Helmet View — 2 Helmet Models
+- GT Full-Face Helmet.
+- Open-Face Sport Helmet.
+- Adjustable opacity (0–100%).
+- Adjustable visor opening size (90–130%).
+- Customizable HUD layering.
+- Shake on Impact ON/OFF.
+- Adjustable shake intensity (0–100%).
+- Helmet shake preview.
+- Automatically hidden when paused.
+- Disabled by default.
+
+### Windshield Glass
+- Customizable reflections, dust and wiper marks.
+- Adjustable sun strip with custom colors.
+- Three windshield crack patterns.
+- Shattered windshield during Limp Mode.
+- Automatic crack fading.
+- Central visibility protection.
+- Disabled by default.
+
+### Fixed: SLIP Light
+- Reworked tyre slip detection using Car Feed telemetry.
+- Fixed false warning activation during sharp cornering without actual tyre slip.
+- Improved lateral slip and wheel spin detection.
+- Improved wheel-to-ground contact detection.
+- Improved filtering of temporary slip signals.
+- Increased slip detection threshold.
+- Retained the 550 ms detection confirmation time.
+- Added real-time tyre slip telemetry diagnostics.
+- ABS and braking detection remain unchanged.
+- Applies to all HUD styles and Standalone Status HUD.
+
+### Compatibility
+- Google Chrome
+- Microsoft Edge
+- Brave
+- Opera / Opera GX
+- Vivaldi
+
+[Download v0.11.7](downloads/NFSU2_Modern_HUD_v0_11_7_Chromium.zip) | [Release Notes](RELEASE_NOTES_v0.11.7.md)
+
+---
 
 ## v0.11.5 — Immersive Cockpit Overlays and TYRES Warning Retuning
 
