@@ -1,6 +1,6 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.11.10 — Windshield, HUD Position and Menu Keyboard Update (Chromium) · Userscript BETA 4 for phones (iPhone & Android)**
+**Current version: v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update (Chromium) · Userscript BETA 4 for phones (iPhone & Android, based on v0.11.10)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics.
 
@@ -8,7 +8,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest version: v0.11.10.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
+**Latest version: v0.11.26.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
 
 - **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
@@ -16,6 +16,22 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **📱 [Download Userscript BETA 4 — phones & tablets](downloads/NFSU2_Userscripts_BETA_4.zip)** — iPhone: Safari + Userscripts · Android: Edge + Tampermonkey. See [Phone install](INSTALLATION.md#phones-and-tablets-userscript-beta-4).
 
 **Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
+
+---
+
+## v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update
+
+Cumulative update since v0.11.10.
+
+- **Three new HUD styles:** Honda S2000 (AP1) digital LED cluster, Honda Integra Type R (DC2) twin dial, and Subaru Impreza RS twin dial with a centre display (gear, NITRO, odometer, warning lights) and an analogue TURBO gauge.
+- **Material library:** 23 extra needle, bezel and dial-background textures in Colors & Materials for all analog styles (not the Modern HUD).
+- **Drink (optional, default OFF):** a sip of beer or whisky from a gloved hand, with an optional police warning, drunk look and controls effect.
+- **Windshield glass:** cracks on the side of the impact (with a Flip option), clearly visible dust after dirt and grass that lasts 20 s.
+- **Handbrake lamp:** follows the game's own handbrake value.
+- **Speed Sensation fix:** streaks, Blue Fog and vignette follow the live Car Feed, also work with the main HUD off, and the menu has a live status line.
+- **TYRES lamp:** reacts only to real wheel slip; the sudden-brake estimate and its slider were removed.
+
+Full details: [v0.11.26 Release Notes](RELEASE_NOTES_v0.11.26.md).
 
 ---
 

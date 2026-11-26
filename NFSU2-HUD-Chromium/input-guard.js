@@ -3,6 +3,8 @@
  * In the running phase ALL driving keys are passed through (WASD and arrows).
  * Misfires are uneven: 55% last 1.5s and the rest keep the older short cut pattern.
  * Real key releases always go through; synthetic releases may be ignored by games.
+ * v0.11.14 Drink "controls effect" (experimental, only while the Drink effect runs and the option is ON): steering keys can be swapped
+ * (A<->D, Left<->Right) and, from the police question to the arrest, forward / back (W, S, Up, Down) can be swallowed (optionally with the brake held) while the inverted steering still works. Ctrl+Alt+Shift+Backspace ends it.
  */
 (() => {
   "use strict";
@@ -25,6 +27,12 @@
   const LONG_MISFIRE_MS = 1500;
   let active = false, scope = "throttle", pattern = "stutter", emergency = false;
   let phase = "drive", phaseUntil = 0, lastHeartbeat = 0;
+  // ---- v0.11.14 Drink controls effect
+  const DK_SWAP = { KeyA: "KeyD", KeyD: "KeyA", ArrowLeft: "ArrowRight", ArrowRight: "ArrowLeft" };
+  const DK_INFO = { KeyA: ["a", 65], KeyD: ["d", 68], KeyW: ["w", 87], KeyS: ["s", 83], ArrowLeft: ["ArrowLeft", 37], ArrowRight: ["ArrowRight", 39], ArrowUp: ["ArrowUp", 38], ArrowDown: ["ArrowDown", 40] };
+  const DK_BLOCK = new Set(["KeyW", "KeyS", "ArrowUp", "ArrowDown"]);   // forward / back: swallowed while locked
+  const dkMap = new Map();          // real steering key -> { to: the opposite key the game is told about, target }
+  let dkInvert = false, dkLock = false, dkBrakeOn = false, lastKeyTarget = null;
   let heldAtActivation = new Set();
   // Menu focus is resolved inside the closed shadow root by content.js.
   // At document_start intercept before the page can cancel native text editing.
@@ -95,6 +103,55 @@
     }
   }
 
+  function dkTarget() {
+    return lastKeyTarget && lastKeyTarget.isConnected ? lastKeyTarget : (document.activeElement || document.body || window);
+  }
+  function dkFire(type, code, target, repeat = false) {
+    const info = DK_INFO[code];
+    if (!info || typeof KeyboardEvent !== "function") return;
+    try {
+      const evt = new KeyboardEvent(type, { key: info[0], code, keyCode: info[1], which: info[1], bubbles: true, cancelable: true, composed: true, repeat: Boolean(repeat) });
+      SYNTHETIC.add(evt);
+      (target && typeof target.dispatchEvent === "function" ? target : window).dispatchEvent(evt);
+    } catch (_err) { /* some listeners ignore synthetic events */ }
+  }
+  function dkReleaseHeld(codes) {          // tell the game that keys it saw going down are up now
+    for (const code of codes) {
+      const pressed = PRESSED.get(code);
+      if (!pressed || !pressed.forwarded || pressed.editable) continue;
+      dkFire("keyup", code, pressed.target || dkTarget());
+      pressed.forwarded = false;
+    }
+  }
+  function dkReleaseMapped() {
+    for (const [, m] of dkMap) dkFire("keyup", m.to, m.target);
+    dkMap.clear();
+  }
+  function dkSetBrake(on) {
+    if (on === dkBrakeOn) return;
+    dkBrakeOn = on;
+    const target = dkTarget();
+    for (const code of ["KeyS", "ArrowDown"]) dkFire(on ? "keydown" : "keyup", code, target);
+  }
+  function dkClear() {
+    dkInvert = false; dkLock = false;
+    dkReleaseMapped(); dkSetBrake(false);
+  }
+  function dkHandleKeydown(e) {
+    if (emergency || !(dkInvert || dkLock) || !foreground()) return false;
+    if (e.ctrlKey || e.altKey || e.metaKey || editable(e)) return false;
+    const code = codeOf(e);
+    if (!ALL_KEYS.has(code)) return false;
+    if (dkLock && DK_BLOCK.has(code)) { e.preventDefault(); e.stopImmediatePropagation(); return true; }
+    const to = DK_SWAP[code];
+    if (!dkInvert || !to) return false;
+    e.preventDefault(); e.stopImmediatePropagation();
+    const old = dkMap.get(code);
+    dkMap.set(code, { to, target: old ? old.target : e.target });
+    dkFire("keydown", to, old ? old.target : e.target, e.repeat);
+    return true;
+  }
+
   function phaseUpdate(now = Date.now()) {
     if (!active || pattern !== "stutter") return;
     if (!phaseUntil) { phase = "drive"; phaseUntil = now + randomDrive(); return; }
@@ -117,12 +174,15 @@
 
   function onKeydown(e) {
     if (SYNTHETIC.has(e)) return;
-    if (emergencyKey(e) && (active || emergency)) {
+    if (emergencyKey(e) && (active || emergency || dkInvert || dkLock)) {
       emergency = true; active = false; phase = "drive"; phaseUntil = 0; heldAtActivation.clear();
+      dkClear();
       window.dispatchEvent(new CustomEvent("nfsu2-hud-emergency-release"));
       e.preventDefault(); e.stopImmediatePropagation(); return;
     }
     if (protectMenuKeydown(e)) return;
+    if (!e.repeat || !lastKeyTarget) lastKeyTarget = e.target;
+    if (dkHandleKeydown(e)) return;
     const code = codeOf(e);
     const isEditable = editable(e);
     const shouldStop = blocked() && !e.ctrlKey && !e.altKey && !e.metaKey && !isEditable && selected(code);
@@ -142,6 +202,18 @@
   function onKeyup(e) {
     if (SYNTHETIC.has(e)) return;
     const code = codeOf(e);
+    const swapped = dkMap.get(code);
+    if (swapped) {                         // the real key was sent to the game as its opposite: release the opposite
+      dkMap.delete(code); PRESSED.delete(code);
+      e.stopImmediatePropagation();
+      dkFire("keyup", swapped.to, swapped.target);
+      return;
+    }
+    if (dkLock && DK_BLOCK.has(code) && !editable(e)) {   // blocked forward / back: the game never saw it go down, so a real key-up must not cancel the optional brake hold
+      PRESSED.delete(code); heldAtActivation.delete(code); gameKeysDown.delete(keyIdentity(e));
+      e.stopImmediatePropagation();
+      return;
+    }
     PRESSED.delete(code); heldAtActivation.delete(code);
     const key = keyIdentity(e);
     const wasForwarded = gameKeysDown.delete(key);
@@ -173,6 +245,17 @@
       }
     },
     resetEmergency() { emergency = false; },
+    // v0.11.14 Drink: { invert, lock, brake } - all false (or no call) = normal keys
+    drink({ invert = false, lock = false, brake = false } = {}) {
+      const wasInvert = dkInvert, wasLock = dkLock;
+      dkInvert = Boolean(invert) && !emergency;
+      dkLock = Boolean(lock) && !emergency;
+      if (dkInvert && !wasInvert) dkReleaseHeld(["KeyA", "KeyD", "ArrowLeft", "ArrowRight"]);
+      if (dkLock && !wasLock) dkReleaseHeld([...DK_BLOCK]);
+      if (!dkInvert) dkReleaseMapped();
+      dkSetBrake(dkLock && Boolean(brake) && !emergency);
+    },
+    drinkStatus() { return { invert: dkInvert, lock: dkLock, brake: dkBrakeOn, mapped: dkMap.size }; },
     status() {
       phaseUpdate();
       const stopping = blocked();
@@ -194,6 +277,7 @@
     window.addEventListener(type, e => {
       if (type === "blur" && e.target !== window) return;
       active = false; phase = "drive"; phaseUntil = 0;
+      dkReleaseMapped(); dkSetBrake(false);
       PRESSED.clear(); heldAtActivation.clear();
       gameKeysDown.clear(); menuKeysDown.clear();
     }, true);

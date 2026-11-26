@@ -1,8 +1,39 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.10 (desktop extension) and Userscript BETA 4 (phones and tablets).**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.26 (desktop extension). Userscript BETA 4 (phones and tablets) is still based on v0.11.10.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update
+
+Cumulative public Chromium release covering all development versions since v0.11.10. Details: [RELEASE_NOTES_v0.11.26.md](RELEASE_NOTES_v0.11.26.md).
+
+### New HUD styles
+- **Honda S2000 (AP1) — Digital LED Cluster:** LED-bar tachometer (100 rpm steps, red segments flash at the redline), 7-segment speed, odometer and TRIP A with a reset button; Colors & Materials supported.
+- **Honda Integra Type R (DC2) — Analog Twin Dial:** twin dials with small TURBO and NITRO gauges, gear display, odometer and warning lights.
+- **Subaru Impreza RS — Twin Dial + Centre Display:** twin dials, a centre display with gear, NITRO bar, odometer and warning lights, and an analogue TURBO gauge below it.
+- Integra and Impreza share one smooth "hood" housing, have per-gauge position and size controls and a **Speedometer scale** choice (Game scale 0–400 km/h or Real car 0–180 km/h).
+- Honda S2000, Honda Integra Type R and Subaru Impreza 2.5 RS added to the car list with matching default HUD styles.
+
+### Colors & Materials
+- 23 additional textures (7 needle, 9 bezel, 7 dial-background materials) for all analog HUD styles except the Modern HUD; new **Needle material** selector.
+
+### Drink (optional, default OFF)
+- Beer or whisky bottle in a gloved hand, rebindable shortcut (default `Ctrl + Alt + B`), optional police warning, drunk look and controls effect.
+
+### Windshield glass
+- Cracks appear on the side of the impact, with a **Flip left / right impact side** option.
+- Dust after driving on dirt and grass, clearly visible, 20 s long with the last 5 s fading; the menu shows the surface reported by the game.
+
+### Handbrake lamp
+- Follows the game's own handbrake value (Car Feed); `Space` is only a fallback when the game does not send it.
+
+### Speed Sensation (fix)
+- Streaks, Blue Fog and the vignette follow the live Car Feed and work with the main HUD switched off; all three stop while paused or not driving.
+- New live status line in the menu (active / why not) and a vignette help text that shows the real Start speed.
+
+### TYRES lamp
+- Reacts only to real wheel slip. The sudden-hard-brake estimate and the **ABS-style brake input** slider were removed; BRAKE is only a text label while the pedal is pressed. A previously saved value of the removed slider is ignored.
 
 ## v0.11.10 — Windshield, HUD Position and Menu Keyboard Update + Userscript BETA 4
 

@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.11.10 — Chromium-based desktop browsers · Userscript BETA 4 for phones and tablets**
+**Release: v0.11.26 — Chromium-based desktop browsers · Userscript BETA 4 for phones and tablets (based on v0.11.10)**
 
 Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
@@ -49,17 +49,17 @@ In the main HUD settings, **HUD X Position** and **HUD Y Position** move the ent
 | `Numpad *` | SAVE ALL settings and local ODO (rebindable) |
 | `Ctrl + Alt + N` / `Numpad /` | Independent Status HUD ON/OFF |
 
-Use the keyboard-shortcuts editor for **TKL / laptop** keyboards. The **Handbrake lamp** uses `Space` while driving, independently of the three customizable menu/HUD/save shortcuts. Its light is based on the key press, **not** Car Feed handbrake telemetry.
+Use the keyboard-shortcuts editor for **TKL / laptop** keyboards. The **Handbrake lamp** follows the game's own handbrake value from the Car Feed; `Space` is only used as a fallback when the game does not send it. The **Drink** shortcut (default `Ctrl + Alt + B`) is rebindable in the menu.
 
 ## HUD, effects and new options
 
-- **HUD Style:** Modern, GT-R Analog, Corolla, Civic, RX-7, Audi A3/TT, Nissan 350Z/G35, Evo VIII/STi, Supra/RX-8. Variant/visual choices depend on the selected style.
-- **Colors & Materials:** per-analog-style needle, dial, ODO and frame colors/materials. Modern HUD has separate digital colors.
+- **HUD Style:** Modern, GT-R Analog, Corolla, Civic, RX-7, Audi A3/TT, Nissan 350Z/G35, Evo VIII/STi, Supra/RX-8, Honda S2000 (digital LED), Honda Integra Type R, Subaru Impreza RS. Variant/visual choices depend on the selected style.
+- **Colors & Materials:** per-analog-style needle, dial, ODO and frame colors/materials, plus a library of 23 extra needle, bezel and dial-background textures (not for the Modern HUD). Modern HUD has separate digital colors.
 - **Glass:** adjustable reflection/visual-depth overlay for analog dashboards.
 - **Standalone Status HUD:** independent warning indicators, layout, X/Y, scale, opacity and colors.
 - **Pedals HUD:** independent Throttle/Brake bars; choose Independent / Under Speedometer / Inside Standalone, plus layout, position and colors.
 - **Impact feedback:** HUD Shake and impact settings, including optional override for Reduce Motion and Last Collision diagnostics.
-- **Speed Sensation:** optional streaks, Blue Fog and corner-darkening Vignette settings.
+- **Speed Sensation:** optional streaks, Blue Fog and corner-darkening Vignette settings. All three follow the live Car Feed, also work with the main HUD off, and a status line in the menu shows whether the effect is active and why not.
 - **Limp Mode:** optional local input restriction. It can run and display while the main custom speedometer is hidden.
 
 ## Cockpit overlays — v0.11.7 and later
@@ -69,9 +69,10 @@ After installation, open the HUD Settings (default `Numpad +` or `Ctrl + Alt + M
 - **Cigarette:** enable it, then choose bottom-left/center/right position, size (50–150%), Smoke animation ON/OFF, smoke amount, Ember puff, Smoke leans with speed, and whether it appears in front of the HUD. **Preview cigarette** works without driving.
 - **Helmet View:** enable it and choose **GT Full-Face** or **Open-Face Sport**. Change opacity, opening size (90–130%), placement in front of/behind the HUD, impact shake ON/OFF and intensity. **Preview shake** demonstrates the effect.
 - **Windshield Glass:** independent effects for reflection, dust, wiper marks, a custom-color sun strip, impact cracks, Limp shattered glass and central visibility protection. Since v0.11.8 the cracks use their own impact threshold (*Crack on impacts from*, default 3.0 m/s, range 3–20 m/s).
-- **TYRES indicator:** the activation threshold is now `Wheel slip warning` slider × **1.155**, an extra 10% vs the v0.11.4 build. The slider itself remains adjustable; BRAKE/ABS is not affected.
+- **Drink:** enable it, pick beer or whisky, and press the Drink shortcut to take a sip. Optional police warning, drunk look and controls effect.
+- **TYRES indicator:** the activation threshold is the `Wheel slip warning` slider × **1.155**. The slider remains adjustable. Since v0.11.26 the lamp reacts only to real wheel slip; the old sudden-brake estimate was removed and BRAKE is only a text label.
 
-The cigarette, helmet and windshield effects start **OFF** for new installations. Existing saved settings are preserved when upgrading. They require a live Car Feed to display during driving and do not modify the game's car physics.
+The cigarette, helmet, windshield and Drink effects start **OFF** for new installations. Existing saved settings are preserved when upgrading. They require a live Car Feed to display during driving and do not modify the game's car physics.
 
 ## Phones and tablets: Userscript BETA 4
 
