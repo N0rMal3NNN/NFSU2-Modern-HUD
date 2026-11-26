@@ -4,7 +4,7 @@
 
 This release updates the Chromium desktop extension from v0.11.10 to **v0.11.26**. It is cumulative: it covers all development versions since v0.11.10.
 
-The phone / tablet userscript (BETA 4) is unchanged and is still based on the v0.11.10 HUD.
+The phone / tablet userscript has its own update, **Userscript BETA 5 (v0.11.26.5)**, now based on this v0.11.26 code — see [Userscript BETA 5 for phones and tablets](#userscript-beta-5-for-phones-and-tablets) below.
 
 ## 🏎️ Three new HUD styles
 
@@ -49,6 +49,26 @@ The phone / tablet userscript (BETA 4) is unchanged and is still based on the v0
 
 - The TYRES lamp now reacts only to real wheel slip (**SLIP**). The old "sudden hard brake at speed" estimate and its **ABS-style brake input** slider were removed, so ordinary braking no longer lights the lamp. **BRAKE** is only a text label (Modern HUD) while the brake pedal is pressed.
 - A previously saved value of the removed slider is simply ignored.
+
+## Userscript BETA 5 for phones and tablets
+
+**Userscript v0.11.26.5 (BETA 5)** brings the v0.11.26 HUD to **iPhone / iPad** (Safari + Userscripts) and **Android** (Microsoft Edge + Tampermonkey). It is **one universal file** for both.
+
+- **Included:** Honda S2000, Integra Type R and Impreza RS HUD styles, the material library, Drink, the Speed Sensation fix and the cleaned-up TYRES lamp.
+- **DRINK button** in the ⚙ launcher (shown only while Drink is enabled). The Drink overlays also stay visible in fullscreen.
+- **Phone defaults:** the new cluster styles start at 28 % HUD size; the other mobile defaults (Eco mode, 2 windshield cracks) are unchanged.
+- **Status:** BETA 5 was tested on real phones, on both iPhone and Android, and works.
+
+### How to install
+
+| Device | Download | Install |
+|---|---|---|
+| **Android — Edge + Tampermonkey** | The **ZIP**: [Userscript BETA 5 ZIP](downloads/NFSU2_Userscripts_BETA_5.zip) (or its [direct link](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Userscripts_BETA_5.zip)) | In Tampermonkey: **Dashboard → Utilities → Import from file**, choose the ZIP, then **Import**. No need to extract. |
+| **iPhone / iPad — Safari + Userscripts** | The **`.js` file**: [`NFSU2_Modern_HUD.user.js`](userscript/NFSU2_Modern_HUD.user.js) (or its [direct link](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/userscript/NFSU2_Modern_HUD.user.js)) | In **Files**, **move** the file into your Userscripts folder, then open **AA → Userscripts** in Safari once. |
+
+Full step-by-step instructions, including updating from BETA 4 (on iPhone delete the old BETA 4 file from the Userscripts folder): [Phones and tablets: Userscript BETA 5](INSTALLATION.md#phones-and-tablets-userscript-beta-5).
+
+**[Download Userscript BETA 5 — ZIP](downloads/NFSU2_Userscripts_BETA_5.zip)** · [`.user.js`](userscript/NFSU2_Modern_HUD.user.js)
 
 ## Upgrade notes
 

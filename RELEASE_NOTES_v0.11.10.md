@@ -40,7 +40,7 @@ All settings, HUD styles, profiles, cigarette, helmet and odometer data from v0.
 | Android | **Microsoft Edge + Tampermonkey** | Working — tested by the project owner and by **RacerXC**, the first Android beta tester |
 | Other Android browsers / managers | — | Not tested |
 
-Step-by-step instructions for both platforms: [Phones and tablets: Userscript BETA 4](INSTALLATION.md#phones-and-tablets-userscript-beta-4).
+Step-by-step instructions for both platforms: [Phones and tablets: Userscript BETA 5](INSTALLATION.md#phones-and-tablets-userscript-beta-5) (current instructions; the newest userscript is BETA 5).
 
 <p align="center">
   <img src="assets/iphone-userscript-hud-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): NFSU2 Modern HUD speedometer at the bottom right of the mobile game screen">
@@ -73,7 +73,7 @@ The userscript contains the same v0.11.10 features as the desktop extension (all
 - **Android:** install **Microsoft Edge**, add **Tampermonkey** from *Extensions*, turn on **Enable** and **Allow User Scripts**, then *Tampermonkey Dashboard → Utilities → Import from file* and select the `.user.js` file.
   - If the game fails to start with a WebGPU error, open `edge://flags/#enable-unsafe-webgpu`, set **Unsafe WebGPU Support** to **Enabled** and restart Edge. ⚠️ This is an experimental setting that may affect security and stability; enable it only if necessary.
 
-Full instructions: [Phones and tablets: Userscript BETA 4](INSTALLATION.md#phones-and-tablets-userscript-beta-4).
+Full instructions: [Phones and tablets: Userscript BETA 5](INSTALLATION.md#phones-and-tablets-userscript-beta-5) (current instructions; the newest userscript is BETA 5).
 
 ### Important notes for the BETA
 
@@ -99,7 +99,7 @@ Phone / tablet userscript (BETA): iPhone / iPad — Safari + Userscripts (workin
 
 **[Download v0.11.10 — Chromium ZIP](downloads/NFSU2_Modern_HUD_v0_11_10_Chromium.zip)** — desktop extension
 
-**[Download Userscript BETA 4 — ZIP](downloads/NFSU2_Userscripts_BETA_4.zip)** — phone / tablet userscript ([raw `.user.js`](userscript/NFSU2_Modern_HUD.user.js))
+**[Download Userscript BETA 4 — ZIP](downloads/NFSU2_Userscripts_BETA_4.zip)** — phone / tablet userscript of this release (the newest userscript is [BETA 5](downloads/NFSU2_Userscripts_BETA_5.zip))
 
 - [Download Latest (Chromium)](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)
 - [Version Archive](DOWNLOADS.md)

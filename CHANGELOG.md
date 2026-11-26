@@ -1,8 +1,22 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.26 (desktop extension). Userscript BETA 4 (phones and tablets) is still based on v0.11.10.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.26 (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## Userscript BETA 5 — iPhone and Android (v0.11.26.5)
+
+One universal userscript for **Safari + Userscripts (iPhone / iPad)** and **Microsoft Edge + Tampermonkey (Android)**, now based on the v0.11.26 code. Details: [RELEASE_NOTES_v0.11.26.md](RELEASE_NOTES_v0.11.26.md#userscript-beta-5-for-phones-and-tablets).
+
+- Includes the Honda S2000, Integra Type R and Impreza RS HUD styles, the material library, Drink, the Speed Sensation fix and the cleaned-up TYRES lamp from v0.11.26.
+- New **DRINK** button in the ⚙ launcher (visible only while Drink is enabled); the Drink overlays also stay visible in fullscreen.
+- Smaller phone defaults for the new cluster styles (28 %).
+- **Updated phone installation guide:** Tampermonkey imports the **ZIP** (Utilities → Import from file) or uses the direct ZIP link; Userscripts on iPhone needs the **`.js`** file moved into the Userscripts folder. Update steps from BETA 4 are included.
+- Tested on real phones, on both iPhone and Android.
+
+[Userscript BETA 5](downloads/NFSU2_Userscripts_BETA_5.zip) | [Installation guide](INSTALLATION.md#phones-and-tablets-userscript-beta-5)
+
+---
 
 ## v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update
 

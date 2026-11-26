@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.11.26 — Chromium-based desktop browsers · Userscript BETA 4 for phones and tablets (based on v0.11.10)**
+**Release: v0.11.26 — Chromium-based desktop browsers · Userscript BETA 5 for phones and tablets (based on v0.11.26)**
 
 Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
@@ -10,7 +10,7 @@ Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU
 
 Google Chrome, Microsoft Edge, Brave, Opera / Opera GX, Vivaldi, and other compatible Chromium-based desktop browsers.
 
-For phones and tablets (iPhone: Safari + Userscripts; Android: Edge + Tampermonkey), jump to [Phones and tablets: Userscript BETA 4](#phones-and-tablets-userscript-beta-4).
+For phones and tablets (iPhone: Safari + Userscripts; Android: Edge + Tampermonkey), jump to [Phones and tablets: Userscript BETA 5](#phones-and-tablets-userscript-beta-5).
 
 ## Fresh installation — Chromium family
 
@@ -74,40 +74,85 @@ After installation, open the HUD Settings (default `Numpad +` or `Ctrl + Alt + M
 
 The cigarette, helmet, windshield and Drink effects start **OFF** for new installations. Existing saved settings are preserved when upgrading. They require a live Car Feed to display during driving and do not modify the game's car physics.
 
-## Phones and tablets: Userscript BETA 4
+## Phones and tablets: Userscript BETA 5
 
-The userscript runs the same v0.11.10 HUD on touch devices. It is a **BETA** (v0.11.10.4).
+The userscript runs the v0.11.26 HUD on touch devices. It is a **BETA** (v0.11.26.5). **One universal file works on both iPhone / iPad and Android.**
 
 | Device | Browser + userscript manager | Status |
 |---|---|---|
-| iPhone / iPad | **Safari + Userscripts** | Working — tested by the project owner |
-| Android | **Microsoft Edge + Tampermonkey** | Working — tested by the project owner and by **RacerXC**, the first Android beta tester |
+| iPhone / iPad | **Safari + Userscripts** | Working — BETA 5 tested on a real iPhone |
+| Android | **Microsoft Edge + Tampermonkey** | Working — BETA 5 tested on a real Android phone (BETA 4 was also tested by **RacerXC**, the first Android beta tester) |
 | Other Android browsers / managers | — | Not tested |
 
-**Download:** [Userscript BETA 4 ZIP](downloads/NFSU2_Userscripts_BETA_4.zip) (contains `NFSU2_Modern_HUD_v0_11_10_US_BETA_4.user.js`) or the raw file [`userscript/NFSU2_Modern_HUD.user.js`](userscript/NFSU2_Modern_HUD.user.js). Extract the ZIP first; the manager needs the `.user.js` file, not the ZIP.
+### Quick start
 
-### iPhone / iPad — Safari + Userscripts
-
-An iPhone needs the **Userscripts** app and the **Safari** browser. Userscripts is a Safari extension, so other browsers on iOS do not run it. The Userscripts project lists iOS 15.1 or later as the minimum version.
+**iPhone / iPad (Safari + Userscripts):**
 
 1. Install **Userscripts** from the App Store and open the app once.
-2. Open **Settings → Safari → Extensions → Userscripts** and turn it **ON**. Set the permission to **Allow** (the Userscripts project recommends *Always Allow* for *All Websites*; at least allow `nfsu2.xyz`). You can also open this from Safari with the **AA** button in the address bar.
-3. Userscripts keeps its scripts in a folder. Current versions create a default folder automatically; if the app asks, tap **Set Userscripts Directory** and choose a folder.
-4. Put the script into that folder: download and extract the BETA 4 ZIP, then copy `NFSU2_Modern_HUD_v0_11_10_US_BETA_4.user.js` into the Userscripts folder with the **Files** app.
-   - *Alternative (from the Userscripts documentation):* open the raw `.user.js` link `https://raw.githubusercontent.com/N0rMal3NNN/NFSU2-Modern-HUD/main/userscript/NFSU2_Modern_HUD.user.js` in Safari, tap **AA → Userscripts** and confirm the install prompt. This path was not tested with this script.
-5. Open **`https://nfsu2.xyz`** in **Safari**. Tap **AA → Userscripts** to check that the script is listed and active (version `0.11.10.4`). A small **⚙** button appears in the top-left corner. If it does not, reload the page.
+2. Download the **`.js`** file (direct link below). If you download the ZIP instead, extract it in the Files app.
+3. **Move** the `.user.js` file into the Userscripts folder.
+4. Enable Userscripts in **Settings → Safari → Extensions** and allow it for `nfsu2.xyz`.
+5. Open `nfsu2.xyz` in Safari and tap **AA → Userscripts** once to check that the script is active.
 
-### Android — Microsoft Edge + Tampermonkey
+**Android (Microsoft Edge + Tampermonkey):**
+
+1. Install **Microsoft Edge**.
+2. Open Edge's menu → **Extensions**, find **Tampermonkey** and install it.
+3. Enable Tampermonkey and **Allow User Scripts**.
+4. Download the **ZIP** file (direct link below). There is no need to extract it.
+5. Open Tampermonkey → **Dashboard → Utilities → Import from file**.
+6. Select the ZIP file and import it.
+7. Open `nfsu2.xyz` in Edge.
+
+Once you are in the game, tap the small **⚙** button to access the HUD settings.
+
+### Which file do I download?
+
+| Your manager | What to download | How it is installed |
+|---|---|---|
+| **Tampermonkey** (Android, Edge) | The **ZIP**: [Userscript BETA 5 ZIP](downloads/NFSU2_Userscripts_BETA_5.zip) · direct link: `https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Userscripts_BETA_5.zip` | Import the ZIP in Tampermonkey (**Utilities → Import from file**). You do not need to extract it. |
+| **Userscripts** (iPhone / iPad, Safari) | The **`.js` file**: [`NFSU2_Modern_HUD.user.js`](userscript/NFSU2_Modern_HUD.user.js) · direct link: `https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/userscript/NFSU2_Modern_HUD.user.js` | **Move** the file into the Userscripts folder with the Files app. |
+
+Both contain the same script. The ZIP holds one file, `NFSU2_Modern_HUD_v0_11_26_US_BETA_5.user.js`. Do not use the green GitHub **Code → Download ZIP** button; it downloads the whole repository.
+
+### Android — detailed steps (Microsoft Edge + Tampermonkey)
 
 1. **Install Microsoft Edge** from Google Play.
 2. **Install Tampermonkey:** open Edge, open the browser menu, choose **Extensions**, search for **Tampermonkey** by Jan Biniok and install it. Make sure **Enable** and **Allow User Scripts** are turned **ON**.
 3. **WebGPU (only if required):** if the game fails to start with a WebGPU error, open `edge://flags/#enable-unsafe-webgpu`, set **Unsafe WebGPU Support** to **Enabled** and restart Edge. ⚠️ This is an experimental browser setting that may affect security and stability. Enable it only if it is necessary.
-4. **Install Modern HUD:** download and extract the BETA 4 ZIP, open the **Tampermonkey Dashboard**, go to **Utilities → Import from file**, select the `.user.js` file and install it. Check that the installed version is **0.11.10.4**.
-5. Open **`https://nfsu2.xyz`**, enter Free Roam or start a race and use the floating **⚙** button to open the HUD settings. Adjust the HUD size and X/Y positions so that the HUD does not overlap the mobile driving controls.
+4. **Download the ZIP:** in Edge, open the direct link to the BETA 5 ZIP from the table above (or tap **Userscript BETA 5 ZIP**). Edge saves `NFSU2_Userscripts_BETA_5.zip` to your phone's **Downloads** folder. Do not extract it.
+5. **Install it manually with Tampermonkey's Import:**
+   1. Open the **Tampermonkey** menu and choose **Dashboard**.
+   2. Open the **Utilities** tab. If the tab is not there, open **Settings** and change **Config Mode** to **Beginner** or **Advanced** (Tampermonkey FAQ).
+   3. Tap **Import from file** and choose `NFSU2_Userscripts_BETA_5.zip` from **Downloads**. Tampermonkey imports ZIP archives from your device.
+   4. A window with the script information appears. Tap **Import**.
+   5. Back in the script list, make sure the switch next to *NFSU2.xyz Modern HUD – Universal Userscript BETA* is **ON** and the version is **0.11.26.5**.
+6. Open **`https://nfsu2.xyz`**, enter Free Roam or start a race and use the floating **⚙** button to open the HUD settings. Adjust the HUD size and X/Y positions so that the HUD does not overlap the mobile driving controls.
+
+*Other ways to install in Tampermonkey (from the Tampermonkey documentation; not tested with this script):* in **Utilities** use **Install from URL** and paste the direct `.user.js` link from the table above, or open that `.user.js` link in Edge and confirm Tampermonkey's install page. Both install the same script, and neither needs the ZIP.
+
+### iPhone / iPad — detailed steps (Safari + Userscripts)
+
+An iPhone needs the **Userscripts** app and the **Safari** browser. Userscripts is a Safari extension, so other browsers on iOS do not run it. The Userscripts project lists iOS 15.1 or later as the minimum version.
+
+1. Install **Userscripts** from the App Store and open the app once.
+2. **Choose the Userscripts folder.** Current versions create a default folder automatically; if the app asks (or you want another place), tap **Set Userscripts Directory** and choose a folder. If you use an iCloud folder on iOS 18 or later, set it to **Keep Downloaded**, otherwise the file may be removed from the phone.
+3. Open **Settings → Safari → Extensions → Userscripts** and turn it **ON**. Set the permission to **Allow** (the Userscripts project recommends *Always Allow* for *All Websites*; at least allow `nfsu2.xyz`). You can also open this from Safari with the **AA** button in the address bar.
+4. **Download the `.js` file:** in Safari, open the direct link to `NFSU2_Modern_HUD.user.js` from the table above and save the file (on the GitHub file page use the download button, *Download raw file*). It is saved to the **Files** app, normally in **Downloads**. If you downloaded the BETA 5 ZIP instead, tap the ZIP in Files to unpack it and use the `.user.js` inside.
+5. **Move it into the Userscripts folder:** in **Files**, long-press the `.user.js` file, choose **Move** and select the Userscripts folder you chose in step 2. (Use *Move*, not *Copy*, so that no second copy stays in Downloads.)
+6. Open **`https://nfsu2.xyz`** in **Safari**. Tap **AA → Userscripts** at least once: the Userscripts documentation says the popup has to be opened after files are added, removed or edited. Check that the script is listed and active (version `0.11.26.5`). A small **⚙** button appears in the top-left corner. If it does not, reload the page.
+
+*Alternative (from the Userscripts documentation; not tested with this script):* open the direct `.user.js` link in Safari, tap **AA → Userscripts** and confirm the install prompt. The `.user.js` ending has to be in the address itself, not in a `?query` or `#fragment`.
+
+### Updating from BETA 4
+
+- **Tampermonkey:** import the BETA 5 ZIP the same way. The script keeps the same name and namespace, so Tampermonkey recognises it as the same script and updates it. If two entries are listed afterwards, disable or delete the older one (0.11.10.4).
+- **Userscripts (iPhone):** the BETA 5 file has a different file name than BETA 4. **Delete the old `NFSU2_Modern_HUD_v0_11_10_US_BETA_4.user.js` from the Userscripts folder** and move the new file in, otherwise two copies of the same script are installed. Then open **AA → Userscripts** once.
+- BETA 4 and BETA 5 use the same storage key inside the manager, so Tampermonkey normally keeps your settings and odometer when the same script is updated. How the Userscripts app files the storage of a renamed file was not verified, so on iPhone your settings may start from the defaults. After updating, check your HUD style and scale and press **SAVE** once.
 
 ### Using the ⚙ button
 
-- **Tap** it to show three buttons: **HUD** (settings), **ON/OFF** (speedometer) and **SAVE** (settings + odometer). Tap the ⚙ again, or tap anywhere else, to hide them.
+- **Tap** it to show the buttons: **HUD** (settings), **ON/OFF** (speedometer), **DRINK** (only while Drink is enabled in the settings) and **SAVE** (settings + odometer). Tap the ⚙ again, or tap anywhere else, to hide them.
 - **Drag** it with your finger to move it. Its position is remembered **separately for Portrait and Landscape**.
 - **HUD** opens the touch-friendly settings menu; close it with ×. The ⚙ is hidden while the menu is open.
 - The ⚙ stays available when the speedometer is OFF, so you can turn it back on.
@@ -116,10 +161,12 @@ An iPhone needs the **Userscripts** app and the **Safari** browser. Userscripts 
 
 - The custom HUD appears only during active gameplay (Free Roam or a race), when the game is sending the Car Feed.
 - The userscript keeps its **own settings and odometer** in the userscript manager's storage. They are **not shared** with the desktop extension and do not sync between devices.
-- The mobile defaults use smaller HUD sizes, *Eco* performance mode and at most **2 windshield cracks on screen** (*Windshield Glass → Max cracks on screen*: 2, 3, 4 or Standard); adjust them in Settings.
-- Cigarette, Helmet View and Windshield Glass start **OFF**; they can reduce FPS on weaker phones.
-- Keyboard shortcuts are for desktop; on a phone use the ⚙ button.
-- To update, import or copy the newer `.user.js` over the old one in your userscript manager.
+- The mobile defaults use smaller HUD sizes (the Honda S2000, Integra Type R and Impreza RS styles start at 28 %), *Eco* performance mode and at most **2 windshield cracks on screen** (*Windshield Glass → Max cracks on screen*: 2, 3, 4 or Standard); adjust them in Settings.
+- Cigarette, Helmet View, Windshield Glass and Drink start **OFF**; they can reduce FPS on weaker phones. When Drink is ON, the **DRINK** button in the ⚙ launcher takes a sip.
+- Keyboard shortcuts are for desktop; on a phone use the ⚙ button. The optional Drink *controls effect* works by swapping keyboard keys, so it is not expected to change on-screen touch controls.
+- **Speed Sensation** (streaks, Blue Fog, vignette) follows the live Car Feed on phones too; the menu shows a status line explaining why it is idle.
+- **Known issue (portrait):** the standalone Status HUD (TYRES / ENGINE / SUSP) can overlap the new cluster styles. Move the HUD with *HUD X / Y Position* or turn the status panel off.
+- To update, see [Updating from BETA 4](#updating-from-beta-4).
 
 ### Problems? Use the Debug report
 

@@ -2,7 +2,7 @@
 
 **Supported desktop browsers:** Google Chrome, Microsoft Edge, Brave, Opera, Opera GX, Vivaldi and other compatible Chromium-based desktop browsers.
 
-**Phones and tablets:** Userscript BETA 4 (based on v0.11.10) — iPhone: Safari + Userscripts (working); Android: Microsoft Edge + Tampermonkey (working, tested with RacerXC) — see [Phones and tablets](#phones-and-tablets-userscript-beta-4) below.
+**Phones and tablets:** Userscript BETA 5 (based on v0.11.26) — iPhone: Safari + Userscripts; Android: Microsoft Edge + Tampermonkey — see [Phones and tablets](#phones-and-tablets-userscript-beta-5) below.
 
 ## Download Latest
 
@@ -27,17 +27,20 @@ This permanent URL always points to the most recent public Chromium-only build. 
 
 All archived downloads contain only the Chromium extension. The version numbers refer to the original functional releases.
 
-## Phones and tablets: Userscript BETA 4
+## Phones and tablets: Userscript BETA 5
 
 | Package | Download | Release information |
 |---|---|---|
-| **Userscript BETA 4 (v0.11.10.4)** | [Download ZIP](downloads/NFSU2_Userscripts_BETA_4.zip) · [raw `.user.js`](userscript/NFSU2_Modern_HUD.user.js) | [What's new](RELEASE_NOTES_v0.11.10.md#userscript-beta-4-for-phones-and-tablets) |
+| **Userscript BETA 5 (v0.11.26.5) — Latest** | [Download ZIP](downloads/NFSU2_Userscripts_BETA_5.zip) · [raw `.user.js`](userscript/NFSU2_Modern_HUD.user.js) | [What's new](RELEASE_NOTES_v0.11.26.md#userscript-beta-5-for-phones-and-tablets) |
+| Userscript BETA 4 (v0.11.10.4) | [Download ZIP](downloads/NFSU2_Userscripts_BETA_4.zip) | [What's new](RELEASE_NOTES_v0.11.10.md#userscript-beta-4-for-phones-and-tablets) |
 
-- **iPhone / iPad:** Safari + **Userscripts** — working, tested by the project owner.
-- **Android:** Microsoft Edge + **Tampermonkey** — working, tested by the project owner and by **RacerXC** (first Android beta tester).
+- **iPhone / iPad:** Safari + **Userscripts** — download the **`.js`** file and move it into the Userscripts folder.
+- **Android:** Microsoft Edge + **Tampermonkey** — download the **ZIP** and import it (**Utilities → Import from file**), or use the direct ZIP link and install it manually.
+- BETA 5 was tested on real phones (iPhone and Android) and works. BETA 4 was tested by the project owner and by **RacerXC** on Android.
 - Other Android browsers and userscript managers are not tested.
+- Direct links: [BETA 5 ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Userscripts_BETA_5.zip) · [`.user.js`](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/userscript/NFSU2_Modern_HUD.user.js)
 
-Based on the v0.11.10 HUD with a small draggable ⚙ launcher that remembers its Portrait and Landscape position. Settings and odometer of the userscript are stored separately from the desktop extension. Step-by-step instructions: [Phones and tablets: Userscript BETA 4](INSTALLATION.md#phones-and-tablets-userscript-beta-4).
+Based on the v0.11.26 HUD with a small draggable ⚙ launcher that remembers its Portrait and Landscape position. Settings and odometer of the userscript are stored separately from the desktop extension. Step-by-step instructions: [Phones and tablets: Userscript BETA 5](INSTALLATION.md#phones-and-tablets-userscript-beta-5).
 
 ## Installation and preserving mileage
 
@@ -56,4 +59,4 @@ GitHub's green **Code → Download ZIP** downloads the full repository rather th
 3. Update README, installation instructions, release notes and this version archive.
 4. Retain previous Chromium-only numbered archives.
 5. Verify ZIP integrity and that the stable and numbered current archives match.
-6. Userscript: keep `userscript/NFSU2_Modern_HUD.user.js` and `downloads/NFSU2_Userscripts_BETA_4.zip` (it contains the same `.user.js`) in sync, and update the version in the table above.
+6. Userscript: keep `userscript/NFSU2_Modern_HUD.user.js` and the current `downloads/NFSU2_Userscripts_BETA_5.zip` (it contains the same `.user.js`) in sync, keep the previous BETA ZIPs, and update the version in the table above.

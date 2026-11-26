@@ -1,6 +1,6 @@
 # NFSU2.xyz Modern HUD
 
-**Current version: v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update (Chromium) · Userscript BETA 4 for phones (iPhone & Android, based on v0.11.10)**
+**Current version: v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update (Chromium) · Userscript BETA 5 for phones (iPhone & Android, based on v0.11.26)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics.
 
@@ -13,7 +13,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
 - **[Installation & Upgrade Guide](INSTALLATION.md)** — important for keeping locally saved settings and odometer values.
-- **📱 [Download Userscript BETA 4 — phones & tablets](downloads/NFSU2_Userscripts_BETA_4.zip)** — iPhone: Safari + Userscripts · Android: Edge + Tampermonkey. See [Phone install](INSTALLATION.md#phones-and-tablets-userscript-beta-4).
+- **📱 [Download Userscript BETA 5 — phones & tablets](downloads/NFSU2_Userscripts_BETA_5.zip)** — iPhone: Safari + Userscripts (move the `.js` file into the Userscripts folder) · Android: Edge + Tampermonkey (import the ZIP). One universal file. See [Phone install](INSTALLATION.md#phones-and-tablets-userscript-beta-5).
 
 **Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
 
@@ -35,6 +35,53 @@ Full details: [v0.11.26 Release Notes](RELEASE_NOTES_v0.11.26.md).
 
 ---
 
+## 📱 Userscript BETA 5 — iPhone and Android
+
+The v0.11.26 HUD for touch devices, in **one universal userscript** for iPhone / iPad and Android. It is a **BETA**.
+
+**iPhone / iPad (Safari + Userscripts):**
+
+1. Install **Userscripts** from the App Store and open the app once.
+2. Download the **`.js`** file (or the ZIP, extracted in Files).
+3. **Move** the `.user.js` file into the Userscripts folder.
+4. Enable Userscripts in **Settings → Safari → Extensions** and allow it for `nfsu2.xyz`.
+5. Open `nfsu2.xyz` in Safari.
+
+**Android (Microsoft Edge + Tampermonkey):**
+
+1. Install **Microsoft Edge**.
+2. Open Edge's menu → **Extensions**, find **Tampermonkey** and install it.
+3. Enable Tampermonkey and **Allow User Scripts**.
+4. Download the **ZIP** file (no need to extract it).
+5. Open Tampermonkey → **Dashboard → Utilities → Import from file**.
+6. Select the ZIP file and import it.
+7. Open `nfsu2.xyz` in Edge.
+
+Once you are in the game, tap the small **⚙** button to access the HUD settings. Other Android browsers and managers are not tested.
+
+**Direct links:** [BETA 5 ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Userscripts_BETA_5.zip) · [`.user.js` file](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/userscript/NFSU2_Modern_HUD.user.js)
+
+**BETA 5 was tested on real phones, on both iPhone and Android, and works.** BETA 4 was tested by the project owner on iPhone and Android and by **RacerXC** on Android.
+
+- **New in BETA 5 (v0.11.26.5):** Honda S2000, Integra Type R and Impreza RS HUD styles, the material library, Drink (with a **DRINK** button in the ⚙ launcher while it is enabled), the Speed Sensation fix, the cleaned-up TYRES lamp, and fullscreen overlays for the new effects.
+- **One small ⚙ button** — nothing else covers the screen; move it with your finger (Portrait and Landscape positions are remembered separately).
+- **HUD, ON/OFF, DRINK and SAVE stay hidden until you press the ⚙.**
+- **Windshield cracks are limited to 2 on screen by default** (choose 2, 3, 4 or Standard in the menu).
+- **Android / Car Feed Debug** section in the menu: a local-only diagnostic report you can copy if something does not work.
+
+<p align="center">
+  <img src="assets/iphone-userscript-hud-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): NFSU2 Modern HUD speedometer at the bottom right of the mobile game screen">
+  <img src="assets/iphone-userscript-cigarette-cracks-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): Cigarette and windshield cracks effects on the mobile game screen">
+</p>
+
+*iPhone (Safari + Userscripts): the HUD at the bottom right (left) and the Cigarette and Windshield Glass effects (right). These screenshots were supplied by the project owner and come from an earlier BETA build; in BETA 4 and BETA 5 only the small ⚙ button is shown until you tap it.*
+
+The userscript keeps its own settings and odometer; they are not shared with the desktop extension. Step-by-step instructions for iPhone and Android: [Phones and tablets: Userscript BETA 5](INSTALLATION.md#phones-and-tablets-userscript-beta-5). Release information: [v0.11.26 Release Notes](RELEASE_NOTES_v0.11.26.md#userscript-beta-5-for-phones-and-tablets).
+
+Thanks to **RacerXC** — the first Android beta tester!
+
+---
+
 ## v0.11.10 — Windshield, HUD Position and Menu Keyboard Update
 
 Cumulative update since v0.11.7 (versions v0.11.8, v0.11.9 and v0.11.10).
@@ -46,33 +93,6 @@ Cumulative update since v0.11.7 (versions v0.11.8, v0.11.9 and v0.11.10).
 
 Full details: [v0.11.10 Release Notes](RELEASE_NOTES_v0.11.10.md).
 
-### 📱 Userscript BETA 4 — iPhone and Android
-
-The same v0.11.10 HUD for touch devices. It is a **BETA**.
-
-| Device | Browser + userscript manager | Status |
-|---|---|---|
-| iPhone / iPad | **Safari + Userscripts** | Working — tested by the project owner |
-| Android | **Microsoft Edge + Tampermonkey** | Working — tested by the project owner and by **RacerXC**, the first Android beta tester |
-| Other Android browsers / managers | — | Not tested |
-
-- **One small ⚙ button** — nothing else covers the screen.
-- **Move it with your finger.**
-- **It remembers its position separately for Portrait and Landscape.**
-- **HUD, ON/OFF and SAVE stay hidden until you press the ⚙.**
-- **Windshield cracks are limited to 2 on screen by default** (choose 2, 3, 4 or Standard in the menu) so a small phone screen does not fill up.
-- **Android / Car Feed Debug** section in the menu: a local-only diagnostic report you can copy if something does not work.
-
-<p align="center">
-  <img src="assets/iphone-userscript-hud-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): NFSU2 Modern HUD speedometer at the bottom right of the mobile game screen">
-  <img src="assets/iphone-userscript-cigarette-cracks-v0.11.10.webp" width="260" alt="iPhone (Safari + Userscripts): Cigarette and windshield cracks effects on the mobile game screen">
-</p>
-
-*iPhone (Safari + Userscripts): the HUD at the bottom right (left) and the Cigarette and Windshield Glass effects (right). These screenshots were supplied by the project owner and come from an earlier BETA build; in BETA 4 only the small ⚙ button is shown until you tap it.*
-
-The userscript keeps its own settings and odometer; they are not shared with the desktop extension. Step-by-step instructions for iPhone and Android: [Phones and tablets: Userscript BETA 4](INSTALLATION.md#phones-and-tablets-userscript-beta-4). Release information: [v0.11.10 Release Notes](RELEASE_NOTES_v0.11.10.md#userscript-beta-4-for-phones-and-tablets).
-
-Thanks to **RacerXC** — the first Android beta tester!
 
 ---
 
@@ -304,7 +324,7 @@ Custom bindings for the main three actions support tenkeyless (TKL) and laptop k
 
 The ZIP contains only `NFSU2-HUD-Chromium/`.
 
-**Phones and tablets (Userscript BETA 4):** iPhone / iPad — Safari + Userscripts (working); Android — Microsoft Edge + Tampermonkey (working, tested with RacerXC). Other Android browsers and managers are not tested.
+**Phones and tablets (Userscript BETA 5):** iPhone / iPad — Safari + Userscripts; Android — Microsoft Edge + Tampermonkey. BETA 5 was tested on real phones (iPhone and Android) and works. Other Android browsers and managers are not tested.
 
 See the [Installation & Upgrade Guide](INSTALLATION.md).
 
