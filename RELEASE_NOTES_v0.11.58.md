@@ -1,35 +1,75 @@
 # v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer (PC)
 
-Cumulative desktop update since the previous public v0.11.26 release. The public desktop build and source are available in the main branch. [Download v0.11.58](downloads/NFSU2_Modern_HUD_v0_11_58_Chromium.zip).
+A major desktop update that brings a customizable smartphone interface into NFSU2.xyz, combining dashboard customization, game telemetry, driving tools and optional player communication in one place.
 
-## Frontvex in-game phone
-- A new phone-based settings menu with a classic panel alternative, home screen, search, app navigation and back/forward controls.
-- Customizable phone size, position, design, frame, body, bezel and accent colors, materials, case, screen cutout, glare and opening animation.
-- Optional 3D phone with a 360-degree rotation mode, rear triple camera, flash, Frontvex logo, beveled side buttons and USB-C port detail. Optional sunlight effect and corner placement.
-- Clock, calendar, game weather, wallpaper, markers, driving settings, status HUD, profiles, shortcuts, Contacts and Messages apps; Settings, Cars HUD, Colors and Effects shortcuts.
-- Wallpaper presets and your own image; fit and dimming controls; customizable icon and weather card sizes.
-- Phone concept inspiration: **[OBD Gaming](https://www.facebook.com/overbudgetgg)**. This is a credit for the idea, not a statement of affiliation or endorsement.
+## Frontvex Phone — 2D & 3D
 
-## Game telemetry and GPS
-- New Car Feed identity fields: automatically choose a speedometer by vehicle model, or turn Automatic OFF and save a different HUD style for each owned Car ID (garage slot). The previous manual assignments are retained when automatic mode is enabled. Stock cars without a stable ID use the model fallback. Mileage continues to be stored per model.
-- Pin Markers with city labels, saved positions and speed recording. Received GPS pins are grouped by location and can be saved explicitly; duplicate Save Pin controls removed. Imported pins can record the recipient's own speed.
-- Game weather via the read-only View Feed, with rain, clouds, road conditions, sun and game time. Refresh when opening the phone or manually; waits for real feed data and times out gracefully. City is selected manually, not automatically detected.
+- **Phone interface:** a home screen with app icons, clock, calendar, search and back/forward navigation. The classic HUD settings panel remains available as an alternative.
+- **3D design:** rotate the phone through 360° to view its front, sides and rear, with a triple-camera design, flash, Frontvex logo, physical button details and USB-C port.
+- **Appearance:** customize the frame, body, bezel, accent colors, materials, case, screen cutout, glare and opening animation. Optional sunlight effect.
+- **Size and placement:** adjust the phone scale and choose its screen position, including corner and centered layouts.
+- **Wallpaper:** select a preset or use your own image, with image-fit and dimming controls. Adjust app icon and weather card sizes.
+- **Apps and shortcuts:** access Settings, Cars HUD, Colors & Materials, Effects, Driving, Status HUD, Profiles, Shortcuts, Markers, Weather, Contacts and Messages directly from the phone.
 
-## Frontvex communication — limited server beta
-- Local profiles with username and FVX number; signed server reservation and official human verification. A cryptographic public FVX ID identifies the account. Standard numbers expire after 15 days without renewal.
-- Contacts, friend requests, accepted friends, online/offline presence, local blocking, private direct WebRTC messages, pending delivery, delivery/read receipts and manually shared GPS pins.
-- Inbox with latest message, sender, timestamp and unread count; incoming/outgoing chat bubbles, chronological history and centralized local message deletion with selection and confirmation. Configurable history limit.
-- Friend request, new message, shared pin and Friend Online alerts, sound selection (five tones), adjustable volume, test alerts, message preview, Do Not Disturb and persistent unread badges. Notifications use a phone banner or bottom-right toast; Frontvex popup duration increased from 3 to 4 seconds, GPS marker and HUD save toasts also extended by one second.
-- More reliable presence, reconnect, identity renewal, incoming notification deduplication and message queue processing; WebRTC is direct/STUN-only, so delivery depends on network compatibility. Usernames, contacts, message history and private keys are local, not stored centrally.
-- **v0.11.57: Embedded registration fix.** The official Turnstile page uses a credentialless iframe on supported Chromium browsers; the authorization server permits the NFSU2 game origins. In-game verification was confirmed by the project owner without opening a new tab or reloading the game.
-- **v0.11.58: Automatic connection after registration.** Successful registration or re-registration triggers a connection refresh without requiring Reconnect / Renew. Routine renewals do not interrupt an active connection, and a deliberately disabled communication setting remains disabled. The code and simulated tests passed; the complete v0.11.58 live registration/reconnection flow still needs confirmation.
-- Online functionality requires an enabled, reachable Frontvex server and is still a controlled beta. The desktop HUD does not require registration. Public availability of the communication service is not guaranteed; no administrative interface is included.
+Phone concept inspiration: **[OBD Gaming](https://www.facebook.com/overbudgetgg)**.
 
-## Usability, reliability and compatibility
-- Long help explanations moved into circled ! popups, with compact inline icons, merged related descriptions, Close/Escape/outside-click dismissal and searchable help text. Important warnings and live status remain visible.
-- Storage adapter handles invalidated extension contexts and stops endless retries; bounded retries for temporary save failures. Reload the game after updating the extension. Existing settings and odometer keys retained.
-- Desktop Chromium only for this update. The new mobile userscript is not ready; the previous Userscript BETA 5 (v0.11.26.5) remains available for iPhone and Android.
-- Unofficial fan project; uses read-only game feeds for telemetry. Some displayed driving effects and warnings are estimates or simulations. Existing optional keyboard-driven effects remain separate from telemetry.
+## Automatic Speedometer & Car Profiles
+
+- **Automatic ON:** selects a matching dashboard style using the vehicle model reported by the game's Car Feed.
+- **Automatic OFF:** choose a HUD style manually for each owned car using its unique Car ID. Different cars of the same model can have different dashboard styles.
+- **Personal assignments:** switching between automatic and manual mode retains your saved manual choices. Cars without a stable Car ID use the model-based fallback.
+- **Odometer:** mileage continues to be recorded separately for each vehicle model.
+
+## Game Weather & Time
+
+- Displays the in-game time and weather conditions using the read-only View Feed.
+- Shows rain, cloud conditions, road conditions and sunlight information when available.
+- Weather information refreshes when opening the phone and can also be refreshed manually.
+- Select a city label manually; the feature does not use real-world GPS or automatically identify your city.
+
+## GPS & Pin Markers
+
+- Save locations in the game world as personal markers and organize them with city labels.
+- Record your driving speed at saved marker locations.
+- Share a selected GPS pin with a Frontvex friend and save received pins to your own marker collection.
+- Use received markers to record your own speed at the same location. Nearby received pins are grouped by location.
+
+## Frontvex Contacts & Player Communication (Limited Server BETA)
+
+- **My Profile:** choose a local username and reserve a custom FVX phone number. Each account uses a cryptographic FVX identity.
+- **Friends:** send and accept friend requests, view your contacts and see online/offline presence. Local blocking is available.
+- **Private messages:** direct peer-to-peer WebRTC communication, pending delivery, delivery/read receipts and manually shared GPS pins.
+- **Inbox:** see the sender, latest message, timestamp and unread count. Conversations use separate incoming and outgoing message bubbles.
+- **Message history:** configurable local history limit and centralized deletion controls with selection and confirmation.
+- **Connection management:** automatic connection refresh after successful registration or re-registration, manual Reconnect / Renew, and an independent communication enable/disable setting. Ordinary renewal is designed to preserve an active connection.
+
+## Notifications & Sounds
+
+- Alerts for friend requests, incoming messages, shared GPS pins and friends coming online.
+- Five selectable notification sounds, adjustable volume and test alerts.
+- Optional message previews, Do Not Disturb and persistent unread badges.
+- Notifications appear as a phone banner or a bottom-right toast; Frontvex popup notifications have a four-second display duration.
+
+## Registration & Privacy
+
+- Official Cloudflare Turnstile verification opens in a popup over the game on supported Chromium browsers, without opening a new tab or navigating away from the game.
+- Standard FVX number reservations expire after 15 days without successful renewal.
+- Usernames, private keys, contacts and message history are stored locally. The registration service stores the information required for number reservation and account authentication.
+- Direct WebRTC communication depends on network compatibility; there is no central message history or relay service.
+- Frontvex communication is optional and currently operates in a restricted server BETA. Access is not guaranteed for every user. The HUD, customization and local driving features do not require an FVX account.
+
+## Settings & Everyday Use
+
+- Compact help icons provide contextual explanations without filling the settings menu with long descriptions.
+- Search includes help text; important warnings and live status remain visible.
+- Local HUD profiles, saved settings and per-model odometer records remain available when upgrading in the same extension folder and browser profile.
+
+
+[Download v0.11.58](downloads/NFSU2_Modern_HUD_v0_11_58_Chromium.zip)
+
+## Availability
+
+Desktop Chromium release. Mobile remains on Userscript BETA 5 (v0.11.26.5) for iPhone and Android. This is an unofficial fan project; some driving warnings and effects are estimates or simulations based on game telemetry. The full automatic reconnection flow remains subject to live beta testing.
 
 ## Upgrade
 Replace files in the same unpacked extension folder, reload the extension, then reload NFSU2.xyz. Do not uninstall or switch browser profiles if you want to preserve your local settings, mileage and Frontvex identity.
