@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.11.26 — Chromium-based desktop browsers · Userscript BETA 5 for phones and tablets (based on v0.11.26)**
+**Release: v0.11.66 BETA — Chromium-based desktop browsers · Userscript BETA 5 for phones and tablets (based on v0.11.26)**
 
 Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
@@ -34,6 +34,20 @@ For phones and tablets (iPhone: Safari + Userscripts; Android: Edge + Tampermonk
 6. Verify that settings, car selection and local ODO values are still present. Use the SAVE ALL shortcut (`Numpad *` by default) once checked.
 
 A different extension ID may not have access to the previous extension's locally saved mileage. The game's own save does not include these values.
+
+### How to check for and install an update
+
+1. Open the Frontvex phone → **Updates (Software Update)**.
+2. Select **Check for Updates** to check immediately; there is no need to wait 30 minutes. The app also checks automatically when initialized and every 30 minutes while the game page is open (subject to cached results, connectivity and browser scheduling).
+3. If a newer public version is available, select **Download Update** and save the official Chromium ZIP. **What's New** opens the changelog. A notification and sound may appear if allowed by your settings/browser; the Updates icon displays an exclamation badge.
+4. Close the game tab, extract the ZIP, and copy the updated extension files over the existing unpacked extension folder. Keep the original folder path and do not uninstall the extension.
+5. Open your browser's extension manager, press **Reload** for the existing extension, then reopen/refresh NFSU2.xyz. Verify the installed version in Software Update and check that saved settings and mileage are present.
+
+The app notifies you about new public releases; it does not install them automatically. No Frontvex registration is required for the update check.
+
+## Frontvex Racing
+
+[Step-by-step PvP racing guide](RELEASE_NOTES_v0.11.66.md#how-to-start-a-pvp-1v1-race).
 
 ## HUD position — v0.11.10
 
