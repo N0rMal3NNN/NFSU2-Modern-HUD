@@ -1,11 +1,11 @@
 # NFSU2.xyz Modern HUD
 
-> **Upcoming desktop v0.11.66 BETA — Frontvex Racing & My Car.** [Feature overview](RELEASE_NOTES_v0.11.66.md). The new package is prepared for upload; the current download remains v0.11.60.
+> **Desktop v0.11.66 BETA — Frontvex Racing & My Car is available.** [Release notes](RELEASE_NOTES_v0.11.66.md).
 
 > **Frontvex Phone, GPS & Automatic Speedometer — Desktop BETA.** [Read the full release notes](RELEASE_NOTES_v0.11.58.md). Includes a customizable 2D/3D in-game phone, automatic HUD selection, GPS markers and optional Frontvex communication. The new mobile build is not ready; Userscript BETA 5 remains available.
 > Special thanks to [OBD Gaming](https://www.facebook.com/overbudgetgg) for the idea behind the Frontvex in-game phone. Frontvex online services are still in a limited server beta.
 
-**Current desktop version: v0.11.60 BETA (Chromium) · Mobile: Userscript BETA 5 (iPhone & Android, based on v0.11.26)**
+**Current desktop version: v0.11.66 BETA (Chromium) · Mobile: Userscript BETA 5 (iPhone & Android, based on v0.11.26)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics.
 
@@ -13,7 +13,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest desktop version: v0.11.60 BETA.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
+**Latest desktop version: v0.11.66 BETA.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
 
 - **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
@@ -21,6 +21,23 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **📱 [Download Userscript BETA 5 — phones & tablets](downloads/NFSU2_Userscripts_BETA_5.zip)** — iPhone: Safari + Userscripts (move the `.js` file into the Userscripts folder) · Android: Edge + Tampermonkey (import the ZIP). One universal file. See [Phone install](INSTALLATION.md#phones-and-tablets-userscript-beta-5).
 
 **Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
+
+---
+
+## v0.11.66 BETA — Frontvex Racing & My Car
+
+Create custom Free Roam tracks, share them with friends and race in Solo Test or friendly PvP 1v1. Both players must stop behind START for two seconds within 5 m of each other before the automatic countdown.
+
+- **Racing:** configurable navigation HUD, 3D gates and sequential checkpoints, synchronized countdown, live opponent position, finish statistics and local career records.
+- **My Car:** performance tests with automatic nitrous detection and manual turbo selection, per-car records, driving statistics and independent trip reset.
+- **Jump Monitor:** optional live airtime HUD and completed jump statistics.
+- **Privacy:** local race and vehicle records; direct peer-to-peer racing with registered friends when a connection succeeds. Cross-network PvP testing remains pending.
+
+[Full release notes and all screenshots](RELEASE_NOTES_v0.11.66.md)
+
+![Racing HUD with 3D start line](assets/frontvex-racing-hud-v0.11.66.webp)
+
+![Frontvex Racing career statistics](assets/frontvex-racing-career-v0.11.66.webp)
 
 ---
 
