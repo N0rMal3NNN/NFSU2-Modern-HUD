@@ -1,5 +1,7 @@
 # NFSU2.xyz Modern HUD
 
+> **Desktop v0.11.59 BETA:** the new package is prepared for upload. The current GitHub download remains v0.11.58 until the package is uploaded.
+
 > **Desktop v0.11.58 BETA is available — Frontvex Phone, GPS & Automatic Speedometer.** [Read the full release notes](RELEASE_NOTES_v0.11.58.md). Includes a customizable 2D/3D in-game phone, automatic HUD selection, GPS markers and optional Frontvex communication. The new mobile build is not ready; Userscript BETA 5 remains available.
 > Special thanks to [OBD Gaming](https://www.facebook.com/overbudgetgg) for the idea behind the Frontvex in-game phone. Frontvex online services are still in a limited server beta.
 
