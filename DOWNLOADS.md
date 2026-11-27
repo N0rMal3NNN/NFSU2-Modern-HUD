@@ -4,11 +4,11 @@
 
 **Phones and tablets:** Userscript BETA 5 (based on v0.11.26) — iPhone: Safari + Userscripts; Android: Microsoft Edge + Tampermonkey — see [Phones and tablets](#phones-and-tablets-userscript-beta-5) below.
 
-> **PC v0.11.58 BETA:** package prepared; upload pending. [What's new](RELEASE_NOTES_v0.11.58.md). Until the ZIP upload is complete, Latest still points to v0.11.26. The mobile userscript update is not ready; BETA 5 remains available.
+> **PC v0.11.58 BETA is available.** [What's new](RELEASE_NOTES_v0.11.58.md). The mobile userscript update is not ready; BETA 5 remains available.
 
 ## Download Latest
 
-**Current version: v0.11.26**
+**Current desktop version: v0.11.58 BETA**
 
 **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)**
 
@@ -18,7 +18,8 @@ This permanent URL always points to the most recent public Chromium-only build. 
 
 | Version | Download | Release information |
 |---|---|---|
-| **v0.11.26 — Latest** | [Download v0.11.26](downloads/NFSU2_Modern_HUD_v0_11_26_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.26.md) |
+| **v0.11.58 BETA — Latest** | [Download v0.11.58](downloads/NFSU2_Modern_HUD_v0_11_58_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.58.md) |
+| v0.11.26 | [Download v0.11.26](downloads/NFSU2_Modern_HUD_v0_11_26_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.26.md) |
 | v0.11.10 | [Download v0.11.10](downloads/NFSU2_Modern_HUD_v0_11_10_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.10.md) |
 | v0.11.7 | [Download v0.11.7](downloads/NFSU2_Modern_HUD_v0_11_7_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.7.md) |
 | v0.11.5 | [Download v0.11.5](downloads/NFSU2_Modern_HUD_v0.11.5_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.5.md) |
