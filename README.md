@@ -1,5 +1,8 @@
 # NFSU2.xyz Modern HUD
 
+> **Upcoming desktop update: v0.11.55 BETA — Frontvex Phone, GPS & Automatic Speedometer.** The PC build is prepared; GitHub ZIP/source upload is pending. [Read the full v0.11.55 changelog](RELEASE_NOTES_v0.11.55.md). The new mobile build is not ready; Userscript BETA 5 remains the available phone release.
+> Phone concept inspiration: [OBD Gaming](https://www.facebook.com/overbudgetgg). Frontvex online services are still in a limited server beta.
+
 **Current version: v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update (Chromium) · Userscript BETA 5 for phones (iPhone & Android, based on v0.11.26)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics.
