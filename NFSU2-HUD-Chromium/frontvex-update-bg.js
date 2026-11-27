@@ -6,8 +6,8 @@ const fvxUpdate=(()=>{
  const DOWNLOAD=ROOT+'/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip';
  const NOTES=ROOT+'/blob/main/CHANGELOG.md';
  const KEY='nfsu2FrontvexPublicUpdateV1', PERIOD=30*60*1000, MANUAL=60*1000;
- const valid=v=>typeof v==='string'&&/^(0|[1-9]\d{0,4})\.(0|[1-9]\d{0,4})\.(0|[1-9]\d{0,4})$/.test(v);
- function newer(a,b){if(!valid(a)||!valid(b))return false;const x=a.split('.').map(Number),y=b.split('.').map(Number);for(let i=0;i<3;i++){if(x[i]!==y[i])return x[i]>y[i];}return false;}
+ const valid=v=>typeof v==='string'&&/^(0|[1-9]\d{0,4})(?:\.(0|[1-9]\d{0,4})){2,3}$/.test(v)&&v.split('.').every(n=>Number(n)<=65535);
+ function newer(a,b){if(!valid(a)||!valid(b))return false;const x=a.split('.').map(Number),y=b.split('.').map(Number);for(let i=0;i<4;i++){const m=x[i]??0,n=y[i]??0;if(m!==n)return m>n;}return false;}
  function normalize(j){if(j?.schema!==1||!valid(j?.desktopPublic?.version))throw Error('BAD_METADATA');const v=j.desktopPublic;return {version:v.version,releasedAt:typeof v.releasedAt==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v.releasedAt)?v.releasedAt:''};}
  let queue=Promise.resolve();
  async function run(force){

@@ -1,3 +1,5 @@
+v0.11.67 — Software Update: supports three- and four-part version numbers. Racing and My Car unchanged.
+
 v0.11.66 — Frontvex Racing & My Car: automatic PvP start requires both cars to be ready and within 5 m of one another (3D distance). Both players need v0.11.66. Solo is unchanged.
 
 v0.11.65.8 — Enable Start With Pause (Test Mode), OFF by default. Turn ON on both clients before starting a new PvP lobby. Background/paused staging can retain a stationary position behind START; actual telemetry is required for movement and finish. Pause time counts in race time. 120-second grace; no server changes.
