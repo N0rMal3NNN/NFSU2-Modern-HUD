@@ -1,6 +1,6 @@
 # NFSU2.xyz Modern HUD
 
-> **Upcoming desktop update: v0.11.55 BETA — Frontvex Phone, GPS & Automatic Speedometer.** The PC build is prepared; GitHub ZIP/source upload is pending. [Read the full v0.11.55 changelog](RELEASE_NOTES_v0.11.55.md). The new mobile build is not ready; Userscript BETA 5 remains the available phone release.
+> **Upcoming desktop update: v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer.** The PC build is prepared; GitHub ZIP/source upload is pending. Registration verification was fixed in v0.11.57, and v0.11.58 adds automatic connection after registration (live reconnection test pending). [Read the full v0.11.58 changelog](RELEASE_NOTES_v0.11.58.md). The new mobile build is not ready; Userscript BETA 5 remains the available phone release.
 > Phone concept inspiration: [OBD Gaming](https://www.facebook.com/overbudgetgg). Frontvex online services are still in a limited server beta.
 
 **Current version: v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update (Chromium) · Userscript BETA 5 for phones (iPhone & Android, based on v0.11.26)**
@@ -19,6 +19,23 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **📱 [Download Userscript BETA 5 — phones & tablets](downloads/NFSU2_Userscripts_BETA_5.zip)** — iPhone: Safari + Userscripts (move the `.js` file into the Userscripts folder) · Android: Edge + Tampermonkey (import the ZIP). One universal file. See [Phone install](INSTALLATION.md#phones-and-tablets-userscript-beta-5).
 
 **Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
+
+---
+
+## v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer (desktop update)
+
+Cumulative update since v0.11.26, prepared for PC (download upload pending).
+
+- **Frontvex Phone:** customizable 2D/3D phone, home screen, 360° rotation, wallpaper, weather and app navigation.
+- **Automatic Speedometer:** model-based selection and manual per-car-ID assignments; existing per-model mileage retained.
+- **GPS and markers:** saved locations, city labels and speed logging, including received pins.
+- **Contacts and Messages (limited server beta):** friend requests, presence, direct WebRTC messages, inbox, receipts, GPS sharing and configurable notifications.
+- **Registration:** embedded Cloudflare Turnstile verification fixed in v0.11.57; v0.11.58 adds automatic connection refresh after successful registration or re-registration, respecting the communication toggle. Live verification confirmed; final automatic reconnection test pending.
+- **Usability:** compact help popups, improved local storage recovery and message history controls.
+
+Phone concept inspiration: [OBD Gaming](https://www.facebook.com/overbudgetgg).
+
+Full details: [v0.11.58 Release Notes](RELEASE_NOTES_v0.11.58.md). The new mobile build is not ready. The HUD works without Frontvex registration; communication access remains restricted during server beta.
 
 ---
 
