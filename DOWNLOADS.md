@@ -4,7 +4,7 @@
 
 **Phones and tablets:** Userscript BETA 5 (based on v0.11.26) — iPhone: Safari + Userscripts; Android: Microsoft Edge + Tampermonkey — see [Phones and tablets](#phones-and-tablets-userscript-beta-5) below.
 
-> **PC v0.11.55 BETA:** package prepared; upload pending. [What's new](RELEASE_NOTES_v0.11.55.md). Until the ZIP upload is complete, Latest still points to v0.11.26. The mobile userscript update is not ready; BETA 5 remains available.
+> **PC v0.11.58 BETA:** package prepared; upload pending. [What's new](RELEASE_NOTES_v0.11.58.md). Until the ZIP upload is complete, Latest still points to v0.11.26. The mobile userscript update is not ready; BETA 5 remains available.
 
 ## Download Latest
 
