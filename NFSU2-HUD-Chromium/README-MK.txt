@@ -118,3 +118,5 @@ v0.11.57 (test): Frontvex registration iframe opts into credentialless mode wher
 v0.11.58: Successful registration, verified re-registration, and renewal now notify the communication module immediately. Existing online-communication opt-in is preserved. Manual recovery resets signaling retry delay; an ordinary renewal does not disconnect a healthy socket or take over another game tab.
 
  v0.11.59: Pin marker management: independent city numbering, local speed records and received-pin choice (keep, replace, or keep both).
+
+ v0.11.60: Software Update app for the public desktop channel. GitHub version checks on launch and every 30 minutes, manual check, once-per-version notification, persistent update badge and manual download. No account required.

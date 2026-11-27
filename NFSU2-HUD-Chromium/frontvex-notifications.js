@@ -26,7 +26,7 @@ function mount(home,storage,options={}){
   function gesture(e){if(e.isTrusted&&(!audio||audio.state!=='running'))void unlock();}
   for(const t of ['pointerdown','pointerup','click','keydown','touchend'])window.addEventListener(t,gesture,{capture:true,passive:true});
   async function play(preview=false,chosen=state.sound,volume=state.volume){if(!preview&&(!state.soundEnabled||state.dnd||Date.now()-lastSound<1000))return false;const seq=++soundSeq;try{if(!audio||audio.state!=='running'){if(preview)await unlock();else {await Promise.race([unlock(),new Promise(resolve=>setTimeout(resolve,350))]);if(!audio||audio.state!=='running'||!showing)return false;}}if(!audio||audio.state!=='running'||!sounds[chosen])return false;lastSound=Date.now();let buffer=buffers.get(chosen);if(!buffer){const raw=atob(sounds[chosen].data),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));buffer=await audio.decodeAudioData(bytes.buffer);buffers.set(chosen,buffer);}if(seq!==soundSeq||(!preview&&!showing))return false;try{playing?.stop();}catch{}const src=audio.createBufferSource(),gain=audio.createGain();gain.gain.value=volume/100;src.buffer=buffer;src.connect(gain);gain.connect(audio.destination);playing=src;src.onended=()=>{if(playing===src)playing=null;src.disconnect();gain.disconnect();};src.start(0,0,Math.min(buffer.duration,3));return true;}catch{return false;}}
-  function enabled(t){return !state.dnd&&(t==='messages'?state.messageEnabled:t==='online'?state.onlineEnabled:state.requestEnabled);}
+  function enabled(t){return !state.dnd&&(t==='messages'?state.messageEnabled:t==='online'?state.onlineEnabled:t==='update'?true:state.requestEnabled);}
   function schedule(delay=250){if(showing||queuedTimer||!queue.length)return;queuedTimer=setTimeout(()=>{queuedTimer=0;nextPopup();},delay);}
   function nextPopup(){
     while(queue.length&&!enabled(queue[0].t))queue.shift();
@@ -34,7 +34,7 @@ function mount(home,storage,options={}){
     const first=queue.shift(),items=[first];
     if(queue.length&&queue[0].t===first.t&&queue[0].demo===first.demo&&!first.extra&&!queue[0].extra)items.push(queue.shift());
     const total=items.reduce((n,x)=>n+1+(x.extra||0),0);
-    const kind=first.t==='messages'?(total===1?'New Message':total+' New Messages'):first.t==='online'?(total===1?'Friend Online':total+' Friends Online'):(total===1?'Friend Request':total+' Friend Requests');
+    const kind=first.t==='update'?'Software Update':first.t==='messages'?(total===1?'New Message':total+' New Messages'):first.t==='online'?(total===1?'Friend Online':total+' Friends Online'):(total===1?'Friend Request':total+' Friend Requests');
     showing=true;place();title.textContent='Frontvex · '+(first.demo?'Test ':'')+kind;
     body.textContent=items.map(x=>x.text).join('\n')+(first.extra?'\n+'+first.extra+' more — open app to read.':'');
     toast.classList.remove('on');void toast.offsetWidth;toast.classList.add('on');void play();
@@ -52,6 +52,7 @@ function mount(home,storage,options={}){
   // Announce each packet once, regardless of which path observes it first.
   async function ingest(snapshot,oldSnapshot){const old=oldSnapshot??data;data=snapshot||null;refresh();for(const t of TYPES){const oldIds=new Set(records(old,t).map(x=>x.id));const seen=new Set(state.seen[t]);const fresh=records(data,t).filter(x=>!oldIds.has(x.id)&&!seen.has(x.id)&&!announced[t].has(x.id));for(const item of fresh){announced[t].add(item.id);popup(t,describe(item,t));}if(announced[t].size>10000){const keep=new Set(records(data,t).map(x=>x.id));for(const id of announced[t]){if(announced[t].size<=7500)break;if(!keep.has(id))announced[t].delete(id);}}if(active===t&&phoneOpen()){const next=normalize(state);next.seen[t]=[...new Set(records(data,t).map(x=>x.id))];next.demo[t]=0;if(JSON.stringify(next)!==JSON.stringify(state))await save(next);}}}
   function received(snapshot){return enqueue(()=>ingest(snapshot));}
+  function softwareUpdate(version){return enqueue(()=>popup('update','New version released: v'+version+'. Please update your extension in Software Update.'));}
   function friendOnline(friend){return enqueue(()=>{popup('online',String(friend.username||('FVX'+String(friend.number||'').replace(/^FVX-?/i,'')))+' is now online.');});}
   storage.onChanged?.((changes,area)=>{if(area!=='local')return;if(changes[KEY]&&ready){state=normalize(changes[KEY].newValue);refresh();}if(!changes[CONTACTS])return;const change=changes[CONTACTS];void enqueue(()=>ingest(change.newValue,change.oldValue));});
   function setting(k,v){return enqueue(async()=>{const n=normalize({...state,[k]:v});await save(n);});}
@@ -64,7 +65,7 @@ function mount(home,storage,options={}){
     const status=el('p','Badges remain until the app is opened, even when popups or sounds are disabled.');status.className='fc-note';btn('Preview Sound',async()=>{const ok=await play(true,select.value,Number(volume.value));status.textContent=ok?'Playing '+sounds[select.value].label+'.':'Sound unavailable. Check browser audio permissions or volume.';});
     btn('Test Message Notification',()=>{void unlock();void demo('messages');});btn('Test Friend Request Notification',()=>{void unlock();void demo('contacts');});btn('Test Friend Online Notification',()=>{void unlock();void enqueue(()=>popup('online','Demo Friend is now online.',true));});btn('Test Notification in 5 seconds',()=>{void unlock();status.textContent='Close the phone to test the bottom-right popup.';setTimeout(()=>void demo('messages'),5000);});parent.append(status);const note=el('p','Message and request tests create local demo badges. Online tests are popup-only. No real messages or requests are sent.');note.className='fc-note';parent.append(note);
   }
-  return Object.freeze({view,mark,received,friendOnline,renderSettings,refresh,place,ready:loaded});
+  return Object.freeze({view,mark,received,friendOnline,softwareUpdate,renderSettings,refresh,place,ready:loaded});
 }
 Object.defineProperty(globalThis,'__frontvexNotifications',{value:Object.freeze({mount,defaults,normalize,records,unread,badgeText}),writable:false,configurable:false});
 })();

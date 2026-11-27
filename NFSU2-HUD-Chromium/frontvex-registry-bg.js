@@ -1,5 +1,6 @@
 /* Frontvex number registry. Only this fixed HTTPS endpoint is allowed. */
 'use strict';
+importScripts('frontvex-update-bg.js');
 const BASE='https://api.frontvex.com';
 const ID_KEY='nfsu2FrontvexRegistryIdentityV1';
 const hex=a=>Array.from(new Uint8Array(a),b=>b.toString(16).padStart(2,'0')).join('');
@@ -73,6 +74,8 @@ chrome.runtime.onMessage.addListener((msg,sender,reply)=>{
   if(sender.id!==chrome.runtime.id||!Number.isInteger(sender.tab?.id))return;
   let url;try{url=new URL(sender.url);}catch{return;}
   const game=sender.frameId===0&&['https://nfsu2.xyz','https://www.nfsu2.xyz'].includes(url.origin);
+  if(game&&msg?.type==='frontvex-update-check-v1'){fvxUpdate.check(msg.manual===true).then(reply,()=>reply({ok:false}));return true;}
+  if(game&&msg?.type==='frontvex-update-open-v1'){fvxUpdate.open(msg.which).then(reply,()=>reply({ok:false}));return true;}
   const auth=sender.frameId>0&&typeof sender.documentId==='string'&&url.origin===AUTH&&url.pathname==='/register';
   if(auth&&msg?.type==='frontvex-auth-ready-v4'){
     if(requestTask){reply({ok:false,code:'BUSY'});return;}
