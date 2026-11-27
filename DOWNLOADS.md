@@ -4,11 +4,11 @@
 
 **Phones and tablets:** Userscript BETA 5 (based on v0.11.26) — iPhone: Safari + Userscripts; Android: Microsoft Edge + Tampermonkey — see [Phones and tablets](#phones-and-tablets-userscript-beta-5) below.
 
-> **PC v0.11.59 BETA is available.** The v0.11.60 Software Update package is prepared for upload. [Feature overview](RELEASE_NOTES_v0.11.60.md). Mobile BETA 5 remains available.
+> **PC v0.11.60 BETA is available.** The v0.11.66 Frontvex Racing & My Car package is prepared for upload. [Feature overview](RELEASE_NOTES_v0.11.66.md). Mobile BETA 5 remains available.
 
 ## Download Latest
 
-**Current desktop version: v0.11.59 BETA**
+**Current desktop version: v0.11.60 BETA**
 
 **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)**
 
@@ -18,7 +18,8 @@ This permanent URL always points to the most recent public Chromium-only build. 
 
 | Version | Download | Release information |
 |---|---|---|
-| **v0.11.59 BETA — Latest** | [Download v0.11.59](downloads/NFSU2_Modern_HUD_v0_11_59_Chromium.zip) | Frontvex desktop BETA |
+| **v0.11.60 BETA — Latest** | [Download v0.11.60](downloads/NFSU2_Modern_HUD_v0_11_60_Chromium.zip) | [Software Update](RELEASE_NOTES_v0.11.60.md) |
+| v0.11.59 BETA | [Download v0.11.59](downloads/NFSU2_Modern_HUD_v0_11_59_Chromium.zip) | Frontvex desktop BETA |
 | v0.11.58 BETA | [Download v0.11.58](downloads/NFSU2_Modern_HUD_v0_11_58_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.58.md) |
 | v0.11.26 | [Download v0.11.26](downloads/NFSU2_Modern_HUD_v0_11_26_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.26.md) |
 | v0.11.10 | [Download v0.11.10](downloads/NFSU2_Modern_HUD_v0_11_10_Chromium.zip) | [What's new](RELEASE_NOTES_v0.11.10.md) |
