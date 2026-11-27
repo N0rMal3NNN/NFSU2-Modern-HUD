@@ -1,44 +1,67 @@
-/* NFSU2 Modern HUD 0.9.10 — cross-browser storage adapter.
- * Uses the native promise browser.* API in Firefox and the callback chrome.* API
- * in Chromium. All callers receive a Promise, including profile imports/exports.
- * No remote requests, tracking, or external dependencies.
+/* NFSU2 Modern HUD 0.11.51 — cross-browser storage adapter.
+ * Promise API for every read/write, including synchronous native exceptions.
+ * An invalidated extension context cannot be repaired by retrying the old script.
+ * No site-local fallback: keep private extension settings in extension storage.
  */
 (() => {
   "use strict";
   const browserApi = typeof browser !== "undefined" && browser?.storage?.local ? browser : null;
   const chromeApi = typeof chrome !== "undefined" && chrome?.storage?.local ? chrome : null;
   const api = browserApi || chromeApi;
-  if (!api) {
-    console.warn("[NFSU2 HUD] Browser extension storage unavailable.");
-    return;
+  if (!api) return;
+  let invalidated = false;
+  const isContextError = error => /extension context invalidated/i.test(error?.message || String(error));
+  const contextError = () => new Error("Extension context invalidated. Reload the game page to reconnect storage.");
+  function record(error) {
+    if (isContextError(error)) invalidated = true;
+    return invalidated ? contextError() : error;
   }
-  const get = (keys = null) => {
-    if (browserApi) return Promise.resolve(browserApi.storage.local.get(keys));
-    return new Promise((resolve,reject) => {
-      try {
+  function check() {
+    if (invalidated) throw contextError();
+    try {
+      if (!api.runtime?.id) throw contextError();
+    } catch (error) { throw record(error); }
+  }
+  const isInvalidated = () => {
+    try { check(); } catch (error) { if (isContextError(error)) return true; }
+    return invalidated;
+  };
+  async function get(keys = null) {
+    try {
+      check();
+      if (browserApi) return (await browserApi.storage.local.get(keys)) || {};
+      return await new Promise((resolve,reject) => {
         chromeApi.storage.local.get(keys, values => {
-          const error = chromeApi.runtime?.lastError;
-          if (error) reject(new Error(error.message || String(error)));
-          else resolve(values || {});
+          try {
+            const error = chromeApi.runtime?.lastError;
+            if (error) reject(new Error(error.message || String(error)));
+            else resolve(values || {});
+          } catch (error) { reject(error); }
         });
-      } catch (error) { reject(error); }
-    });
-  };
-  const set = entries => {
-    if (browserApi) return Promise.resolve(browserApi.storage.local.set(entries));
-    return new Promise((resolve,reject) => {
-      try {
+      });
+    } catch (error) { throw record(error); }
+  }
+  async function set(entries) {
+    try {
+      check();
+      if (browserApi) { await browserApi.storage.local.set(entries); return; }
+      await new Promise((resolve,reject) => {
         chromeApi.storage.local.set(entries, () => {
-          const error = chromeApi.runtime?.lastError;
-          if (error) reject(new Error(error.message || String(error)));
-          else resolve();
+          try {
+            const error = chromeApi.runtime?.lastError;
+            if (error) reject(new Error(error.message || String(error)));
+            else resolve();
+          } catch (error) { reject(error); }
         });
-      } catch (error) { reject(error); }
-    });
+      });
+    } catch (error) { throw record(error); }
+  }
+  const onChanged = handler => {
+    try { check(); api.storage.onChanged.addListener(handler); }
+    catch (error) { if (!isContextError(record(error))) throw error; }
   };
-  const onChanged = handler => api.storage.onChanged.addListener(handler);
   Object.defineProperty(globalThis, "__nfsu2HudStorage", {
-    value: Object.freeze({get, set, onChanged}),
+    value: Object.freeze({get, set, onChanged, isInvalidated, isContextError}),
     configurable: false, writable: false
   });
 })();

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NFSU2.xyz Modern HUD",
-  "version": "0.11.26",
+  "version": "0.11.58",
   "description": "Five HUD styles and redesigned standalone 2026 status panel with angled LEDs, TKL shortcuts, Limp Mode.",
   "permissions": [
     "storage"
@@ -30,9 +30,31 @@
         "storage-adapter.js",
         "shift-logic.js",
         "hotkeys.js",
+        "frontvex-sounds.js",
+        "frontvex-notifications.js",
+        "frontvex-communication.js",
+        "frontvex-contacts.js",
         "content.js"
       ],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://auth.frontvex.com/register*"
+      ],
+      "js": [
+        "frontvex-auth.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
     }
-  ]
+  ],
+  "host_permissions": [
+    "https://api.frontvex.com/*",
+    "https://auth.frontvex.com/*",
+    "https://signal.frontvex.com/*"
+  ],
+  "background": {
+    "service_worker": "frontvex-registry-bg.js"
+  }
 }

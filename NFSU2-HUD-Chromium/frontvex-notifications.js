@@ -1,0 +1,70 @@
+/* Frontvex local notifications. No network, no game feed changes. */
+(()=>{
+'use strict';
+const CONTACTS='nfsu2FrontvexContactsV1',KEY='nfsu2FrontvexNotificationsV1';
+const TYPES=['messages','contacts'];
+const sounds=globalThis.__frontvexSounds||{};
+const defaults=()=>({version:1,sound:'quick-tone',volume:50,soundEnabled:true,messageEnabled:true,requestEnabled:true,onlineEnabled:true,preview:true,dnd:false,duration:4,seen:{messages:[],contacts:[]},demo:{messages:0,contacts:0}});
+const clamp=(x,min,max,fallback)=>Number.isFinite(Number(x))?Math.min(max,Math.max(min,Math.round(Number(x)))):fallback;
+function normalize(v){const d=defaults();if(!v||v.version!==1)return d;for(const k of ['soundEnabled','messageEnabled','requestEnabled','onlineEnabled','preview','dnd'])if(typeof v[k]==='boolean')d[k]=v[k];if(Object.hasOwn(sounds,v.sound))d.sound=v.sound;d.volume=clamp(v.volume,0,100,50);d.duration=4;for(const t of TYPES){d.seen[t]=Array.isArray(v.seen?.[t])?v.seen[t].filter(x=>typeof x==='string'):[];d.demo[t]=clamp(v.demo?.[t],0,999,0);}return d;}
+function records(d,t){const src=t==='messages'?d?.messages:d?.incoming;const blocked=new Set((Array.isArray(d?.blocked)?d.blocked:[]).map(x=>x.id));return (Array.isArray(src)?src:[]).filter(x=>x&&typeof x.id==='string'&&(t!=='messages'||x.direction==='in')&&!blocked.has(x.peer||x.id)).map(x=>t==='contacts'&&typeof x.requestId==='string'?{...x,id:x.requestId}:x);}
+function unread(d,s,t){const seen=new Set(s.seen[t]);return records(d,t).filter(x=>!seen.has(x.id));}
+function badgeText(n){return n>99?'99+':String(n);}
+function mount(home,storage,options={}){
+  const doc=home.ownerDocument;let data=null,state=defaults(),ready=false,active='',chain=Promise.resolve(),audio=null,playing=null,soundSeq=0,lastSound=0;
+  const buffers=new Map();const badges={};const announced={messages:new Set(),contacts:new Set()};let timer=0,queuedTimer=0,showing=false;const queue=[];const MAX_QUEUE=24,POPUP_MS=4000,GAP_MS=500;const screen=options.screen||home.closest('.ph-screen');const phoneOpen=()=>Boolean(screen&&options.isPhoneOpen?.());
+  for(const t of TYPES){const b=home.querySelector('.fv-app[data-app="'+t+'"]');if(!b)continue;const span=doc.createElement('span');span.className='fv-notification-badge';span.hidden=true;span.setAttribute('aria-hidden','true');b.querySelector('.fv-ico').append(span);badges[t]={b,span};}
+  const host=doc.createElement('div');host.style.cssText='all:initial;position:fixed;bottom:18px;right:18px;z-index:2147483647;pointer-events:none;width:min(330px,calc(100vw - 36px));';
+  const shadow=host.attachShadow({mode:'closed'});const style=doc.createElement('style');style.textContent=':host{color-scheme:dark}.toast{box-sizing:border-box;display:none;padding:12px 15px;background:linear-gradient(110deg,#202e3d,#15202d);color:#effaff;border:1px solid #40556b;border-left:3px solid #72d4dd;border-radius:5px;box-shadow:0 8px 24px #0008;font:13px/1.4 system-ui,sans-serif;overflow:hidden}.toast.on{display:block;animation:fvx-in .18s ease-out}.toast.phone{background:rgba(23,35,46,.98);border:1px solid #617584;border-radius:17px;padding:10px 12px}.toast.phone.on{animation:fvx-phone-in .18s ease-out}.title{font-weight:750;color:#a8edee;margin-bottom:4px}.body{white-space:pre-wrap;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}@keyframes fvx-in{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}@keyframes fvx-phone-in{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){.toast.on,.toast.phone.on{animation:none}}';
+  const toast=doc.createElement('div');toast.className='toast';toast.setAttribute('role','status');const title=doc.createElement('div'),body=doc.createElement('div');title.className='title';body.className='body';toast.append(title,body);shadow.append(style,toast);
+  function place(){const inside=phoneOpen();const target=inside?screen:(doc.fullscreenElement||doc.webkitFullscreenElement||doc.documentElement);if(host.parentNode!==target)target.append(host);host.style.position=inside?'absolute':'fixed';host.style.top=inside?'calc(var(--sbh, 30px) + 4px)':'auto';host.style.bottom=inside?'auto':'18px';host.style.left=inside?'8px':'auto';host.style.right=inside?'8px':'18px';host.style.width=inside?'auto':'min(330px,calc(100vw - 36px))';host.style.zIndex=inside?'100':'2147483647';toast.classList.toggle('phone',inside);}
+  place();doc.addEventListener('fullscreenchange',place);doc.addEventListener('webkitfullscreenchange',place);
+  function refresh(){for(const t of TYPES){const info=badges[t];if(!info)continue;const n=unread(data,state,t).length+state.demo[t];info.span.hidden=!n;info.span.textContent=n?badgeText(n):'';info.b.setAttribute('aria-label',(t==='messages'?'Messages':'Contacts')+(n?' · '+n+' unread':''));}}
+  function enqueue(fn){chain=chain.then(async()=>{await loaded;return fn();}).catch(e=>console.warn('[Frontvex] Notification save failed',e));return chain;}
+  async function save(next){await storage.set({[KEY]:next});state=next;refresh();}
+  function unlock(){try{if(!audio||audio.state==='closed'){const A=globalThis.AudioContext||globalThis.webkitAudioContext;if(A)audio=new A();}if(audio&&audio.state!=='running'&&audio.state!=='closed')return audio.resume().catch(()=>{});}catch{}return Promise.resolve();}
+  function gesture(e){if(e.isTrusted&&(!audio||audio.state!=='running'))void unlock();}
+  for(const t of ['pointerdown','pointerup','click','keydown','touchend'])window.addEventListener(t,gesture,{capture:true,passive:true});
+  async function play(preview=false,chosen=state.sound,volume=state.volume){if(!preview&&(!state.soundEnabled||state.dnd||Date.now()-lastSound<1000))return false;const seq=++soundSeq;try{if(!audio||audio.state!=='running'){if(preview)await unlock();else {await Promise.race([unlock(),new Promise(resolve=>setTimeout(resolve,350))]);if(!audio||audio.state!=='running'||!showing)return false;}}if(!audio||audio.state!=='running'||!sounds[chosen])return false;lastSound=Date.now();let buffer=buffers.get(chosen);if(!buffer){const raw=atob(sounds[chosen].data),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));buffer=await audio.decodeAudioData(bytes.buffer);buffers.set(chosen,buffer);}if(seq!==soundSeq||(!preview&&!showing))return false;try{playing?.stop();}catch{}const src=audio.createBufferSource(),gain=audio.createGain();gain.gain.value=volume/100;src.buffer=buffer;src.connect(gain);gain.connect(audio.destination);playing=src;src.onended=()=>{if(playing===src)playing=null;src.disconnect();gain.disconnect();};src.start(0,0,Math.min(buffer.duration,3));return true;}catch{return false;}}
+  function enabled(t){return !state.dnd&&(t==='messages'?state.messageEnabled:t==='online'?state.onlineEnabled:state.requestEnabled);}
+  function schedule(delay=250){if(showing||queuedTimer||!queue.length)return;queuedTimer=setTimeout(()=>{queuedTimer=0;nextPopup();},delay);}
+  function nextPopup(){
+    while(queue.length&&!enabled(queue[0].t))queue.shift();
+    if(!queue.length)return;
+    const first=queue.shift(),items=[first];
+    if(queue.length&&queue[0].t===first.t&&queue[0].demo===first.demo&&!first.extra&&!queue[0].extra)items.push(queue.shift());
+    const total=items.reduce((n,x)=>n+1+(x.extra||0),0);
+    const kind=first.t==='messages'?(total===1?'New Message':total+' New Messages'):first.t==='online'?(total===1?'Friend Online':total+' Friends Online'):(total===1?'Friend Request':total+' Friend Requests');
+    showing=true;place();title.textContent='Frontvex · '+(first.demo?'Test ':'')+kind;
+    body.textContent=items.map(x=>x.text).join('\n')+(first.extra?'\n+'+first.extra+' more — open app to read.':'');
+    toast.classList.remove('on');void toast.offsetWidth;toast.classList.add('on');void play();
+    timer=setTimeout(()=>{toast.classList.remove('on');showing=false;schedule(GAP_MS);},POPUP_MS);
+  }
+  function popup(t,text,isDemo=false){if(!enabled(t))return;
+    if(queue.length>=MAX_QUEUE){const tail=[...queue].reverse().find(x=>x.t===t&&x.demo===isDemo);if(tail)tail.extra=(tail.extra||0)+1;else{const removed=queue.pop();queue.push({t,text,demo:isDemo,extra:0});}return;}
+    queue.push({t,text,demo:isDemo,extra:0});schedule();
+  }
+  function describe(r,t){if(t==='contacts')return state.preview?(r.username||('FVX'+String(r.number||'').replace(/^FVX-?/i,''))||'New friend request'):'You have a new friend request.';const friend=(data?.friends||[]).find(x=>x.id===r.peer);return state.preview?String(friend?.username||'Friend')+': '+String(r.text||'').slice(0,250):'You have a new message.';}
+  function mark(t){if(!TYPES.includes(t))return Promise.resolve();return enqueue(async()=>{const next=normalize(state);next.seen[t]=[...new Set(records(data,t).map(x=>x.id))];next.demo[t]=0;if(JSON.stringify(next)!==JSON.stringify(state))await save(next);});}
+  function view(t){active=TYPES.includes(t)?t:'';if(active)void mark(active);place();}
+  const loaded=(async()=>{try{const r=await storage.get([CONTACTS,KEY]);data=r?.[CONTACTS]||null;state=normalize(r?.[KEY]);for(const t of TYPES)for(const item of records(data,t))announced[t].add(item.id);ready=true;refresh();}catch(e){console.warn('[Frontvex] Notification load failed',e);}})();
+  // Use the same serialized path for native storage changes and confirmed P2P receipts.
+  // Announce each packet once, regardless of which path observes it first.
+  async function ingest(snapshot,oldSnapshot){const old=oldSnapshot??data;data=snapshot||null;refresh();for(const t of TYPES){const oldIds=new Set(records(old,t).map(x=>x.id));const seen=new Set(state.seen[t]);const fresh=records(data,t).filter(x=>!oldIds.has(x.id)&&!seen.has(x.id)&&!announced[t].has(x.id));for(const item of fresh){announced[t].add(item.id);popup(t,describe(item,t));}if(announced[t].size>10000){const keep=new Set(records(data,t).map(x=>x.id));for(const id of announced[t]){if(announced[t].size<=7500)break;if(!keep.has(id))announced[t].delete(id);}}if(active===t&&phoneOpen()){const next=normalize(state);next.seen[t]=[...new Set(records(data,t).map(x=>x.id))];next.demo[t]=0;if(JSON.stringify(next)!==JSON.stringify(state))await save(next);}}}
+  function received(snapshot){return enqueue(()=>ingest(snapshot));}
+  function friendOnline(friend){return enqueue(()=>{popup('online',String(friend.username||('FVX'+String(friend.number||'').replace(/^FVX-?/i,'')))+' is now online.');});}
+  storage.onChanged?.((changes,area)=>{if(area!=='local')return;if(changes[KEY]&&ready){state=normalize(changes[KEY].newValue);refresh();}if(!changes[CONTACTS])return;const change=changes[CONTACTS];void enqueue(()=>ingest(change.newValue,change.oldValue));});
+  function setting(k,v){return enqueue(async()=>{const n=normalize({...state,[k]:v});await save(n);});}
+  function demo(t){return enqueue(async()=>{const n=normalize(state);n.demo[t]=Math.min(999,n.demo[t]+1);await save(n);popup(t,t==='messages'?'Demo message — this is not a real delivery.':'Demo friend request — this is not a real request.',true);});}
+  function renderSettings(parent){const el=(tag,text)=>{const x=doc.createElement(tag);if(text!==undefined)x.textContent=text;return x;};const label=(name,input)=>{const l=el('label',name);l.className='fc-label';l.append(input);parent.append(l);};const btn=(txt,fn)=>{const b=el('button',txt);b.type='button';b.className='fc-btn';b.addEventListener('click',fn);parent.append(b);return b;};
+    for(const [k,name] of [['messageEnabled','Message popups'],['requestEnabled','Friend request popups'],['onlineEnabled','Friend online popups'],['soundEnabled','Notification sound'],['preview','Show message preview'],['dnd','Do Not Disturb']]){const input=el('input');input.type='checkbox';input.checked=state[k];input.className='fc-notify-check';label(name,input);input.addEventListener('change',()=>void setting(k,input.checked));}
+    const select=el('select');for(const [k,s] of Object.entries(sounds)){const o=el('option',s.label+(k==='quick-tone'?' (Default)':''));o.value=k;select.append(o);}select.value=state.sound;label('Notification sound',select);select.addEventListener('change',()=>void setting('sound',select.value));
+    const volume=el('input');volume.type='range';volume.min='0';volume.max='100';volume.step='5';volume.value=String(state.volume);const v=el('span',volume.value+'%');label('Sound volume',volume);parent.append(v);volume.addEventListener('input',()=>{v.textContent=volume.value+'%';});volume.addEventListener('change',()=>void setting('volume',Number(volume.value)));
+    const timing=el('p','Popups: 4 seconds · Up to 2 at a time in one banner · 0.5 s gap. Phone closed: bottom right. Phone open: top of phone.');timing.className='fc-note';parent.append(timing);
+    const status=el('p','Badges remain until the app is opened, even when popups or sounds are disabled.');status.className='fc-note';btn('Preview Sound',async()=>{const ok=await play(true,select.value,Number(volume.value));status.textContent=ok?'Playing '+sounds[select.value].label+'.':'Sound unavailable. Check browser audio permissions or volume.';});
+    btn('Test Message Notification',()=>{void unlock();void demo('messages');});btn('Test Friend Request Notification',()=>{void unlock();void demo('contacts');});btn('Test Friend Online Notification',()=>{void unlock();void enqueue(()=>popup('online','Demo Friend is now online.',true));});btn('Test Notification in 5 seconds',()=>{void unlock();status.textContent='Close the phone to test the bottom-right popup.';setTimeout(()=>void demo('messages'),5000);});parent.append(status);const note=el('p','Message and request tests create local demo badges. Online tests are popup-only. No real messages or requests are sent.');note.className='fc-note';parent.append(note);
+  }
+  return Object.freeze({view,mark,received,friendOnline,renderSettings,refresh,place,ready:loaded});
+}
+Object.defineProperty(globalThis,'__frontvexNotifications',{value:Object.freeze({mount,defaults,normalize,records,unread,badgeText}),writable:false,configurable:false});
+})();
