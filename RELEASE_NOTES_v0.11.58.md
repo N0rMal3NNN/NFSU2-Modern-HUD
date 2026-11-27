@@ -1,6 +1,6 @@
 # v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer (PC)
 
-Cumulative desktop update since the previous public v0.11.26 release. The public desktop build is prepared; the GitHub download files and source must be uploaded before the permanent Latest link serves v0.11.58.
+Cumulative desktop update since the previous public v0.11.26 release. The public desktop build and source are available in the main branch. [Download v0.11.58](downloads/NFSU2_Modern_HUD_v0_11_58_Chromium.zip).
 
 ## Frontvex in-game phone
 - A new phone-based settings menu with a classic panel alternative, home screen, search, app navigation and back/forward controls.
