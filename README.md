@@ -1,7 +1,7 @@
 # NFSU2.xyz Modern HUD
 
 > **Desktop v0.11.58 BETA is available — Frontvex Phone, GPS & Automatic Speedometer.** [Read the full release notes](RELEASE_NOTES_v0.11.58.md). Includes a customizable 2D/3D in-game phone, automatic HUD selection, GPS markers and optional Frontvex communication. The new mobile build is not ready; Userscript BETA 5 remains available.
-> Phone concept inspiration: [OBD Gaming](https://www.facebook.com/overbudgetgg). Frontvex online services are still in a limited server beta.
+> Special thanks to [OBD Gaming](https://www.facebook.com/overbudgetgg) for the idea behind the Frontvex in-game phone. Frontvex online services are still in a limited server beta.
 
 **Current desktop version: v0.11.58 BETA (Chromium) · Mobile: Userscript BETA 5 (iPhone & Android, based on v0.11.26)**
 
@@ -35,7 +35,7 @@ A major desktop update that brings a customizable smartphone interface into NFSU
 - **Wallpaper:** select a preset or use your own image, with image-fit and dimming controls. Adjust app icon and weather card sizes.
 - **Apps and shortcuts:** access Settings, Cars HUD, Colors & Materials, Effects, Driving, Status HUD, Profiles, Shortcuts, Markers, Weather, Contacts and Messages directly from the phone.
 
-Phone concept inspiration: **[OBD Gaming](https://www.facebook.com/overbudgetgg)**.
+**Special thanks to [OBD Gaming](https://www.facebook.com/overbudgetgg) for the inspiration behind the Frontvex in-game phone. Your idea helped bring this feature to life!**
 
 ### Automatic Speedometer & Car Profiles
 
