@@ -26,13 +26,28 @@ A cumulative desktop update since v0.11.60. Create and share your own Free Roam 
 
 ## Screenshots
 
-The following screenshots show the preceding tested development build with the same Racing and Jump Monitor interface. Images are included in the release upload package.
+The following screenshots show the preceding tested development build with the same Racing and Jump Monitor interface. 
 
-- PvP Career Statistics: `assets/frontvex-racing-career-v0.11.66.webp`
-- Race results: `assets/frontvex-racing-results-v0.11.66.webp`
-- My Tracks: `assets/frontvex-racing-tracks-v0.11.66.webp`
-- Jump Monitor: `assets/frontvex-jump-monitor-v0.11.66.webp`
-- Racing overlay and 3D start/finish markers: `assets/frontvex-racing-hud-v0.11.66.webp`
+### PvP Career Statistics
+
+![PvP Career Statistics](assets/frontvex-racing-career-v0.11.66.webp)
+
+### Race results
+
+![Race results](assets/frontvex-racing-results-v0.11.66.webp)
+
+### My Tracks
+
+![My Tracks](assets/frontvex-racing-tracks-v0.11.66.webp)
+
+### Jump Monitor
+
+![Jump Monitor](assets/frontvex-jump-monitor-v0.11.66.webp)
+
+### Racing overlay and 3D start/finish markers
+
+![Racing overlay and 3D start/finish markers](assets/frontvex-racing-hud-v0.11.66.webp)
+
 
 ## Compatibility and privacy
 
