@@ -11,7 +11,7 @@ A major desktop update that brings a customizable smartphone interface into NFSU
 - **Wallpaper:** select a preset or use your own image, with image-fit and dimming controls. Adjust app icon and weather card sizes.
 - **Apps and shortcuts:** access Settings, Cars HUD, Colors & Materials, Effects, Driving, Status HUD, Profiles, Shortcuts, Markers, Weather, Contacts and Messages directly from the phone.
 
-Phone concept inspiration: **[OBD Gaming](https://www.facebook.com/overbudgetgg)**.
+**Special thanks to [OBD Gaming](https://www.facebook.com/overbudgetgg) for the inspiration behind the Frontvex in-game phone. Your idea helped bring this feature to life!**
 
 ## Automatic Speedometer & Car Profiles
 
