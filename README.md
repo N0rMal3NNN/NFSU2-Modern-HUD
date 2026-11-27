@@ -1,9 +1,9 @@
 # NFSU2.xyz Modern HUD
 
-> **Upcoming desktop update: v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer.** The PC build is prepared; GitHub ZIP/source upload is pending. Registration verification was fixed in v0.11.57, and v0.11.58 adds automatic connection after registration (live reconnection test pending). [Read the full v0.11.58 changelog](RELEASE_NOTES_v0.11.58.md). The new mobile build is not ready; Userscript BETA 5 remains the available phone release.
+> **Desktop v0.11.58 BETA is available — Frontvex Phone, GPS & Automatic Speedometer.** [Read the full release notes](RELEASE_NOTES_v0.11.58.md). Registration verification was fixed in v0.11.57; v0.11.58 adds automatic reconnection after registration. The new mobile build is not ready; Userscript BETA 5 remains available.
 > Phone concept inspiration: [OBD Gaming](https://www.facebook.com/overbudgetgg). Frontvex online services are still in a limited server beta.
 
-**Current version: v0.11.26 — New HUD Styles, Material Library, Drink and Speed Sensation Update (Chromium) · Userscript BETA 5 for phones (iPhone & Android, based on v0.11.26)**
+**Current desktop version: v0.11.58 BETA (Chromium) · Mobile: Userscript BETA 5 (iPhone & Android, based on v0.11.26)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics.
 
@@ -11,7 +11,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest version: v0.11.26.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
+**Latest desktop version: v0.11.58 BETA.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
 
 - **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
@@ -24,7 +24,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer (desktop update)
 
-Cumulative update since v0.11.26, prepared for PC (download upload pending).
+Cumulative public desktop update since v0.11.26.
 
 - **Frontvex Phone:** customizable 2D/3D phone, home screen, 360° rotation, wallpaper, weather and app navigation.
 - **Automatic Speedometer:** model-based selection and manual per-car-ID assignments; existing per-model mileage retained.
@@ -34,6 +34,19 @@ Cumulative update since v0.11.26, prepared for PC (download upload pending).
 - **Usability:** compact help popups, improved local storage recovery and message history controls.
 
 Phone concept inspiration: [OBD Gaming](https://www.facebook.com/overbudgetgg).
+
+### Frontvex Phone — Screenshots
+
+<p align="center">
+  <img src="assets/frontvex-home-v0.11.55.webp" width="45%" alt="Frontvex phone home screen">
+  <img src="assets/frontvex-3d-rear-v0.11.55.webp" width="45%" alt="Frontvex 3D rear phone design">
+</p>
+<p align="center">
+  <img src="assets/frontvex-auto-hud-v0.11.55.webp" width="45%" alt="Automatic speedometer settings">
+  <img src="assets/frontvex-wallpaper-v0.11.55.webp" width="45%" alt="Frontvex wallpaper settings">
+</p>
+
+*Screenshots from the v0.11.55 development build; the phone features are included in v0.11.58.*
 
 Full details: [v0.11.58 Release Notes](RELEASE_NOTES_v0.11.58.md). The new mobile build is not ready. The HUD works without Frontvex registration; communication access remains restricted during server beta.
 
@@ -118,7 +131,7 @@ Full details: [v0.11.10 Release Notes](RELEASE_NOTES_v0.11.10.md).
 
 ## v0.11.7 — Cigarette, Helmet & Driving Immersion Update
 
-The latest update introduces customizable cockpit effects and improved tyre slip detection for a more immersive driving experience.
+This update introduced customizable cockpit effects and improved tyre slip detection for a more immersive driving experience.
 
 ### 🚬 Cigarette
 
