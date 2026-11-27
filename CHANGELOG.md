@@ -1,8 +1,16 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.58 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.59 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.11.60 BETA — Software Update (package upload pending)
+
+Dedicated Software Update app, automatic and manual GitHub version checks, update badge, once-per-release notification, official download and release information. [Feature overview](RELEASE_NOTES_v0.11.60.md).
+
+## v0.11.59 BETA — Desktop
+
+Public desktop build, including Frontvex phone, GPS markers and optional communication.
 
 ## v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer (PC)
 
