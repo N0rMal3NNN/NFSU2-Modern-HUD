@@ -1,8 +1,12 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.66 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.67 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.11.67 BETA — Software Update
+
+The public desktop update checker now supports version numbers with three or four numeric components, including development builds. Version checks, update notifications and the official download link remain available in the Frontvex phone. Older development builds with the previous checker may require one manual upgrade. [Installation & Update Guide](INSTALLATION.md#how-to-check-for-and-install-an-update).
 
 ## v0.11.66 BETA — Frontvex Racing & My Car
 
