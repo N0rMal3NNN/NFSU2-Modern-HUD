@@ -1,10 +1,10 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.26 (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.58 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
 
-## v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer (PC; package upload pending)
+## v0.11.58 BETA — Frontvex Phone, GPS & Automatic Speedometer (PC)
 
 Cumulative desktop update since v0.11.26: Frontvex phone with customizable 2D/3D design, wallpaper and apps; game weather and GPS speed markers; automatic model-based HUD selection and manual per-Car-ID assignments; controlled-beta contacts, messaging, notifications and embedded verification; compact help popups and save reliability improvements. v0.11.57 fixes the embedded Turnstile iframe on compatible Chromium browsers (live verification confirmed). v0.11.58 automatically refreshes the connection after successful registration or re-registration without disrupting routine renewal or overriding disabled communication settings (live reconnection test pending). Full details: [v0.11.58 release notes](RELEASE_NOTES_v0.11.58.md). Phone concept inspiration: [OBD Gaming](https://www.facebook.com/overbudgetgg). Mobile update is not ready; BETA 5 remains available.
 
