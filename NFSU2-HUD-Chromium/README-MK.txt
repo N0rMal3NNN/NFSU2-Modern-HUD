@@ -1,3 +1,52 @@
+v0.11.66 — Frontvex Racing & My Car: automatic PvP start requires both cars to be ready and within 5 m of one another (3D distance). Both players need v0.11.66. Solo is unchanged.
+
+v0.11.65.8 — Enable Start With Pause (Test Mode), OFF by default. Turn ON on both clients before starting a new PvP lobby. Background/paused staging can retain a stationary position behind START; actual telemetry is required for movement and finish. Pause time counts in race time. 120-second grace; no server changes.
+
+v0.11.65.7 Public Test — Share Track first; receiver must Accept & Save Track, then Challenge Friend is enabled for that friend/track. Race invitation has notification and badge; Accept confirms and loads both players into automatic staging. Existing tracks are preserved; share again once to establish confirmation. No server update.
+
+v0.11.65.7 Public Test — persistent PvP career statistics, Win Rate and Solo totals independent of the last 50 results. Existing retained results seed the counters once. Delete Race History resets both.
+
+v0.11.65.5 Public Test — Delete Race History with confirmation. Clears only local Solo/PvP results and derived win/loss/tie counts. Tracks, ODO and My Car stay intact.
+
+v0.11.65.4 Public Test — Automatic PvP countdown after both players continuously hold still behind START for 2 seconds. Manual Ready / Start removed; host schedules existing synchronized countdown. Burnout during countdown remains allowed until START gate crossing. Solo Test unchanged. Both players require v0.11.65.4.
+
+v0.11.65.3 Public Test — Gold first-place and Solo finish titles, silver second-place title; soft glow. Results HUD remains enlarged by 50% and visible for 10 seconds. No race logic or storage changes.
+
+v0.11.65.2 Public Test — Racing results HUD enlarged 50%; visible for 10 seconds (Solo and PvP). Race History layout unchanged.
+v0.11.65.1 Public Test — Countdown allows throttle and handbrake behind START; false start uses actual gate crossing. Solo and PvP.
+v0.11.65 Public Test — Solo Test, PvP challenge, Ready, synchronized countdown, live positions, race end statistics and local race history. Both players need this build. Direct P2P only; no server changes.
+v0.11.64.3 — Racing checkpoint gates
+- START, FINISH and active checkpoint share a 24 m transverse gate (12 m each side). Checkpoints require ordered forward crossing with height tolerance. White active checkpoint line and pin default to 50% opacity; old 100% setting migrates once, other opacity values retained. Existing height/range/color controls apply. Practice only; no server changes.
+
+v0.11.64.2 — Racing Practice gates, predictive navigation and checkpoint settings
+- Racing Settings: checkpoint opacity 0–100%, 3D height 0.5–20 m (default 3.2 m), 3D visibility range 0–5000 m (0 = unlimited). Settings are local; visibility does not change checkpoint validation.
+- Load Track (Practice): stop within 12 m behind START facing along the route. Countdown 5–1–GO; moving early restarts staging. Timing begins at GO; cross START in the route direction, pass checkpoints in order and cross FINISH.
+- START and FINISH are finite 24 m transverse gates, derived from route tangent; projected lines use estimated road height (no terrain mesh). Finish crossing checked per feed frame.
+- Navigation predicts upcoming turns from route geometry, with speed-dependent lookahead, directional labels and smooth rotation. Track name required before recording and saving. Existing tracks and preferences retained. Practice only, not synchronized multiplayer.
+
+v0.11.64.1 — Racing world pins
+- START and FINISH markers projected from actual saved 3D coordinates via the shared read-only View Feed. Practice / Show Racing HUD activates them; independent Show 3D START / FINISH Pins toggle, existing START/FINISH colors, distance labels. No GPS pin storage changes. Screen-space markers do not have terrain occlusion.
+
+v0.11.64 — Racing Phase 2 Public Test
+- My Tracks > Practice / Show Racing HUD: independent route overlay, navigation arrow, checkpoint progress, adjustable scale/opacity/X/Y and colors. No original minimap transform is available.
+- Share Track: choose saved track and online friend; direct P2P bounded chunks; received tracks in Invitations > Accept & Save or Decline. Both need Phase 2. No server changes; incoming tracks stored locally, transfer/receipt requires active connection.
+- PvP countdown, opponent live positions and race results remain upcoming.
+
+v0.11.63 — Frontvex Racing Phase 1 / Turbo setup
+- My Car: manual turbo setup before test, label in results HUD and phone; personal best split by turbo and nitro. Legacy results remain Unknown Turbo.
+- Racing: Free Roam START/FINISH, recorded 3D route, automatic checkpoints every 100m, local saved tracks, preview, delete with confirmation. No multiplayer yet.
+- ODO, driving statistics and 7s performance HUD unchanged.
+
+v0.11.62 — My Car / Driving Statistics
+- Одделни менија Performance Monitor и Driving Statistics.
+- Results HUD 7 секунди; автоматска статистика по Car ID, локално зачувување.
+- Trip и Reset Statistics независни од ODO и Performance.
+- Jump Monitor HUD (4 секунди по приземјување), опција за исклучување.
+- Driving Time и Average Speed се пресметуваат само во движење.
+
+v0.11.61 — My Car / Performance Monitor
+Phone > My Car > Start: stop the car, press Start, drive forward, stop for 1 second. The results HUD remains visible for 5 seconds. Latest Result and Personal Best (with/without nitro) are saved locally per owned vehicle ID, or stock model. ODO is displayed from the existing model odometer. No server changes or registration.
+
 v0.11.55 — Compact inline help and simplified admin confirmation
 - Help buttons sit next to labels; related descriptions share a single popup. Live status and safety warnings remain visible.
 - Public edition: no administrator interface.
@@ -120,3 +169,5 @@ v0.11.58: Successful registration, verified re-registration, and renewal now not
  v0.11.59: Pin marker management: independent city numbering, local speed records and received-pin choice (keep, replace, or keep both).
 
  v0.11.60: Software Update app for the public desktop channel. GitHub version checks on launch and every 30 minutes, manual check, once-per-version notification, persistent update badge and manual download. No account required.
+
+0.11.64.1: Optional world-positioned START, FINISH and next checkpoint markers using View Feed projection. During Practice only the current checkpoint is visible in the Racing overlay and 3D layer, and the next appears after a valid pass. Saved route previews still show all checkpoints. No game or server changes.

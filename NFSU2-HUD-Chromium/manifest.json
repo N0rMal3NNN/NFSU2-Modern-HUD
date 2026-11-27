@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NFSU2.xyz Modern HUD",
-  "version": "0.11.60",
+  "version": "0.11.66",
   "description": "Five HUD styles and redesigned standalone 2026 status panel with angled LEDs, TKL shortcuts, Limp Mode.",
   "permissions": [
     "storage"
@@ -35,6 +35,10 @@
         "frontvex-communication.js",
         "frontvex-contacts.js",
         "frontvex-updates.js",
+        "frontvex-driving-stats.js",
+        "frontvex-mycar.js",
+        "frontvex-racing-phase2.js",
+        "frontvex-racing.js",
         "content.js"
       ],
       "run_at": "document_idle"

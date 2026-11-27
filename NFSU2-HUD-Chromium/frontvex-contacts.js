@@ -39,7 +39,9 @@
     function blocked(d,id,n){return d.blocked.some(x=>x.id===id||x.number===n);}
     function ack(id,packet){net?.transmit(id,{type:'ack',id:packet});}
     async function receive(id,n,m){
-      if(!state||working||!netId(id)||!validNumber(n)||!m||!packetId(m.id)||blocked(state,id,n))return;
+      if(!state||!netId(id)||!validNumber(n)||!m||!packetId(m.id)||blocked(state,id,n))return;
+      if(typeof m.type==='string'&&m.type.startsWith('race-')){if(state.communicationEnabled&&state.friends.some(x=>x.id===id))options.onRacePacket?.(id,n,m);return;}
+      if(working)return;
       if(m.type==='ack'){
         if(!state.outbox.some(x=>x.id===m.id&&x.peer===id)&&!state.outgoing.some(x=>x.id===m.id&&x.peer===id&&x.status!=='delivered')&&!state.responses.some(x=>x.id===m.id&&x.peer===id)&&!state.reads.some(x=>x.id===m.id&&x.peer===id))return;
         await commit(d=>{const out=d.outbox.find(x=>x.id===m.id&&x.peer===id);if(out){d.outbox=d.outbox.filter(x=>x!==out);d.messages.push({...out,direction:'out',status:'delivered'});prune(d);}const r=d.outgoing.find(x=>x.id===m.id&&x.peer===id);if(r)r.status='delivered';d.responses=d.responses.filter(x=>!(x.id===m.id&&x.peer===id));d.reads=d.reads.filter(x=>!(x.id===m.id&&x.peer===id));},'Delivery acknowledged.',true);return;
@@ -294,7 +296,7 @@
     // Check only while the game tab exists, and only after explicit registry activation.
     void open();window.addEventListener('pageshow',async e=>{if(e.persisted&&state&&!working){working=true;try{await resumeVerification();}finally{working=false;render();}}});setInterval(maybeRenew,60000);setInterval(schedulePump,2500);doc.addEventListener('visibilitychange',schedulePump);window.addEventListener('focus',schedulePump);
     storage.onChanged?.((changes,area)=>{if(area!=='local'||!changes[KEY]||working||!state)return;const d=changes[KEY].newValue;if(d?.version!==1||!d.profile?.id)return;const changed=JSON.stringify(state)!==JSON.stringify(d);if(!changed)return;state=normalize(d,state);if(tab==='messages'||tab==='requests'||tab==='friends')render();});
-    return Object.freeze({open});
+    return Object.freeze({open,racing:Object.freeze({friends:()=>state?.communicationEnabled?(state.friends||[]).filter(f=>netId(f.id)&&!blocked(state,f.id,f.number)).map(f=>({id:f.id,number:f.number,username:f.username,online:!!net?.online(f.id)})):[],send:(id,m)=>{const f=state?.friends.find(x=>x.id===id);if(!state?.communicationEnabled||!f||blocked(state,id,f.number)||!net?.ready())return false;net.ensure(id,f.number);return net.transmit(id,m);}})});
   }
   Object.defineProperty(globalThis,'__frontvexContacts',{value:Object.freeze({mount}),configurable:false,writable:false});
 })();
