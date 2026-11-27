@@ -1,4 +1,4 @@
-/* NFSU2 Modern HUD v0.11.58 — Embedded Frontvex verification; v0.11.52 — Compact help popups and same-tab verification; v0.11.51 — Storage context recovery and HUD selection at top; v0.11.50 — Automatic speedometer by car model and manual HUD by individual Car ID; v0.11.49 — Notification sounds and badges; Contacts app (local profile, friends, requests, messages and privacy settings); v0.11.36 — rounded WebGL keys, shell-integrated rear logo and bottom USB-C; v0.11.35 — rear logo in both themes, transparent Frontvex screen logo, USB-C port, resizable weather card and rounder side buttons; v0.11.34 — transparent Frontvex screen logo and rear branding in both themes; v0.11.33 — manual 360° phone rotation, rear triple camera, Frontvex theme and city-labelled pins; v0.11.32 — optional 3D phone (own WebGL body and case, no hands; the screen stays the live menu; light from the game's sun); v0.11.31 — phone position option (right corner beside the speedometer, GTA 5 style) and optional sunlight on the phone (from the game's View Feed); v0.11.30 — Pin Markers (a key plants speed pins in the world, drawn from the View Feed) and an adjustable icon size on the phone; v0.11.29 — Frontvex phone menu: the settings menu is a phone held in the player's hands (live weather from the game's View Feed, ticking clock, calendar, swipeable home screen, Clock / Calendar / Weather apps); v0.11.26 — the sudden-brake estimate is gone from the tyre lamp (it now only shows real wheel slip; BRAKE is a plain text label); v0.11.25 — Speed Sensation streaks/fog now follow the live Car Feed (independent of the main HUD toggle) + live status line; v0.11.24 — Honda Integra Type R (DC2) and Subaru Impreza RS analogue clusters on a smooth hood frame; Impreza = twin dials with a centre display (gear, nitro, odometer, warning lights) and the TURBO gauge under it; Colors & Materials and a game / real speed scale for both; v0.11.22 — windshield dust also on GRASS (Bayview reports grass as GRASS, the Most Wanted map as DIRT); v0.11.21 — the windshield dust is clearly visible now (tan film + smudges + grains) and the menu shows which surface the game reports under the wheels; v0.11.20 — windshield dust lasts 20 s after the dirt, only the last 5 s fade; v0.11.19 — windshield cracks follow the side of the impact, dust only after driving on DIRT, Colors & Materials for the Honda S2000 style, the Photo/Drone/Skate/Replay auto-hide is removed; v0.11.18 — handbrake lamp follows the game's own handbrake (Car Feed), optional auto-hide in Photo / Drone / Skate / Replay, Honda Integra Type R and Subaru Impreza 2.5 RS added to the car list; v0.11.17 — Drink: the ladder keeps its place when you sober up (a late press while the look fades goes on), Honda S2000 added to the car list; v0.11.16 — Honda S2000 (AP1) digital-cluster HUD style (LED bar tachometer, 7-segment speed, odometer + TRIP A); v0.11.15 — Drink ladder fix: drink 3 is a sip with the drunk look + the police warning, the messages follow the drunk look; v0.11.14 — Drink (a bottle of beer or whisky in a gloved hand, police warning, drunk look and optional controls effect; default OFF); v0.11.10 — per-style whole-HUD X/Y and live-only standalone indicators; v0.11.9 — native menu keyboard input protection; v0.11.8 — independent windshield collision detection; v0.11.7 — multi-wheel Car Feed slip confirmation; v0.11.6 — further stricter tyre slip detection; v0.11.5 — stricter tyre slip detection; v0.11.4 — Cigarette (3D, forward-pointing, with ember glow + animated smoke; position / size / smoke / puff / speed lean / behind or in front of the HUD); v0.11.3 — Helmet View: second 3D model 'Open-Face Sport' + model selector, 'Opening size 100%' is drawn 5 % larger; v0.11.2 — Helmet View (two 3D-shaded helmets: GT Full-Face / Open-Face Sport; behind the HUD or in front of it (covers part of it); optional shake on impact); v0.11.1 — Windshield glass: custom sun-strip colour, varied cracks (line / star / web), new defaults (OFF); v0.11.0 — Windshield glass (wiper marks, sun strip, impact cracks, Limp shatter); v0.10.8 — TYRES lamp needs 5 % more spin/slide; Chromium-only (Chrome, Edge, Brave, Opera, Vivaldi); v0.10.7 — RX-7 four icons 2+2 around the RPM dial; numerals never sit on a tick; status lamps instead of TYRES/ENGINE/SUSP/HAND captions (GT-R, Corolla); Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
+/* NFSU2 Modern HUD v0.11.59 — Pin marker management; v0.11.58 — Embedded Frontvex verification; v0.11.52 — Compact help popups and same-tab verification; v0.11.51 — Storage context recovery and HUD selection at top; v0.11.50 — Automatic speedometer by car model and manual HUD by individual Car ID; v0.11.49 — Notification sounds and badges; Contacts app (local profile, friends, requests, messages and privacy settings); v0.11.36 — rounded WebGL keys, shell-integrated rear logo and bottom USB-C; v0.11.35 — rear logo in both themes, transparent Frontvex screen logo, USB-C port, resizable weather card and rounder side buttons; v0.11.34 — transparent Frontvex screen logo and rear branding in both themes; v0.11.33 — manual 360° phone rotation, rear triple camera, Frontvex theme and city-labelled pins; v0.11.32 — optional 3D phone (own WebGL body and case, no hands; the screen stays the live menu; light from the game's sun); v0.11.31 — phone position option (right corner beside the speedometer, GTA 5 style) and optional sunlight on the phone (from the game's View Feed); v0.11.30 — Pin Markers (a key plants speed pins in the world, drawn from the View Feed) and an adjustable icon size on the phone; v0.11.29 — Frontvex phone menu: the settings menu is a phone held in the player's hands (live weather from the game's View Feed, ticking clock, calendar, swipeable home screen, Clock / Calendar / Weather apps); v0.11.26 — the sudden-brake estimate is gone from the tyre lamp (it now only shows real wheel slip; BRAKE is a plain text label); v0.11.25 — Speed Sensation streaks/fog now follow the live Car Feed (independent of the main HUD toggle) + live status line; v0.11.24 — Honda Integra Type R (DC2) and Subaru Impreza RS analogue clusters on a smooth hood frame; Impreza = twin dials with a centre display (gear, nitro, odometer, warning lights) and the TURBO gauge under it; Colors & Materials and a game / real speed scale for both; v0.11.22 — windshield dust also on GRASS (Bayview reports grass as GRASS, the Most Wanted map as DIRT); v0.11.21 — the windshield dust is clearly visible now (tan film + smudges + grains) and the menu shows which surface the game reports under the wheels; v0.11.20 — windshield dust lasts 20 s after the dirt, only the last 5 s fade; v0.11.19 — windshield cracks follow the side of the impact, dust only after driving on DIRT, Colors & Materials for the Honda S2000 style, the Photo/Drone/Skate/Replay auto-hide is removed; v0.11.18 — handbrake lamp follows the game's own handbrake (Car Feed), optional auto-hide in Photo / Drone / Skate / Replay, Honda Integra Type R and Subaru Impreza 2.5 RS added to the car list; v0.11.17 — Drink: the ladder keeps its place when you sober up (a late press while the look fades goes on), Honda S2000 added to the car list; v0.11.16 — Honda S2000 (AP1) digital-cluster HUD style (LED bar tachometer, 7-segment speed, odometer + TRIP A); v0.11.15 — Drink ladder fix: drink 3 is a sip with the drunk look + the police warning, the messages follow the drunk look; v0.11.14 — Drink (a bottle of beer or whisky in a gloved hand, police warning, drunk look and optional controls effect; default OFF); v0.11.10 — per-style whole-HUD X/Y and live-only standalone indicators; v0.11.9 — native menu keyboard input protection; v0.11.8 — independent windshield collision detection; v0.11.7 — multi-wheel Car Feed slip confirmation; v0.11.6 — further stricter tyre slip detection; v0.11.5 — stricter tyre slip detection; v0.11.4 — Cigarette (3D, forward-pointing, with ember glow + animated smoke; position / size / smoke / puff / speed lean / behind or in front of the HUD); v0.11.3 — Helmet View: second 3D model 'Open-Face Sport' + model selector, 'Opening size 100%' is drawn 5 % larger; v0.11.2 — Helmet View (two 3D-shaded helmets: GT Full-Face / Open-Face Sport; behind the HUD or in front of it (covers part of it); optional shake on impact); v0.11.1 — Windshield glass: custom sun-strip colour, varied cracks (line / star / web), new defaults (OFF); v0.11.0 — Windshield glass (wiper marks, sun strip, impact cracks, Limp shatter); v0.10.8 — TYRES lamp needs 5 % more spin/slide; Chromium-only (Chrome, Edge, Brave, Opera, Vivaldi); v0.10.7 — RX-7 four icons 2+2 around the RPM dial; numerals never sit on a tick; status lamps instead of TYRES/ENGINE/SUSP/HAND captions (GT-R, Corolla); Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
  * Numpad + opens/closes an in-game settings panel.
  * Numpad - toggles the ENTIRE custom Modern HUD (not the game's own HUD).
  * No modification to NFSU2's game code, rendering buffers, or physics.
@@ -3975,7 +3975,7 @@
       .mk-btn2{margin:4px 0 9px;}
     </style>
     <section class="panel" id="settingsPanel" aria-label="Modern HUD in-game settings" role="dialog" aria-modal="false">
-      <div class="top" id="dragHandle" title="Drag menu with mouse"><h2>Modern HUD <span style="color:#72d4dd">v0.11.58</span></h2><button class="x" id="close" type="button" aria-label="Close settings">×</button></div>
+      <div class="top" id="dragHandle" title="Drag menu with mouse"><h2>Modern HUD <span style="color:#72d4dd">v0.11.59</span></h2><button class="x" id="close" type="button" aria-label="Close settings">×</button></div>
       <p id="menuIntro">Drag the header to move the menu. Drag the bottom-left corner to resize its width and height. Changes apply live and are saved.</p>
       <div class="menu-nav">
         <label>Find a setting<input type="search" id="menuSearch" autocomplete="off" placeholder="e.g. opacity, ODO, shift..."></label>
@@ -10456,10 +10456,7 @@ void main(){
     compactHelp,
     onVerificationReturn:ok=>{let attempts=0;const reopen=()=>{if(!settingsReady&&attempts++<40){setTimeout(reopen,250);return;}showSaveToast(ok?"Frontvex verification complete":"Frontvex verification not completed",!ok);if(settings.menuStyle==="phone"&&phoneFits()){toggleMenu(true);if(phoneActive)fvGo("contacts");}};setTimeout(reopen,0);},
     listPins:()=>pm.loaded?pm.list.map(q=>({city:pmCity(q),cityN:q.cityN||q.n,x:q.x,y:q.y,z:q.z})):[],
-    importPin:q=>{if(!pm.loaded||pm.list.length>=PM_MAX||!["Bayview","Rockport","Palmont"].includes(q.city)||![q.x,q.y,q.z].every(v=>typeof v==="number"&&Number.isFinite(v)&&Math.abs(v)<=1000000))return false;
-      const existing=pm.list.find(p=>pmCity(p)===q.city&&Math.hypot(p.x-q.x,p.y-q.y,p.z-q.z)<1);
-      if(existing){existing.auto=true;pmAfterChange();return true;}
-      const pin={n:++pm.seq,city:q.city,cityN:++pm.citySeq[q.city],x:q.x,y:q.y,z:q.z,s:null,k:0,auto:true,t:Date.now(),in:false,done:true,dmin:Infinity,smin:0,d:-1,el:null,row:null};pm.list.push(pin);pmAddEl(pin);pmAfterChange();return true;}
+    importPin:(q,choice,expected)=>pmImportPin(q,choice,expected)
   });
   // Which app a settings section belongs to (by its title); "Settings" shows every section.
   function fvAppOf(el){
@@ -11121,7 +11118,7 @@ void main(){
   // Record rule: keep the first / update on every pass / keep the highest (never goes down). Pins stay saved on this computer.
   // Nothing is drawn from page text: all pin elements are built with createElement + textContent, styled through the CSSOM only.
   const PM_KEY="nfsu2HudMarkersV1",PM_MAX=40,PM_HEAD_M=3.2,PM_BASE_DZ=.45,PM_NEAR_DELETE_M=50;
-  const pm={list:[],seq:0,citySeq:{Bayview:0,Rockport:0,Palmont:0},car:{x:0,y:0,z:0,spd:0,at:-1e9},cam:null,rect:null,rectAt:0,loaded:false,noSave:false,saveT:0,
+  const pm={list:[],seq:0,citySeq:{Bayview:0,Rockport:0,Palmont:0},car:{x:0,y:0,z:0,spd:0,at:-1e9},prev:null,cam:null,rect:null,rectAt:0,loaded:false,noSave:false,saveT:0,
             pinsOn:false,toastOn:false,toastT:0,hostOn:false,calib:"",calibAt:0,shown:0,nearD:-1,nearN:0,delAllUntil:0,delAllT:0};
   const pmHost=document.createElement("div");
   pmHost.id="nfsu2-pin-markers-root";
@@ -11232,12 +11229,13 @@ void main(){
           if(!x||!pmFin(x.x)||!pmFin(x.y)||!pmFin(x.z)||!pmFin(x.n))continue;
           const city=["Bayview","Rockport","Palmont"].includes(x.city)?x.city:"Bayview",cityN=pmFin(x.cityN)&&x.cityN>0?Math.floor(x.cityN):Math.floor(x.n);
           pm.citySeq[city]=Math.max(pm.citySeq[city],cityN);
-          list.push({n:Math.floor(x.n),city,cityN,x:x.x,y:x.y,z:x.z,s:pmFin(x.s)&&x.s>=0?x.s:null,k:pmFin(x.k)?Math.max(0,Math.floor(x.k)):0,auto:x.auto===true||(x.auto===undefined&&x.s==null),t:pmFin(x.t)?x.t:0,in:false,done:true,dmin:Infinity,smin:0,d:-1,el:null,row:null});
+          list.push({n:Math.floor(x.n),city,cityN,x:x.x,y:x.y,z:x.z,s:pmFin(x.s)&&x.s>=0?x.s:null,k:pmFin(x.k)?Math.max(0,Math.floor(x.k)):0,auto:x.auto===true||(x.auto===undefined&&x.s==null),t:pmFin(x.t)?x.t:0,in:false,done:false,dmin:Infinity,smin:0,d:-1,el:null,row:null});
           if(list.length>=PM_MAX)break;
         }
         if(d.citySeq)for(const city of Object.keys(pm.citySeq))if(pmFin(d.citySeq[city]))pm.citySeq[city]=Math.max(pm.citySeq[city],Math.floor(d.citySeq[city]));
         pm.list=list.concat(pm.list);
-        pm.seq=Math.max(pm.seq,pmFin(d.seq)?Math.floor(d.seq):0,...pm.list.map(q=>q.n));
+        pmResetEmptyCounters();
+        pm.seq=pm.list.length?Math.max(pm.seq,pmFin(d.seq)?Math.floor(d.seq):0,...pm.list.map(q=>q.n)):0;
         for(const q of pm.list)if(!q.el)pmAddEl(q);
       }
       pm.loaded=true;
@@ -11257,6 +11255,41 @@ void main(){
   // ---- planting, recording, deleting ----
   function pmDist(q,c){return Math.hypot(q.x-c.x,q.y-c.y,q.z-c.z);}
   function pmCarFresh(now){return now-pm.car.at<1500;}
+  // Display counters are independent of the internal marker ID. Reset empty cities only.
+  function pmResetEmptyCounters(){
+    for(const city of Object.keys(pm.citySeq))if(!pm.list.some(q=>pmCity(q)===city))pm.citySeq[city]=0;
+  }
+  function pmNextCityNumber(city){
+    const used=new Set(pm.list.filter(q=>pmCity(q)===city).map(q=>q.cityN||q.n));
+    let n=pm.citySeq[city]+1;
+    if(n>1000000)n=1;
+    while(used.has(n))n=n===1000000?1:n+1;
+    pm.citySeq[city]=Math.max(pm.citySeq[city],n);return n;
+  }
+  function pmImportPin(q,choice,expected){
+    if(!pm.loaded||!q||!Object.hasOwn(pm.citySeq,q.city)||!Number.isInteger(q.cityN)||q.cityN<1||q.cityN>1000000||![q.x,q.y,q.z].every(v=>pmFin(v)&&Math.abs(v)<=1000000))return false;
+    const same=pm.list.find(p=>pmCity(p)===q.city&&pmDist(p,q)<1);
+    if(same){if(!same.auto){same.auto=true;pmAfterChange();}return true;}
+    const conflict=pm.list.find(p=>pmCity(p)===q.city&&(p.cityN||p.n)===q.cityN);
+    if(conflict&&(!choice||expected!==conflict.n))return {conflict:true,target:conflict.n,label:pmLabel(conflict),speed:conflict.s==null?'Not recorded':pmSpeed(conflict.s),distance:pmDistText(pmDist(conflict,q)),canKeepBoth:pm.list.length<PM_MAX};
+    if(conflict&&choice!=='replace'&&choice!=='both')return false;
+    if(pm.list.length>=PM_MAX&&!(conflict&&choice==='replace'))return false;
+    const cityN=conflict&&choice==='both'?pmNextCityNumber(q.city):q.cityN;
+    const pin={n:++pm.seq,city:q.city,cityN,x:q.x,y:q.y,z:q.z,s:null,k:0,auto:true,t:Date.now(),in:false,done:false,dmin:Infinity,smin:0,d:-1,el:null,row:null};
+    if(conflict&&choice==='replace'){const i=pm.list.indexOf(conflict);pmRemoveEl(conflict);pm.list.splice(i,1,pin);}
+    else pm.list.push(pin);
+    pm.citySeq[q.city]=Math.max(pm.citySeq[q.city],cityN);
+    pmAddEl(pin);pmAfterChange();return true;
+  }
+  // Closest point between consecutive, physically plausible live samples. Prevent missed passes at high speed.
+  function pmSegment(q,a,b){
+    const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,len2=dx*dx+dy*dy+dz*dz;
+    const t=len2?Math.max(0,Math.min(1,((q.x-a.x)*dx+(q.y-a.y)*dy+(q.z-a.z)*dz)/len2)):1;
+    return {d:Math.hypot(q.x-a.x-t*dx,q.y-a.y-t*dy,q.z-a.z-t*dz),spd:a.spd+(b.spd-a.spd)*t};
+  }
+  function pmContinuous(a,b){const dt=(b.at-a.at)/1000;return dt>0&&dt<=.75&&pmDist(a,b)<=Math.max(a.spd,b.spd)*dt+15;}
+  function pmClearPass(){pm.prev=null;pm.car.at=-1e9;for(const q of pm.list){q.in=false;q.done=false;q.dmin=Infinity;}}
+
   function pmAfterChange(){
     pmSyncFeed();pmSave();pmListRender();
     if(!pm.list.length)pmPinsShow(false);
@@ -11265,7 +11298,7 @@ void main(){
   }
   function pmAdd(c,s){
     if(pm.list.length>=PM_MAX){pmSay(`Pin limit reached (${PM_MAX}). Delete a pin first.`,true);return null;}
-    const city=settings.markersCity;const q={n:++pm.seq,city,cityN:++pm.citySeq[city],x:c.x,y:c.y,z:c.z,s,k:s==null?0:1,auto:false,t:Date.now(),in:false,done:true,dmin:Infinity,smin:0,d:-1,el:null,row:null};
+    const city=settings.markersCity;const q={n:++pm.seq,city,cityN:pmNextCityNumber(city),x:c.x,y:c.y,z:c.z,s,k:s==null?0:1,auto:false,t:Date.now(),in:false,done:true,dmin:Infinity,smin:0,d:-1,el:null,row:null};
     pm.list.push(q);pmAddEl(q);
     return q;
   }
@@ -11297,8 +11330,11 @@ void main(){
     let near=null,nd=Infinity;
     for(const q of pmLocal()){const d=pmDist(q,c);if(d<nd){nd=d;near=q;}}
     if(settings.markersMode==="press"){
+      if(nd>settings.markersRadius&&pm.prev&&pmContinuous(pm.prev,c)&&now-c.at<500){
+        for(const q of pmLocal()){const hit=pmSegment(q,pm.prev,c);if(hit.d<nd){nd=hit.d;near=q;}}
+      }
       if(near&&nd<=settings.markersRadius){          // pressing again at an existing pin updates it by the record rule
-        const r=pmRecord(near,c.spd);pmReportRecord(near,c.spd,r,"passed");pmAfterChange();return true;
+        const r=pmRecord(near,c.spd);near.in=false;near.done=true;near.dmin=Infinity;pmReportRecord(near,c.spd,r,"passed");pmAfterChange();return true;
       }
       const q=pmAdd(c,c.spd);if(!q)return false;
       pmReportRecord(q,c.spd,{set:true,old:null},"passed");
@@ -11312,7 +11348,7 @@ void main(){
   }
   function pmRemove(q){
     const i=pm.list.indexOf(q);if(i<0)return;
-    pm.list.splice(i,1);pmRemoveEl(q);
+    pm.list.splice(i,1);pmRemoveEl(q);pmResetEmptyCounters();
   }
   function pmDeleteLast(){
     const local=pmLocal();if(!local.length){pmSay("There are no pins in this city to delete.");return false;}
@@ -11334,9 +11370,9 @@ void main(){
   }
   // Deleting everything needs a second press within 3 seconds (button or key).
   function pmDeleteAll(){
-    if(!pm.list.length){pmSay("There are no pins to delete.");return false;}
+    if(!pm.list.length){pmResetEmptyCounters();pmSave();pmSay("There are no pins to delete.");return false;}
     const now=performance.now();
-    if(now>pm.delAllUntil){
+    if(!pm.delAllUntil||now>pm.delAllUntil){
       pm.delAllUntil=now+3000;
       clearTimeout(pm.delAllT);pm.delAllT=setTimeout(()=>{pm.delAllUntil=0;pmSyncMenu();},3050);
       pmToast(`Press again within 3 s to delete all ${pm.list.length} pins`,true);saveStatus(`Press again within 3 seconds to delete all ${pm.list.length} pins.`,true);
@@ -11345,7 +11381,7 @@ void main(){
     pm.delAllUntil=0;clearTimeout(pm.delAllT);
     const n=pm.list.length;
     for(const q of pm.list)pmRemoveEl(q);
-    pm.list.length=0;pmAfterChange();
+    pm.list.length=0;pmResetEmptyCounters();pmAfterChange();
     pmSay(`All ${n} pins deleted.`);return true;
   }
   function pmDeleteKey(){
@@ -11358,22 +11394,24 @@ void main(){
   function pmCar(m,now){
     if(!pmReady||!settings.markersEnabled)return;
     const p=m.pos;
-    if(!pmOk(p,3))return;
-    const c=pm.car;c.x=p[0];c.y=p[1];c.z=p[2];c.spd=Math.abs(Number(m.speed))||0;c.at=now;
+    if(!pmOk(p,3)||!pmFin(m.speed)){pmClearPass();return;}
+    const c=pm.car,b={x:p[0],y:p[1],z:p[2],spd:Math.abs(m.speed),at:now};
+    const prev=pmContinuous(c,b)?{...c}:null;
+    if(!prev){for(const q of pm.list){q.in=false;q.dmin=Infinity;if(pmDist(q,b)>settings.markersRadius)q.done=false;}}
+    pm.prev=prev;Object.assign(c,b);
     if(!pm.list.length)return;
     const R=settings.markersRadius;
     for(const q of pmLocal()){
       if(settings.markersMode!=="wait"&&!q.auto)continue;
-      const d=Math.hypot(q.x-c.x,q.y-c.y,q.z-c.z);
-      if(d<=R){
-        if(q.done)continue;                         // just planted / just passed: leave the circle first
-        if(!q.in){q.in=true;q.dmin=d;q.smin=c.spd;}
-        else if(d<q.dmin){q.dmin=d;q.smin=c.spd;}   // still getting closer: keep the speed at the closest point
-        else if(d>q.dmin+1.5)pmPassed(q);           // moving away from the closest point: the pass is over
-      }else{
-        if(q.in)pmPassed(q);
-        q.done=false;
-      }
+      const d=pmDist(q,c),oldD=prev?pmDist(q,prev):Infinity;
+      if(q.done&&prev&&oldD>R)q.done=false;
+      if(q.done){if(d>R)q.done=false;continue;}
+      const hit=prev?pmSegment(q,prev,c):{d,spd:c.spd};
+      if(hit.d<=R){
+        if(!q.in||hit.d<q.dmin){q.in=true;q.dmin=hit.d;q.smin=hit.spd;}
+        if(d>R||d>q.dmin+1.5)pmPassed(q);
+      }else if(q.in)pmPassed(q);
+      if(d>R)q.done=false;
     }
   }
   function pmPassed(q){
@@ -11564,13 +11602,13 @@ void main(){
     if(!pmReady)return;
     if(key==="markersCity"){
       for(const q of pm.list){q.in=false;q.done=true;q.dmin=Infinity;if(q.el){q.el.shown=0;q.el.pin.style.display="none";q.el.edge.style.display="none";}}
-      pm.car.at=-1e9;pm.nearD=-1;pmListTick();
+      pm.car.at=-1e9;pm.prev=null;pm.nearD=-1;pmListTick();
       if(phoneActive&&menuOpen)fvWxRender();
     }else if(key==="markersEnabled"){
-      for(const q of pm.list){q.in=false;q.done=true;q.dmin=Infinity;}
+      pmClearPass();
       pmSyncFeed();
-    }else if(key==="markersMode"){
-      for(const q of pm.list){q.in=false;q.done=true;q.dmin=Infinity;}
+    }else if(key==="markersMode"||key==="markersRadius"){
+      for(const q of pm.list){q.in=false;q.done=pmCarFresh(performance.now())&&pmDist(q,pm.car)<=settings.markersRadius;q.dmin=Infinity;}
     }else if(key==="markersColor")pmApplyStyle();
     else if(key==="speedUnit"){pmTextAll();pmListTick();}
     else if(key==="markersHideM"||key==="markersScale"||key==="markersEdgeArrows"){
@@ -12040,6 +12078,7 @@ void main(){
     if (!m || typeof m !== "object") return;
     if (m.nfsu2 === "feed-ready") {feedReady = true; return;}
     if (m.nfsu2 !== "car" || m.car !== true || m.state?.driving === false) {
+      if(m.nfsu2==="car"&&pmReady&&pm.car.at>=0)pmClearPass();
       if (m.nfsu2 === "car" && m.car !== true){ssNoCarAt = performance.now();handleCarIdentity(null);}
       if (m.nfsu2 === "car" && m.state?.driving === false) {
         latest = m;hbRecompute();
@@ -12068,6 +12107,7 @@ void main(){
     syncStandaloneVisibility(lastSpeedFxFeedAt);
     hbRecompute();
     const now=performance.now();
+    pmCar(m,now);
     sampleOdometer(m,now);
     observeCollision(m,now);
     processSuspensionEvents(m,now);
@@ -12078,7 +12118,6 @@ void main(){
     wshSurfaceReadout(m,now);
     processHelmetShake(m,now);
     processDrink(m,now);
-    pmCar(m,now);
     pedalsUpdate(m,now);
     hbRecompute();
     updateVignette();

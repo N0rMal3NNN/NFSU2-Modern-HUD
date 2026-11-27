@@ -116,3 +116,5 @@ v0.11.57 (test): Frontvex registration iframe opts into credentialless mode wher
 
 
 v0.11.58: Successful registration, verified re-registration, and renewal now notify the communication module immediately. Existing online-communication opt-in is preserved. Manual recovery resets signaling retry delay; an ordinary renewal does not disconnect a healthy socket or take over another game tab.
+
+ v0.11.59: Pin marker management: independent city numbering, local speed records and received-pin choice (keep, replace, or keep both).
