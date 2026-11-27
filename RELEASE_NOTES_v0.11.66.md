@@ -8,7 +8,7 @@ A cumulative desktop update since v0.11.60. Create and share your own Free Roam 
 - My Tracks: preview, save, load, delete, and share routes with registered online friends. Accept and save a shared track before challenging its owner.
 - Solo Test: practice your own route with automatic countdown and finish statistics.
 - PvP 1v1: race invitations, notifications, automatic route loading, live opponent marker and position, synchronized countdown, and direct WebRTC communication.
-- Both drivers must be staged behind START, stationary for two seconds, and within 5 m of each other for the automatic PvP countdown. Both need this desktop version.
+- Both drivers must be staged behind START, stationary for two seconds, and within 5 m of each other (side by side, one behind the other, or diagonally) for the automatic PvP countdown. Both need this desktop version.
 - Green START, white checkpoint and red FINISH lines (24 m wide). Optional 3D pins, adjustable checkpoint opacity, height and visibility range.
 - Configurable Racing overlay above the original minimap, predictive turn arrow, next-turn distance, progress, race timer, colors, size, opacity and position.
 - Burnouts during the countdown are permitted; crossing START early is a false start.
