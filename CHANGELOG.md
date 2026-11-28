@@ -4,6 +4,10 @@ All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
 
+## v0.11.69 BETA — Shared Performance Tests & Privacy (package upload pending)
+
+Share saved performance tests directly with online Frontvex friends, including all nine upgrade categories, Unique flags, measured results, test conditions and speed graphs. Recipients can accept or decline, store up to 50 shared tests separately, and compare a received result against any of their saved tests, including different car models. Positive/negative differences highlight measured gains or losses; results are not server-verified. Added friend-name hover with fixed comparison columns, incoming test notifications, and a masked-by-default public FVX ID with temporary reveal. [Performance Lab and sharing guide](RELEASE_NOTES_v0.11.68.md#shared-performance-tests--friend-comparison-v01169).
+
 ## v0.11.68 BETA — My Car Performance Lab
 
 Named per-car setups with all nine upgrade categories and Unique flags, extended performance telemetry, dynamic maximum-speed intervals, manual/automatic finish, side-by-side comparison of any two saved tests to evaluate upgrade and setup improvements, speed graphs, test history and customizable performance HUD with 10-second results. [Feature overview and quick start](RELEASE_NOTES_v0.11.68.md).
