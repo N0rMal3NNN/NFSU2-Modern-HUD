@@ -4,13 +4,11 @@
 
 **Phones and tablets:** Userscript BETA 5 (based on v0.11.26) — iPhone: Safari + Userscripts; Android: Microsoft Edge + Tampermonkey — see [Phones and tablets](#phones-and-tablets-userscript-beta-5) below.
 
-> **Upcoming PC v0.11.68 BETA — My Car Performance Lab.** [Feature overview](RELEASE_NOTES_v0.11.68.md). Package upload pending.
-
-> **PC v0.11.67 BETA — Software Update is available.** [What's new](CHANGELOG.md#v01167-beta--software-update). Mobile BETA 5 remains available.
+> **PC v0.11.68 BETA — My Car Performance Lab is available.** [Release notes](RELEASE_NOTES_v0.11.68.md). Mobile BETA 5 remains available.
 
 ## Download Latest
 
-**Current desktop version: v0.11.67 BETA**
+**Current desktop version: v0.11.68 BETA**
 
 **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)**
 
@@ -20,7 +18,8 @@ This permanent URL always points to the most recent public Chromium-only build. 
 
 | Version | Download | Release information |
 |---|---|---|
-| **v0.11.67 BETA — Latest** | [Download v0.11.67](downloads/NFSU2_Modern_HUD_v0_11_67_Chromium.zip) | [Software Update](CHANGELOG.md#v01167-beta--software-update) |
+| **v0.11.68 BETA — Latest** | [Download v0.11.68](downloads/NFSU2_Modern_HUD_v0_11_68_Chromium.zip) | [Performance Lab](RELEASE_NOTES_v0.11.68.md) |
+| v0.11.67 BETA | [Download v0.11.67](downloads/NFSU2_Modern_HUD_v0_11_67_Chromium.zip) | [Software Update](CHANGELOG.md#v01167-beta--software-update) |
 | v0.11.66 BETA | [Download v0.11.66](downloads/NFSU2_Modern_HUD_v0_11_66_Chromium.zip) | [Release notes](RELEASE_NOTES_v0.11.66.md) |
 | v0.11.60 BETA | [Download v0.11.60](downloads/NFSU2_Modern_HUD_v0_11_60_Chromium.zip) | [Software Update](RELEASE_NOTES_v0.11.60.md) |
 | v0.11.59 BETA | [Download v0.11.59](downloads/NFSU2_Modern_HUD_v0_11_59_Chromium.zip) | Frontvex desktop BETA |
