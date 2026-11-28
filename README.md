@@ -1,11 +1,11 @@
 # NFSU2.xyz Modern HUD
 
-> **Desktop v0.11.68 BETA — My Car Performance Lab is available.** [Feature overview, screenshots and quick start](RELEASE_NOTES_v0.11.68.md).
+> **Desktop v0.11.69 BETA — My Car Performance Lab & Shared Performance Tests are available.** [Feature overview, screenshots and quick start](RELEASE_NOTES_v0.11.68.md).
 
 > **Frontvex Phone, GPS & Automatic Speedometer — Desktop BETA.** [Read the full release notes](RELEASE_NOTES_v0.11.58.md). Includes a customizable 2D/3D in-game phone, automatic HUD selection, GPS markers and optional Frontvex communication. The new mobile build is not ready; Userscript BETA 5 remains available.
 > Special thanks to [OBD Gaming](https://www.facebook.com/overbudgetgg) for the idea behind the Frontvex in-game phone. Frontvex online services are still in a limited server beta.
 
-**Current desktop version: v0.11.68 BETA (Chromium) · Mobile: Userscript BETA 5 (iPhone & Android, based on v0.11.26)**
+**Current desktop version: v0.11.69 BETA (Chromium) · Mobile: Userscript BETA 5 (iPhone & Android, based on v0.11.26)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics.
 
@@ -13,7 +13,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest desktop version: v0.11.68 BETA.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
+**Latest desktop version: v0.11.69 BETA.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
 
 - **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
@@ -24,7 +24,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ---
 
-## v0.11.68 BETA — My Car Performance Lab
+## v0.11.68–v0.11.69 BETA — My Car Performance Lab
 
 Turn your Frontvex phone into a vehicle performance testing tool. Run multiple tests, compare two saved results at a time and find out which upgrades or complete setups deliver the best measured performance for your car.
 
@@ -36,7 +36,7 @@ Turn your Frontvex phone into a vehicle performance testing tool. Run multiple t
 
 **Example:** Test your car with Engine Stage 2, install Stage 3 in the game, update Car Setup and repeat the test under comparable conditions. Compare the two results to see whether the new setup accelerates faster, achieves a higher speed or improves other measured metrics. Repeat with other parts to decide which upgrades suit your driving style.
 
-### Share Performance Test & Friend Comparison — v0.11.69 (upcoming)
+### Share Performance Test & Friend Comparison — v0.11.69
 
 Share saved performance tests directly with online Frontvex friends, including all nine upgrade categories, Unique flags, measured results, test conditions and speed graphs. Recipients can accept or decline, store up to 50 shared tests separately, and compare a received result against any of their saved tests, including different car models. Positive/negative differences highlight measured gains or losses; results are not server-verified.
 
@@ -73,7 +73,7 @@ Create custom Free Roam tracks, share them with friends and race in Solo Test or
 
 ### How to start a PvP 1v1 race
 
-1. **Register and connect:** Both players need the latest public desktop extension (v0.11.68 for the current release), a registered Frontvex account/number and enabled communication. Enter Free Roam and make sure both players are online and can connect directly.
+1. **Register and connect:** Both players need the latest public desktop extension (v0.11.69 for the current release), a registered Frontvex account/number and enabled communication. Enter Free Roam and make sure both players are online and can connect directly.
 2. **Add a friend:** Open the Frontvex phone → **Contacts**, find your friend by their Frontvex number, send a friend request and have them accept it.
 3. **Create a track:** Open **Racing → Create Track**, enter a track name, choose **Set START & Record**, drive the route, choose **Set FINISH**, and press **Save Track**.
 4. **Share the track:** In **My Tracks**, select the saved track, select your online friend and send it using **Share Race Track**.
