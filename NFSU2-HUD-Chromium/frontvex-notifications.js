@@ -28,8 +28,9 @@ function mount(home,storage,options={}){
   async function play(preview=false,chosen=state.sound,volume=state.volume){if(!preview&&(!state.soundEnabled||state.dnd||Date.now()-lastSound<1000))return false;const seq=++soundSeq;try{if(!audio||audio.state!=='running'){if(preview)await unlock();else {await Promise.race([unlock(),new Promise(resolve=>setTimeout(resolve,350))]);if(!audio||audio.state!=='running'||!showing)return false;}}if(!audio||audio.state!=='running'||!sounds[chosen])return false;lastSound=Date.now();let buffer=buffers.get(chosen);if(!buffer){const raw=atob(sounds[chosen].data),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));buffer=await audio.decodeAudioData(bytes.buffer);buffers.set(chosen,buffer);}if(seq!==soundSeq||(!preview&&!showing))return false;try{playing?.stop();}catch{}const src=audio.createBufferSource(),gain=audio.createGain();gain.gain.value=volume/100;src.buffer=buffer;src.connect(gain);gain.connect(audio.destination);playing=src;src.onended=()=>{if(playing===src)playing=null;src.disconnect();gain.disconnect();};src.start(0,0,Math.min(buffer.duration,3));return true;}catch{return false;}}
   function enabled(t){return !state.dnd&&(t==='messages'?state.messageEnabled:t==='online'?state.onlineEnabled:t==='update'?true:t==='performance'?state.performanceEnabled!==false:t==='race'?state.raceEnabled:state.requestEnabled);}
   function schedule(delay=250){if(showing||queuedTimer||!queue.length)return;queuedTimer=setTimeout(()=>{queuedTimer=0;nextPopup();},delay);}
+  function stillValid(item){return enabled(item.t)&&(!item.valid||item.valid())&&(!item.expiresAt||Date.now()<item.expiresAt);}
   function nextPopup(){
-    while(queue.length&&!enabled(queue[0].t))queue.shift();
+    for(let i=queue.length-1;i>=0;i--)if(!stillValid(queue[i]))queue.splice(i,1);
     if(!queue.length)return;
     const first=queue.shift(),items=[first];
     if(queue.length&&queue[0].t===first.t&&queue[0].demo===first.demo&&!first.extra&&!queue[0].extra)items.push(queue.shift());
@@ -40,9 +41,10 @@ function mount(home,storage,options={}){
     toast.classList.remove('on');void toast.offsetWidth;toast.classList.add('on');void play();
     timer=setTimeout(()=>{toast.classList.remove('on');showing=false;schedule(GAP_MS);},POPUP_MS);
   }
-  function popup(t,text,isDemo=false){if(!enabled(t))return;
-    if(queue.length>=MAX_QUEUE){const tail=[...queue].reverse().find(x=>x.t===t&&x.demo===isDemo);if(tail)tail.extra=(tail.extra||0)+1;else{const removed=queue.pop();queue.push({t,text,demo:isDemo,extra:0});}return;}
-    queue.push({t,text,demo:isDemo,extra:0});schedule();
+  function popup(t,text,isDemo=false,valid=null,expiresAt=0){if(!enabled(t)|| (valid&&!valid())||(expiresAt&&Date.now()>=expiresAt))return;
+    if(valid){for(let i=queue.length-1;i>=0;i--)if(!stillValid(queue[i]))queue.splice(i,1);}
+    if(queue.length>=MAX_QUEUE){if(valid)return;const tail=[...queue].reverse().find(x=>x.t===t&&x.demo===isDemo);if(tail)tail.extra=(tail.extra||0)+1;else{const removed=queue.pop();queue.push({t,text,demo:isDemo,extra:0});}return;}
+    queue.push({t,text,demo:isDemo,extra:0,valid,expiresAt});schedule();
   }
   function describe(r,t){if(t==='contacts')return state.preview?(r.username||('FVX'+String(r.number||'').replace(/^FVX-?/i,''))||'New friend request'):'You have a new friend request.';const friend=(data?.friends||[]).find(x=>x.id===r.peer);return state.preview?String(friend?.username||'Friend')+': '+String(r.text||'').slice(0,250):'You have a new message.';}
   function mark(t){if(!TYPES.includes(t))return Promise.resolve();return enqueue(async()=>{const next=normalize(state);next.seen[t]=[...new Set(records(data,t).map(x=>x.id))];next.demo[t]=0;if(JSON.stringify(next)!==JSON.stringify(state))await save(next);});}
@@ -55,7 +57,7 @@ function mount(home,storage,options={}){
   function softwareUpdate(version){return enqueue(()=>popup('update','New version released: v'+version+'. Please update your extension in Software Update.'));}
   function performanceNotice(sender,model){return enqueue(()=>popup('performance',state.preview?String(sender||'Friend').slice(0,40)+' shared a performance test: '+String(model||'Car').slice(0,40)+' — My Car → Shared Tests.':'New shared performance test — My Car → Shared Tests.'));}
   function raceNotice(kind,sender,track){return enqueue(()=>{const who=String(sender||'Friend').slice(0,80),name=String(track||'Race track').slice(0,60);let msg=kind==='accepted'?who+' accepted your PvP challenge. Track loaded — go to START.':kind==='invite'?who+' invited you to race: '+name+' — Racing → Invitations → Accept.':who+' shared a track: '+name+' — Racing → Invitations.';if(!state.preview&&kind!=='accepted')msg=kind==='invite'?'New PvP invitation — Racing → Invitations.':'New shared track — Racing → Invitations.';popup('race',msg);});}
-  function friendOnline(friend){return enqueue(()=>{popup('online',String(friend.username||('FVX'+String(friend.number||'').replace(/^FVX-?/i,'')))+' is now online.');});}
+  function friendOnline(friend,valid=null){const expiresAt=Date.now()+30000;return enqueue(()=>{popup('online',String(friend.username||('FVX'+String(friend.number||'').replace(/^FVX-?/i,'')))+' is now online.',false,valid,expiresAt);});}
   storage.onChanged?.((changes,area)=>{if(area!=='local')return;if(changes[KEY]&&ready){state=normalize(changes[KEY].newValue);refresh();}if(!changes[CONTACTS])return;const change=changes[CONTACTS];void enqueue(()=>ingest(change.newValue,change.oldValue));});
   function setting(k,v){return enqueue(async()=>{const n=normalize({...state,[k]:v});await save(n);});}
   function demo(t){return enqueue(async()=>{const n=normalize(state);n.demo[t]=Math.min(999,n.demo[t]+1);await save(n);popup(t,t==='messages'?'Demo message — this is not a real delivery.':'Demo friend request — this is not a real request.',true);});}

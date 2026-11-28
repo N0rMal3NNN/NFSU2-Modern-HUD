@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "NFSU2.xyz Modern HUD",
-  "version": "0.11.79",
-  "description": "Modern HUD Public BETA \u2014 smooth roof rain and windshield drying.",
+  "version": "0.11.82",
+  "description": "Modern HUD Public BETA \u2014 customizable dashboard for NFSU2.xyz.",
   "permissions": [
     "storage"
   ],

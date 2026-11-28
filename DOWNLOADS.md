@@ -4,11 +4,11 @@
 
 **Phones and tablets:** Userscript BETA 5 (based on v0.11.26) — iPhone: Safari + Userscripts; Android: Microsoft Edge + Tampermonkey — see [Phones and tablets](#phones-and-tablets-userscript-beta-5) below.
 
-> **PC v0.11.79 BETA — Dynamic Windshield & Interior Rain Audio is available.** [Feature guide](RELEASE_NOTES_v0.11.79.md). Mobile BETA 5 remains available.
+> **PC v0.11.82 BETA — Dynamic Windshield & Interior Rain Audio is available.** [Feature guide](RELEASE_NOTES_v0.11.79.md). Mobile BETA 5 remains available.
 
 ## Download Latest
 
-**Current desktop version: v0.11.79 BETA**
+**Current desktop version: v0.11.82 BETA**
 
 **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)**
 
@@ -18,7 +18,8 @@ This permanent URL always points to the most recent public Chromium-only build. 
 
 | Version | Download | Release information |
 |---|---|---|
-| **v0.11.79 BETA — Latest** | [Download v0.11.79](downloads/NFSU2_Modern_HUD_v0_11_79_Chromium.zip) | [Dynamic Windshield & Interior Rain Audio](RELEASE_NOTES_v0.11.79.md) |
+| **v0.11.82 BETA — Latest** | [Download v0.11.82](downloads/NFSU2_Modern_HUD_v0_11_82_Chromium.zip) | — |
+| v0.11.79 BETA | [Download v0.11.79](downloads/NFSU2_Modern_HUD_v0_11_79_Chromium.zip) | [Dynamic Windshield & Interior Rain Audio](RELEASE_NOTES_v0.11.79.md) |
 | v0.11.69 BETA | [Download v0.11.69](downloads/NFSU2_Modern_HUD_v0_11_69_Chromium.zip) | [Shared Performance Tests](RELEASE_NOTES_v0.11.68.md#shared-performance-tests--friend-comparison-v01169) |
 | v0.11.68 BETA | [Download v0.11.68](downloads/NFSU2_Modern_HUD_v0_11_68_Chromium.zip) | [Performance Lab](RELEASE_NOTES_v0.11.68.md) |
 | v0.11.67 BETA | [Download v0.11.67](downloads/NFSU2_Modern_HUD_v0_11_67_Chromium.zip) | [Software Update](CHANGELOG.md#v01167-beta--software-update) |
