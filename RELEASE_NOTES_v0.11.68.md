@@ -29,6 +29,25 @@ A cumulative desktop update since v0.11.67. Configure your current car, measure 
 - Turbo PSI, nitrous pressure, actual engine horsepower and torque are not supplied by the Car Feed. Performance changes are measured from the tests, not inferred as actual pressure or power figures. Multiple changed parts are treated as an overall setup change.
 - Up to 50 detailed tests per vehicle identity, personal records and history deletion with confirmation. Existing odometer and driving statistics remain separate.
 
+### How to find the best upgrades for your car
+
+You can run multiple performance tests, save your results, compare any two saved runs, and discover which upgrades or combinations of parts give your car the best measured performance.
+
+For example, start with Engine Stage 2, ECU Stage 2, Turbo Stage 2 and your existing tyres, suspension and other parts. Save this configuration as your baseline and complete a performance test. Install Engine Stage 3 in the game, update that part in Car Setup and run another test on the same road under similar conditions. Compare both runs to see how the upgrade affected acceleration, maximum achieved speed, braking and other measured results. Repeat with ECU, Turbo, Transmission, Tyres, Suspension, Brakes, Nitrous or Weight Reduction to evaluate different builds.
+
+| Example metric | Before upgrade | After upgrade | Difference |
+|---|---:|---:|---:|
+| 0–100 km/h | 5.000 s | 4.500 s | 10% less time |
+| 100–200 km/h | 10.000 s | 9.000 s | 10% less time |
+| Maximum achieved speed | 310 km/h | 325 km/h | +15 km/h |
+| 100–0 km/h braking distance | 40 m | 38 m | 5% shorter |
+
+*Illustrative values, not measured results from a real upgrade test.*
+
+Every recorded test retains its complete nine-part setup, including Unique upgrades. Compare Results shows the two setups, the measured differences and the acceleration curves. You can revisit older tests from Test History instead of losing them when you modify your car. Up to 50 detailed tests can be stored per vehicle identity.
+
+For a fair comparison, use the same car, route, direction, transmission mode, weather and nitrous conditions. Run each setup several times and avoid collisions or jumps. Changing one part at a time makes it easier to evaluate that upgrade; if several parts change together, the difference represents the overall setup rather than the contribution of any single part. Tyres, brakes and suspension may improve traction, braking or cornering without increasing top speed. Turbo boost pressure, nitrous pressure, horsepower and torque are not directly exposed by the feed, so the app compares observed performance instead of inventing sensor readings.
+
 ## Performance HUD Settings
 
 Independent of the main speedometer: X/Y position, size (20–250%), opacity, preview and reset. Settings are saved locally across cars.
