@@ -1,5 +1,7 @@
 # NFSU2.xyz Modern HUD
 
+> **Upcoming desktop v0.11.68 BETA — My Car Performance Lab.** [Feature overview and quick start](RELEASE_NOTES_v0.11.68.md). The package is prepared for upload; the current download remains v0.11.67.
+
 > **Desktop v0.11.67 BETA — Software Update is available.** [What's new](CHANGELOG.md#v01167-beta--software-update) · [Racing & My Car](RELEASE_NOTES_v0.11.66.md).
 
 > **Frontvex Phone, GPS & Automatic Speedometer — Desktop BETA.** [Read the full release notes](RELEASE_NOTES_v0.11.58.md). Includes a customizable 2D/3D in-game phone, automatic HUD selection, GPS markers and optional Frontvex communication. The new mobile build is not ready; Userscript BETA 5 remains available.
