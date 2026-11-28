@@ -1,8 +1,22 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.69 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.79 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
+
+## v0.11.79 BETA — Dynamic Windshield & Interior Rain Audio
+
+A cumulative desktop update since v0.11.69.
+
+- **Dynamic glass:** automatic cockpit contour detection, natural microdroplets, density 0–150%, independent size, opacity, movement, lifetime, merging and trails. Shared glass mask for dust, reflection, wipers, sun strip, impact cracks and Limp glass; legacy full-screen rendering remains selectable.
+- **Persistence and drying:** rain state is retained across camera changes without external-view rendering; gradual speed-dependent drying after rain stops. Existing crack and Limp Mode timers are retained.
+- **Independent damage controls:** ordinary impact cracks and Limp Mode shattered glass can be enabled separately.
+- **Interior rain audio:** bundled Nox_Sound roof loop (CC0), 70% factory volume, +10% gain, dynamic intensity and smooth camera/weather fades; independent of visual rain. Optional custom sound and preview.
+- **Navigation and stability:** app section selectors, simplified windshield controls, automatic tracking recovery and reduced rendering work.
+
+Known limitations: mirror exclusion and bridge/tunnel shelter detection are not implemented; tracking is experimental. Mobile Userscript BETA 5 is unchanged.
+
+[Release notes and quick start](RELEASE_NOTES_v0.11.79.md).
 
 ## v0.11.69 BETA — Shared Performance Tests & Privacy
 
