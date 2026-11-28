@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.11.67 BETA — Chromium-based desktop browsers · Userscript BETA 5 for phones and tablets (based on v0.11.26)**
+**Release: v0.11.68 BETA — Chromium-based desktop browsers · Userscript BETA 5 for phones and tablets (based on v0.11.26)**
 
 Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
