@@ -48,6 +48,25 @@ Every recorded test retains its complete nine-part setup, including Unique upgra
 
 For a fair comparison, use the same car, route, direction, transmission mode, weather and nitrous conditions. Run each setup several times and avoid collisions or jumps. Changing one part at a time makes it easier to evaluate that upgrade; if several parts change together, the difference represents the overall setup rather than the contribution of any single part. Tyres, brakes and suspension may improve traction, braking or cornering without increasing top speed. Turbo boost pressure, nitrous pressure, horsepower and torque are not directly exposed by the feed, so the app compares observed performance instead of inventing sensor readings.
 
+## Shared Performance Tests & Friend Comparison (v0.11.69)
+
+**Prepared for the next public desktop release.** Both players need v0.11.69 or newer and an active Frontvex connection.
+
+Share saved performance tests directly with online Frontvex friends, including all nine upgrade categories, Unique flags, measured results, test conditions and speed graphs. Recipients can accept or decline, store up to 50 shared tests separately, and compare a received result against any of their saved tests, including different car models. Positive/negative differences highlight measured gains or losses; results are not server-verified.
+
+### How to share and compare
+
+1. Open My Car → Test History and expand **Share Performance Test** on a saved result.
+2. Select an online friend and press **Share Test**.
+3. The recipient receives a notification and opens My Car → **Shared Tests** to accept and save or decline the result.
+4. Select **Compare With My Setup** and choose one of your saved tests. Compare the complete setup, acceleration, speed, braking, handling, nitrous, events and speed curves side by side.
+
+The friend's username appears above their car. Comparison tables display **Friend** by default and reveal the username on hover without moving the statistics. Long names are truncated to fit. Test-condition warnings help identify unfair comparisons.
+
+Shared data uses the existing direct peer-to-peer connection; no odometer, personal Car ID or route coordinates are included. Shared test results are not verified by the server. The public FVX ID is masked by default, can be revealed manually for ten seconds, and can still be copied. The mask helps prevent accidental disclosure in screenshots.
+
+Live cross-network sharing has not yet been independently verified.
+
 ## Performance HUD Settings
 
 Independent of the main speedometer: X/Y position, size (20–250%), opacity, preview and reset. Settings are saved locally across cars.
@@ -93,6 +112,6 @@ Four screenshots from the tested v0.11.68.2 development build:
 
 ## Compatibility and privacy
 
-Desktop Chromium public release; mobile Userscript BETA 5 is unchanged. Performance Lab uses local storage and the official read-only Car Feed, with no additional Frontvex server requests. It does not change the game's upgrades or physics. For best results compare repeated runs on the same route with the same driving conditions. The example confirms live result recording; not every mode has been independently verified in the live game.
+Desktop Chromium public release; mobile Userscript BETA 5 is unchanged. Performance Lab uses local storage and the official read-only Car Feed. Local tests require no additional Frontvex server requests; optional sharing in v0.11.69 uses the existing friend connection. It does not change the game's upgrades or physics. For best results compare repeated runs on the same route with the same driving conditions. The example confirms live result recording; not every mode has been independently verified in the live game.
 
 [Installation & Update Guide](INSTALLATION.md) · [PvP Racing Guide](RELEASE_NOTES_v0.11.66.md#how-to-start-a-pvp-1v1-race)
