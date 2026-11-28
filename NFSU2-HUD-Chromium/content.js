@@ -1,4 +1,4 @@
-/* NFSU2 Modern HUD v0.11.68.2 — Racing gates, countdown and predictive navigation; v0.11.64.1 — Racing 3D START/FINISH; v0.11.64 — Racing Phase 2; v0.11.63 — Racing Track Creator and manual turbo setup; v0.11.62 — My Car Driving Statistics; v0.11.61 — My Car Performance Monitor; v0.11.60 — Software Update; v0.11.59 — Pin marker management; v0.11.58 — Embedded Frontvex verification; v0.11.52 — Compact help popups and same-tab verification; v0.11.51 — Storage context recovery and HUD selection at top; v0.11.50 — Automatic speedometer by car model and manual HUD by individual Car ID; v0.11.49 — Notification sounds and badges; Contacts app (local profile, friends, requests, messages and privacy settings); v0.11.36 — rounded WebGL keys, shell-integrated rear logo and bottom USB-C; v0.11.35 — rear logo in both themes, transparent Frontvex screen logo, USB-C port, resizable weather card and rounder side buttons; v0.11.34 — transparent Frontvex screen logo and rear branding in both themes; v0.11.33 — manual 360° phone rotation, rear triple camera, Frontvex theme and city-labelled pins; v0.11.32 — optional 3D phone (own WebGL body and case, no hands; the screen stays the live menu; light from the game's sun); v0.11.31 — phone position option (right corner beside the speedometer, GTA 5 style) and optional sunlight on the phone (from the game's View Feed); v0.11.30 — Pin Markers (a key plants speed pins in the world, drawn from the View Feed) and an adjustable icon size on the phone; v0.11.29 — Frontvex phone menu: the settings menu is a phone held in the player's hands (live weather from the game's View Feed, ticking clock, calendar, swipeable home screen, Clock / Calendar / Weather apps); v0.11.26 — the sudden-brake estimate is gone from the tyre lamp (it now only shows real wheel slip; BRAKE is a plain text label); v0.11.25 — Speed Sensation streaks/fog now follow the live Car Feed (independent of the main HUD toggle) + live status line; v0.11.24 — Honda Integra Type R (DC2) and Subaru Impreza RS analogue clusters on a smooth hood frame; Impreza = twin dials with a centre display (gear, nitro, odometer, warning lights) and the TURBO gauge under it; Colors & Materials and a game / real speed scale for both; v0.11.22 — windshield dust also on GRASS (Bayview reports grass as GRASS, the Most Wanted map as DIRT); v0.11.21 — the windshield dust is clearly visible now (tan film + smudges + grains) and the menu shows which surface the game reports under the wheels; v0.11.20 — windshield dust lasts 20 s after the dirt, only the last 5 s fade; v0.11.19 — windshield cracks follow the side of the impact, dust only after driving on DIRT, Colors & Materials for the Honda S2000 style, the Photo/Drone/Skate/Replay auto-hide is removed; v0.11.18 — handbrake lamp follows the game's own handbrake (Car Feed), optional auto-hide in Photo / Drone / Skate / Replay, Honda Integra Type R and Subaru Impreza 2.5 RS added to the car list; v0.11.17 — Drink: the ladder keeps its place when you sober up (a late press while the look fades goes on), Honda S2000 added to the car list; v0.11.16 — Honda S2000 (AP1) digital-cluster HUD style (LED bar tachometer, 7-segment speed, odometer + TRIP A); v0.11.15 — Drink ladder fix: drink 3 is a sip with the drunk look + the police warning, the messages follow the drunk look; v0.11.14 — Drink (a bottle of beer or whisky in a gloved hand, police warning, drunk look and optional controls effect; default OFF); v0.11.10 — per-style whole-HUD X/Y and live-only standalone indicators; v0.11.9 — native menu keyboard input protection; v0.11.8 — independent windshield collision detection; v0.11.7 — multi-wheel Car Feed slip confirmation; v0.11.6 — further stricter tyre slip detection; v0.11.5 — stricter tyre slip detection; v0.11.4 — Cigarette (3D, forward-pointing, with ember glow + animated smoke; position / size / smoke / puff / speed lean / behind or in front of the HUD); v0.11.3 — Helmet View: second 3D model 'Open-Face Sport' + model selector, 'Opening size 100%' is drawn 5 % larger; v0.11.2 — Helmet View (two 3D-shaded helmets: GT Full-Face / Open-Face Sport; behind the HUD or in front of it (covers part of it); optional shake on impact); v0.11.1 — Windshield glass: custom sun-strip colour, varied cracks (line / star / web), new defaults (OFF); v0.11.0 — Windshield glass (wiper marks, sun strip, impact cracks, Limp shatter); v0.10.8 — TYRES lamp needs 5 % more spin/slide; Chromium-only (Chrome, Edge, Brave, Opera, Vivaldi); v0.10.7 — RX-7 four icons 2+2 around the RPM dial; numerals never sit on a tick; status lamps instead of TYRES/ENGINE/SUSP/HAND captions (GT-R, Corolla); Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
+/* NFSU2 Modern HUD v0.11.79 — smooth roof rain and drying; v0.11.78.1 — interior roof rain audio; v0.11.77 — independent impact and Limp Mode glass effects; v0.11.76 — BETA: simplified windshield controls and automatic acquisition; v0.11.75 — BETA: compact app section navigation; v0.11.72 — BETA: Dynamic Windshield Engine (automatic cockpit detection, rain and glass effects); v0.11.68.2 — Racing gates, countdown and predictive navigation; v0.11.64.1 — Racing 3D START/FINISH; v0.11.64 — Racing Phase 2; v0.11.63 — Racing Track Creator and manual turbo setup; v0.11.62 — My Car Driving Statistics; v0.11.61 — My Car Performance Monitor; v0.11.60 — Software Update; v0.11.59 — Pin marker management; v0.11.58 — Embedded Frontvex verification; v0.11.52 — Compact help popups and same-tab verification; v0.11.51 — Storage context recovery and HUD selection at top; v0.11.50 — Automatic speedometer by car model and manual HUD by individual Car ID; v0.11.49 — Notification sounds and badges; Contacts app (local profile, friends, requests, messages and privacy settings); v0.11.36 — rounded WebGL keys, shell-integrated rear logo and bottom USB-C; v0.11.35 — rear logo in both themes, transparent Frontvex screen logo, USB-C port, resizable weather card and rounder side buttons; v0.11.34 — transparent Frontvex screen logo and rear branding in both themes; v0.11.33 — manual 360° phone rotation, rear triple camera, Frontvex theme and city-labelled pins; v0.11.32 — optional 3D phone (own WebGL body and case, no hands; the screen stays the live menu; light from the game's sun); v0.11.31 — phone position option (right corner beside the speedometer, GTA 5 style) and optional sunlight on the phone (from the game's View Feed); v0.11.30 — Pin Markers (a key plants speed pins in the world, drawn from the View Feed) and an adjustable icon size on the phone; v0.11.29 — Frontvex phone menu: the settings menu is a phone held in the player's hands (live weather from the game's View Feed, ticking clock, calendar, swipeable home screen, Clock / Calendar / Weather apps); v0.11.26 — the sudden-brake estimate is gone from the tyre lamp (it now only shows real wheel slip; BRAKE is a plain text label); v0.11.25 — Speed Sensation streaks/fog now follow the live Car Feed (independent of the main HUD toggle) + live status line; v0.11.24 — Honda Integra Type R (DC2) and Subaru Impreza RS analogue clusters on a smooth hood frame; Impreza = twin dials with a centre display (gear, nitro, odometer, warning lights) and the TURBO gauge under it; Colors & Materials and a game / real speed scale for both; v0.11.22 — windshield dust also on GRASS (Bayview reports grass as GRASS, the Most Wanted map as DIRT); v0.11.21 — the windshield dust is clearly visible now (tan film + smudges + grains) and the menu shows which surface the game reports under the wheels; v0.11.20 — windshield dust lasts 20 s after the dirt, only the last 5 s fade; v0.11.19 — windshield cracks follow the side of the impact, dust only after driving on DIRT, Colors & Materials for the Honda S2000 style, the Photo/Drone/Skate/Replay auto-hide is removed; v0.11.18 — handbrake lamp follows the game's own handbrake (Car Feed), optional auto-hide in Photo / Drone / Skate / Replay, Honda Integra Type R and Subaru Impreza 2.5 RS added to the car list; v0.11.17 — Drink: the ladder keeps its place when you sober up (a late press while the look fades goes on), Honda S2000 added to the car list; v0.11.16 — Honda S2000 (AP1) digital-cluster HUD style (LED bar tachometer, 7-segment speed, odometer + TRIP A); v0.11.15 — Drink ladder fix: drink 3 is a sip with the drunk look + the police warning, the messages follow the drunk look; v0.11.14 — Drink (a bottle of beer or whisky in a gloved hand, police warning, drunk look and optional controls effect; default OFF); v0.11.10 — per-style whole-HUD X/Y and live-only standalone indicators; v0.11.9 — native menu keyboard input protection; v0.11.8 — independent windshield collision detection; v0.11.7 — multi-wheel Car Feed slip confirmation; v0.11.6 — further stricter tyre slip detection; v0.11.5 — stricter tyre slip detection; v0.11.4 — Cigarette (3D, forward-pointing, with ember glow + animated smoke; position / size / smoke / puff / speed lean / behind or in front of the HUD); v0.11.3 — Helmet View: second 3D model 'Open-Face Sport' + model selector, 'Opening size 100%' is drawn 5 % larger; v0.11.2 — Helmet View (two 3D-shaded helmets: GT Full-Face / Open-Face Sport; behind the HUD or in front of it (covers part of it); optional shake on impact); v0.11.1 — Windshield glass: custom sun-strip colour, varied cracks (line / star / web), new defaults (OFF); v0.11.0 — Windshield glass (wiper marks, sun strip, impact cracks, Limp shatter); v0.10.8 — TYRES lamp needs 5 % more spin/slide; Chromium-only (Chrome, Edge, Brave, Opera, Vivaldi); v0.10.7 — RX-7 four icons 2+2 around the RPM dial; numerals never sit on a tick; status lamps instead of TYRES/ENGINE/SUSP/HAND captions (GT-R, Corolla); Civic linear warning row + code names; adjustable blue fog; irregular engine misfire / impact idle reset simulation; official read-only Car Feed HUD.
  * Numpad + opens/closes an in-game settings panel.
  * Numpad - toggles the ENTIRE custom Modern HUD (not the game's own HUD).
  * No modification to NFSU2's game code, rendering buffers, or physics.
@@ -259,10 +259,13 @@
     pedalsOpacity: 85, pedalsThrottleColor: "#3DDC84", pedalsBrakeColor: "#FF4B4B",
     speedSensationVignette: 20, impactFeedbackIgnoreReducedMotion: false,
     // v0.11.0 Windshield glass (whole screen, under the HUD)
+    interiorRainAudioEnabled: true, interiorRainAudioVolume: 70, interiorRainAudioDynamic: true, interiorRainAudioCockpit: true, interiorRainAudioFade: true,
+    windshieldDynamic: true, windshieldPersistent: true, windshieldGradualDrying: true, windshieldSpeedDrying: true, windshieldDryingSpeed: 100, windshieldRainEnabled: true, windshieldRainIntensity: 100, windshieldRainSize: 100, windshieldRainOpacity: 85, windshieldRainFlow: 100, windshieldRainLife: 100, windshieldRainMargin: 5, windshieldRainFps: 45, windshieldRainSearch: 3, windshieldRainMerge: true, windshieldRainTrails: true, windshieldRainRefraction: true, windshieldRainDebug: false,
     windshieldEnabled: false, windshieldReflEnabled: true, windshieldReflPct: 100, windshieldDustEnabled: true, windshieldImpactFlip: false, windshieldDustPct: 100, windshieldWiperEnabled: true, windshieldWiperPct: 0, windshieldSunEnabled: true, windshieldSunPct: 50, windshieldSunColor: "#184A96",
     helmetEnabled: false, helmetModel: "gt", helmetOpacityPct: 100, helmetSizePct: 100, helmetOverHud: false, helmetShakeEnabled: true, helmetShakePct: 50,
     cigaretteEnabled: false, cigarettePosition: "center", cigaretteSizePct: 100, cigaretteSmokeEnabled: true, cigaretteSmokePct: 60, cigarettePuffEnabled: true, cigaretteSmokeLean: false, cigaretteOverHud: false,
     drinkEnabled: false, drinkKind: "beer", shortcutDrink: "Ctrl+Alt+KeyB", drinkSipSeconds: 3.5, drinkFreeDrinks: 2, drinkPolice: true, drinkLook: true, drinkControls: false, drinkBrake: false, drinkDrunkSeconds: 7,
+    windshieldImpactCracksEnabled: true, windshieldLimpGlassEnabled: true,
     windshieldCracksPct: 25, windshieldHitDv: 3.0, windshieldFadeSeconds: 120, windshieldLimpPct: 80, windshieldClearZonePct: 80,
     speedSensationEnabled: true, speedSensationIntensity: 100, speedSensationFogEnabled: true, speedSensationFogPercent: 12, speedSensationStartKmh: 190,
     impactFeedbackEnabled: true, impactFeedbackIntensity: 70, impactFeedbackFlash: true, impactFeedbackShake: true,
@@ -344,9 +347,10 @@
   });
   const SHORTCUT_KEYS = Object.keys(Hotkeys.DEFAULTS);
   const allowedPositions = new Set(["bottom-right", "bottom-left", "top-right", "top-left"]);
-  const boolKeys = ["autoSpeedometer","phoneSunlight","phoneCornerAvoid","markersEnabled","markersEdgeArrows","phoneGlare","phoneAnimation","drinkEnabled","drinkPolice","drinkLook","drinkControls","drinkBrake","cigaretteEnabled","cigaretteSmokeEnabled","cigarettePuffEnabled","cigaretteSmokeLean","cigaretteOverHud","helmetEnabled","helmetOverHud","helmetShakeEnabled","gtrHousing","statusHudEnabled","hudEnabled", "showSpeed", "showRpm", "showGear", "showNitro", "showShift", "showIcons", "showTurbo", "showTyreIcon", "showEngineIcon", "showSuspIcon", "showHandbrakeIcon", "damageEnabled", "damageInputCut", "damageImpactIdleReset", "showTelemetryWarnings", "speedSensationEnabled", "speedSensationFogEnabled", "impactFeedbackEnabled", "pedalsEnabled", "impactFeedbackIgnoreReducedMotion", "impactFeedbackFlash", "impactFeedbackShake", "analogOdometerEnabled", "analogDepthEnabled", "windshieldEnabled", "windshieldReflEnabled", "windshieldDustEnabled", "windshieldWiperEnabled", "windshieldSunEnabled", "windshieldImpactFlip"];
+  const boolKeys = ["interiorRainAudioEnabled","interiorRainAudioDynamic","interiorRainAudioCockpit","interiorRainAudioFade","windshieldImpactCracksEnabled","windshieldLimpGlassEnabled","windshieldDynamic","windshieldPersistent","windshieldGradualDrying","windshieldSpeedDrying","windshieldRainEnabled","windshieldRainMerge","windshieldRainTrails","windshieldRainRefraction","windshieldRainDebug","autoSpeedometer","phoneSunlight","phoneCornerAvoid","markersEnabled","markersEdgeArrows","phoneGlare","phoneAnimation","drinkEnabled","drinkPolice","drinkLook","drinkControls","drinkBrake","cigaretteEnabled","cigaretteSmokeEnabled","cigarettePuffEnabled","cigaretteSmokeLean","cigaretteOverHud","helmetEnabled","helmetOverHud","helmetShakeEnabled","gtrHousing","statusHudEnabled","hudEnabled", "showSpeed", "showRpm", "showGear", "showNitro", "showShift", "showIcons", "showTurbo", "showTyreIcon", "showEngineIcon", "showSuspIcon", "showHandbrakeIcon", "damageEnabled", "damageInputCut", "damageImpactIdleReset", "showTelemetryWarnings", "speedSensationEnabled", "speedSensationFogEnabled", "impactFeedbackEnabled", "pedalsEnabled", "impactFeedbackIgnoreReducedMotion", "impactFeedbackFlash", "impactFeedbackShake", "analogOdometerEnabled", "analogDepthEnabled", "windshieldEnabled", "windshieldReflEnabled", "windshieldDustEnabled", "windshieldWiperEnabled", "windshieldSunEnabled", "windshieldImpactFlip"];
+  const WSH_RAIN_RANGES={interiorRainAudioVolume:[0,100],windshieldDryingSpeed:[25,200],windshieldRainIntensity:[0,150],windshieldRainSize:[40,200],windshieldRainOpacity:[0,100],windshieldRainFlow:[0,250],windshieldRainLife:[25,200],windshieldRainMargin:[0,20],windshieldRainFps:[15,60],windshieldRainSearch:[1,13]};
   const WSH_PCT_KEYS = ["windshieldReflPct","windshieldDustPct","windshieldWiperPct","windshieldSunPct","windshieldCracksPct","windshieldLimpPct","windshieldClearZonePct"];
-  const WSH_KEYS = ["windshieldEnabled","windshieldReflEnabled","windshieldDustEnabled","windshieldWiperEnabled","windshieldSunEnabled",...WSH_PCT_KEYS,"windshieldHitDv","windshieldFadeSeconds","windshieldSunColor"];
+  const WSH_KEYS = ["windshieldImpactCracksEnabled","windshieldLimpGlassEnabled","windshieldEnabled","windshieldReflEnabled","windshieldDustEnabled","windshieldWiperEnabled","windshieldSunEnabled",...WSH_PCT_KEYS,"windshieldHitDv","windshieldFadeSeconds","windshieldSunColor"];
   const ANALOG_POSITION_KEYS = ["analogTurboOffsetX","analogTurboOffsetY","analogRpmOffsetX","analogRpmOffsetY","analogSpeedOffsetX","analogSpeedOffsetY"];
   const ANALOG_SIZE_KEYS = ["analogTurboSizePct","analogRpmSizePct","analogSpeedSizePct"];
   const COROLLA_POSITION_KEYS=ANALOG_POSITION_KEYS.map(key=>"corolla"+key.slice(6));
@@ -622,6 +626,7 @@
 
   function normalize(key, val) {
     if (SHORTCUT_KEYS.includes(key)) return Hotkeys.canonical(val) || Hotkeys.DEFAULTS[key];
+    if (WSH_RAIN_RANGES[key]){const [a,b]=WSH_RAIN_RANGES[key];return Number.isFinite(Number(val))?clamp(Math.round(Number(val)),a,b):DEFAULTS[key];}
     if (boolKeys.includes(key)) return typeof val === "boolean" ? val : DEFAULTS[key];
     if (key === "hudMode") return val === "cockpit" ? "cockpit" : "full";
     if (key === "hudStyle") return typeof val === "string" && HUD_STYLES[val]?.implemented ? val : "modern";
@@ -3618,6 +3623,26 @@
          border:1px solid #577787;border-radius:7px;padding:6px 8px;font:12px system-ui,Arial,sans-serif}
       .menu-nav button{height:35px;align-self:end;padding:6px 9px}
       .menu-nav .menu-count{font-size:10px;color:#83afbc;width:100%}
+      /* v0.11.75: compact page navigation, independent of the setting controls. */
+      .panel fieldset.menu-page-hidden{display:none!important;}
+      .menu-section-nav{position:sticky;top:-17px;z-index:14;display:flex;align-items:center;gap:6px;background:#12212b;border:1px solid #36525e;border-radius:10px;padding:7px;margin:0 0 9px;}
+      .panel:not(.in-phone) .menu-section-nav{position:relative;top:0;}
+      .panel.menu-single-page:not(.in-phone) .menu-nav{position:relative;top:auto;}
+      .panel.menu-single-page:not(.in-phone) .menu-section-nav{position:sticky;top:-17px;}
+      .panel.in-phone .menu-section-nav{top:-8px;background:#12212b;}
+      .menu-section-nav[hidden],.menu-section-list[hidden]{display:none!important;}
+      .menu-section-nav select{flex:1;min-width:0;max-width:none!important;width:100%;height:36px;background:#203845;color:#f2faff;border:1px solid #52717d;border-radius:7px;padding:5px;font:600 12px system-ui,sans-serif;}
+      .menu-section-nav button{flex:0 0 auto;min-height:36px;padding:5px 9px;white-space:nowrap;}
+      .menu-section-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));gap:6px;margin:0 0 12px;}
+      .panel.in-phone .menu-section-list{grid-template-columns:1fr;}
+      .menu-section-list button{width:100%;min-height:36px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border:1px solid #3a5966;border-radius:9px;background:#192e39;color:#edf7fa;line-height:1.25;white-space:normal;}
+      .menu-section-list button:hover,.menu-section-list button:focus-visible{background:#264653;border-color:#72d4dd;}
+      .menu-section-list p{grid-column:1/-1;margin:3px 0;color:#aac2cc;}
+      .panel.menu-single-page .sections-grid{column-count:1;column-width:auto;}
+      .panel.menu-single-page .sections-grid > fieldset{display:block;max-width:660px;}
+      .panel.in-phone.menu-single-page .sections-grid > fieldset{max-width:none;}
+      .fv-sub .mc-tabs,.fv-sub .fc-nav{position:sticky;top:calc(var(--sbh) + var(--barh) + 6px);z-index:5;background:#0d1820;padding:5px 0;}
+
 
       input:disabled {opacity:.4;cursor:not-allowed;}
       input[type="number"]{width:104px;height:32px;padding:5px 8px;border:1px solid #4b6974;border-radius:8px;background:#20323e;color:#ecf4f8;text-align:right;font:inherit;}
@@ -3985,7 +4010,7 @@
       .mk-btn2{margin:4px 0 9px;}
     </style>
     <section class="panel" id="settingsPanel" aria-label="Modern HUD in-game settings" role="dialog" aria-modal="false">
-      <div class="top" id="dragHandle" title="Drag menu with mouse"><h2>Modern HUD <span style="color:#72d4dd">v0.11.68.2</span></h2><button class="x" id="close" type="button" aria-label="Close settings">×</button></div>
+      <div class="top" id="dragHandle" title="Drag menu with mouse"><h2>Modern HUD <span style="color:#72d4dd">v0.11.79</span></h2><button class="x" id="close" type="button" aria-label="Close settings">×</button></div>
       <p id="menuIntro">Drag the header to move the menu. Drag the bottom-left corner to resize its width and height. Changes apply live and are saved.</p>
       <div class="menu-nav">
         <label>Find a setting<input type="search" id="menuSearch" autocomplete="off" placeholder="e.g. opacity, ODO, shift..."></label>
@@ -3999,6 +4024,8 @@
         <span class="menu-count" id="menuFilterCount"></span>
       </div>
       <div class="fv-query" id="fvQuery" hidden><span id="fvQueryText"></span><button type="button" id="fvQueryClear" aria-label="Clear the search">×</button></div>
+      <div class="menu-section-nav" id="menuSectionNav" hidden><button type="button" id="menuSectionBack" aria-label="Back to sections">‹ Sections</button><select id="menuSectionPick" aria-label="Choose a settings section"></select></div>
+      <div class="menu-section-list" id="menuSectionList" hidden aria-label="Available settings sections"></div>
       <div class="sections-grid" id="sectionsGrid">
       <fieldset><legend>HUD</legend>
         <label class="line"><input type="checkbox" id="hudEnabled"> Enable custom HUD</label>
@@ -4015,7 +4042,7 @@
         <div class="help">ON: the factory HUD follows the live car model. OFF: select any HUD and it is saved automatically for this individual owned car. A stock car has no personal ID. Mileage remains separate and manually selected.</div>
       </fieldset>
 
-      <fieldset id="phoneMenuSettings"><legend>Phone Menu — Frontvex</legend>
+      <fieldset id="phoneMenuSettings"><legend>Phone Menu — Design &amp; Materials</legend>
         <label for="menuStyle" style="display:block;margin:2px 0 6px">Menu style</label>
         <select id="menuStyle" aria-label="Menu style"><option value="phone">Frontvex phone (in hand)</option><option value="classic">Classic panel</option></select>
         <div class="help" id="phoneFitHelp"></div>
@@ -4035,6 +4062,8 @@
         <select id="phoneCase" aria-label="Phone case"><option value="none">No case</option><option value="bumper">Bumper</option><option value="rugged">Rugged</option></select>
         <label for="phoneCutout" style="display:block;margin:9px 0 6px">Front camera / buttons</label>
         <select id="phoneCutout" aria-label="Phone front camera style"><option value="pill">Pill cutout</option><option value="hole">Punch hole</option><option value="notch">Notch</option><option value="retro">Retro (speaker + home button)</option><option value="none">None</option></select>
+      </fieldset>
+      <fieldset><legend>Phone Menu — 3D, Theme &amp; Hands</legend>
         <label for="phoneRender" class="mk-lab">Phone look</label>
         <select id="phoneRender" aria-label="Phone look"><option value="2d">Standard (flat art, in your hands)</option><option value="3d">3D (real phone body, no hands)</option></select>
         <div id="phoneRotationRows"><label for="phoneRotateMode" class="mk-lab">3D rotation control</label>
@@ -4055,6 +4084,8 @@
           <select id="phoneHandMode" aria-label="Which hands hold the phone"><option value="both">Both hands</option><option value="left">Left hand only</option><option value="right">Right hand only</option></select>
         </div>
         </div>
+      </fieldset>
+      <fieldset><legend>Phone Menu — Home Screen &amp; Clock</legend>
         <label for="phoneTimeFormat" style="display:block;margin:9px 0 6px">Clock format</label>
         <select id="phoneTimeFormat" aria-label="Clock format"><option value="system">System default</option><option value="24h">24-hour</option><option value="12h">12-hour (AM / PM)</option></select>
         <label for="phoneHomeRows" style="display:block;margin:9px 0 6px">Home screen icon rows</label>
@@ -4063,6 +4094,8 @@
         <div class="fv-sizer"><button type="button" id="phoneIconMinus" aria-label="Smaller icons">−</button><button type="button" id="phoneIconPlus" aria-label="Larger icons">+</button><button type="button" id="phoneIconReset" aria-label="Reset the icon size">100%</button></div>
         <div class="space" style="margin-top:10px"><label for="phoneWeatherScale">Weather panel size</label><b class="value" id="phoneWeatherScaleValue">100%</b></div>
         <input id="phoneWeatherScale" type="range" min="70" max="140" step="1">
+      </fieldset>
+      <fieldset><legend>Phone Menu — Colors &amp; Lighting</legend>
         <div class="space" id="phoneGloveRow" style="margin-top:10px"><label for="phoneGloveColor">Glove color</label><input id="phoneGloveColor" type="color"></div>
         <div class="space" id="phoneSkinRow" style="margin-top:10px"><label for="phoneSkinColor">Skin tone</label><input id="phoneSkinColor" type="color"></div>
         <label class="line"><input type="checkbox" id="phoneGlare"> Glass reflection on the screen</label>
@@ -4071,6 +4104,8 @@
         <div id="phoneSunRow"><label for="phoneSunStrength" class="mk-lab">Sunlight strength</label>
         <select id="phoneSunStrength" aria-label="Sunlight strength"><option value="subtle">Subtle</option><option value="normal">Normal</option><option value="strong">Strong</option></select></div>
         <div class="help" id="phoneSunHelp"></div>
+      </fieldset>
+      <fieldset><legend>Phone Menu — Size &amp; Position</legend>
         <div class="space" style="margin-top:10px"><label for="phoneScalePct">Phone size</label><b class="value" id="phoneScalePctValue">100%</b></div>
         <input id="phoneScalePct" type="range" min="50" max="160" step="1">
         <div id="phonePosHands">
@@ -4100,7 +4135,7 @@
         <input id="phoneWallDim" type="range" min="0" max="70" step="1">
         <div class="help" id="phoneWallHelp"></div>
       </fieldset>
-      <fieldset id="markersSettings"><legend>Pin Markers — speed pins in the world</legend>
+      <fieldset id="markersSettings"><legend>Pin Markers — Manage Pins</legend>
         <label class="line"><input type="checkbox" id="markersEnabled"> Pin Markers ON/OFF</label>
         <label for="markersCity" class="mk-lab">Current city (manual selection)</label><select id="markersCity"><option>Bayview</option><option>Rockport</option><option>Palmont</option></select><div class="help">The feed does not identify the city. Select the city when changing maps; only its pins are shown and recorded.</div>
         <div class="help">Press the pin key while driving to plant a pin that keeps a speed record. The pin is drawn over the game: a softly rounded label with the speed, and a thin line down to the spot. Pins stay saved on this computer. Default OFF.</div>
@@ -4108,6 +4143,8 @@
         <div class="three"><button id="markerDelLast" type="button">Delete last</button><button id="markerDelNear" type="button">Delete nearest</button><button id="markerDelAll" type="button">Delete all</button></div>
         <div class="mk-list" id="markersList" role="list" aria-label="Pins"></div>
         <div class="help" id="markersStatus" aria-live="polite">—</div>
+      </fieldset>
+      <fieldset><legend>Pin Markers — Recording &amp; Appearance</legend>
         <label for="markersMode" class="mk-lab mk-lab1">How a pin records</label>
         <select id="markersMode" aria-label="How a pin records"><option value="press">Press while passing</option><option value="wait">Plant, then drive past</option></select>
         <div class="help" id="markersModeHelp"></div>
@@ -4121,6 +4158,8 @@
         <div class="space"><label for="markersScale">Pin size</label><b class="value" id="markersScaleValue">100%</b></div>
         <input id="markersScale" type="range" min="60" max="160" step="5">
         <label class="line"><input type="checkbox" id="markersEdgeArrows"> Show an arrow at the screen edge for pins out of view</label>
+      </fieldset>
+      <fieldset><legend>Pin Markers — Shortcuts &amp; Reset</legend>
         <div class="space mk-gap"><span>Plant a pin</span><strong id="shortcutMarkerText">Numpad .</strong></div>
         <button type="button" id="shortcutMarkerBind" class="mk-btn mk-btn2">Change pin key</button>
         <label for="markersKeyDelete" class="mk-lab">The delete key removes</label>
@@ -4289,9 +4328,52 @@
         <div style="margin-top:9px;display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="drinkPreviewSip" type="button">Preview sip</button><button id="drinkPreviewEffect" type="button">Preview effect</button></div>
         <div class="help">From the warning drink on you stay drunk for this many seconds, plus 1 s for every drink after it (drink 3: +0 s, drink 4: +1 s ... drink 10: +7 s). If you do not drink again in that time you sober up with a 3 s fade-away and the drink counter starts again. The preview starts the ladder at drink 3, the police warning (look only: your controls are never changed and your real counter is kept): press the Drink key to keep going.</div>
       </fieldset>
-      <fieldset><legend>Visual Effects — Windshield Glass</legend>
-        <label class="line"><input type="checkbox" id="windshieldEnabled"> Enable Windshield Glass (whole screen)</label>
-        <div class="help">A transparent glass layer over the whole game window, under the HUD: reflection, dust, wiper marks and a tinted sun strip (each one is a separate ON/OFF + intensity option). Strong impacts add cracks (they fade away smoothly after the time below if there is no new hit). Limp Mode shatters the glass until the repair ends; then ALL cracks are cleaned. It never blocks the mouse and the centre of the screen stays readable.</div>
+      <fieldset><legend>Visual Effects — Windshield: General &amp; Drying</legend>
+        <label class="line"><input type="checkbox" id="windshieldEnabled"> Enable Windshield Glass</label>
+        <div class="help">A transparent glass layer on the detected cockpit windshield, under the HUD: reflection, dust, wiper marks and a tinted sun strip (each one is a separate ON/OFF + intensity option). Strong impacts add cracks (they fade away smoothly after the time below if there is no new hit). Limp Mode shatters the glass until the repair ends; then ALL cracks are cleaned. It never blocks the mouse and the centre of the screen stays readable.</div>
+
+        <label class="line">Windshield effects version <select id="windshieldVersion"><option value="latest">Latest version — Dynamic cockpit</option><option value="previous">Previous version — Full screen</option></select></label><div class="help">Previous: original full-screen glass effects (no dynamic rain). Latest: automatic cockpit glass and rain.</div>
+        <label class="line"><input type="checkbox" id="windshieldPersistent"> Preserve effects on camera change</label>
+        <label class="line"><input type="checkbox" id="windshieldGradualDrying"> Gradual rain drying</label>
+        <label class="line"><input type="checkbox" id="windshieldSpeedDrying"> Speed-dependent drying</label>
+        <div class="space"><label for="windshieldDryingSpeed">Drying speed</label><span class="value" id="windshieldDryingSpeedValue">100%</span></div><input type="range" id="windshieldDryingSpeed" min="25" max="200" step="1">
+        <div class="help">Automatic detection adapts to the car and viewport while driving. Previous version uses the original full-screen glass effects without rain. Mirror exclusion is not enabled in this beta.</div>
+      </fieldset>
+      <fieldset><legend>Visual Effects — Interior Rain Audio</legend>
+        <label class="line"><input type="checkbox" id="interiorRainAudioEnabled"> Enable Interior Rain Audio</label>
+        <div class="space"><label for="interiorRainAudioVolume">Rain volume</label><span class="value" id="interiorRainAudioVolumeValue">70%</span></div>
+        <input type="range" id="interiorRainAudioVolume" min="0" max="100" step="1">
+        <label class="line"><input type="checkbox" id="interiorRainAudioDynamic"> Dynamic rain intensity</label>
+        <label class="line"><input type="checkbox" id="interiorRainAudioCockpit"> Cockpit view only</label>
+        <label class="line"><input type="checkbox" id="interiorRainAudioFade"> Smooth audio fade</label>
+        <div class="help">Rain Inside Car — Roof by Nox_Sound (CC0). Original roof loop is included. No import needed. An optional custom sound can be stored locally. Plays independently of visual windshield effects.</div>
+        <input type="file" id="interiorRainAudioFile" accept="audio/*,.wav,.ogg,.mp3" hidden>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px"><button type="button" id="interiorRainAudioImport">Load custom sound</button><button type="button" id="interiorRainAudioPreview">Preview sound 10 s</button><button type="button" id="interiorRainAudioStop">Stop preview</button></div>
+        <div class="help" id="interiorRainAudioStatus" aria-live="polite">Loading audio settings…</div>
+      </fieldset>
+      <fieldset><legend>Visual Effects — Windshield: Rain Drops</legend>
+        <label class="line"><input type="checkbox" id="windshieldRainEnabled"> Rain droplets</label>
+        <div class="space"><label for="windshieldRainIntensity">Drop intensity (0% = off · 150% = +50%)</label><span class="value" id="windshieldRainIntensityValue">100%</span></div>
+        <input type="range" id="windshieldRainIntensity" min="0" max="150" step="1"><div style="display:flex;gap:5px;margin:3px 0"><button type="button" id="windshieldRainIntensityNormal">100% drops</button><button type="button" id="windshieldRainIntensityBoost">+50% more drops (150%)</button></div>
+        <div class="space"><label for="windshieldRainSize">Drop size</label><span class="value" id="windshieldRainSizeValue">100%</span></div>
+        <input type="range" id="windshieldRainSize" min="40" max="200" step="1"><div style="display:flex;gap:5px;margin:3px 0"><button type="button" id="windshieldRainSizeNormal">100% size</button><button type="button" id="windshieldRainSizeLarge">+50% size</button></div>
+        <div class="space"><label for="windshieldRainOpacity">Drop opacity</label><span class="value" id="windshieldRainOpacityValue">85%</span></div>
+        <input type="range" id="windshieldRainOpacity" min="0" max="100" step="1">
+        <div class="space"><label for="windshieldRainFlow">Airflow / movement</label><span class="value" id="windshieldRainFlowValue">100%</span></div>
+        <input type="range" id="windshieldRainFlow" min="0" max="250" step="1">
+        <div class="space"><label for="windshieldRainLife">Drop lifetime</label><span class="value" id="windshieldRainLifeValue">100%</span></div>
+        <input type="range" id="windshieldRainLife" min="25" max="200" step="1">
+        <div class="space"><label for="windshieldRainMargin">Glass safety margin</label><span class="value" id="windshieldRainMarginValue">5 px</span></div>
+        <input type="range" id="windshieldRainMargin" min="0" max="20" step="1">
+        <div class="space"><label for="windshieldRainFps">Rain FPS limit</label><span class="value" id="windshieldRainFpsValue">45 FPS</span></div>
+        <input type="range" id="windshieldRainFps" min="15" max="60" step="1">
+        <label class="line"><input type="checkbox" id="windshieldRainMerge"> Drop merging</label>
+        <label class="line"><input type="checkbox" id="windshieldRainTrails"> Water trails</label>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px"><button id="windshieldRainPreview" type="button">Preview rain 20 s</button></div>
+        <div class="help" id="windshieldAutoStatus" role="status">Dynamic windshield off</div>
+        <div id="windshieldVisualAccess" hidden style="margin-top:6px"><div class="help">The browser cannot read the game canvas. Allow visual access to the current game tab to enable automatic detection.</div><button id="windshieldCapture" type="button">Enable visual access</button></div>
+      </fieldset>
+      <fieldset><legend>Visual Effects — Windshield: Reflection &amp; Dust</legend>
         <label class="line"><input type="checkbox" id="windshieldReflEnabled"> Glass reflection</label>
         <div class="space"><label for="windshieldReflPct">Glass reflection intensity</label><span class="value" id="windshieldReflPctValue">100%</span></div>
         <input type="range" id="windshieldReflPct" min="0" max="100" step="5">
@@ -4299,6 +4381,9 @@
         <div class="space"><label for="windshieldDustPct">Dust intensity</label><span class="value" id="windshieldDustPctValue">100%</span></div>
         <input type="range" id="windshieldDustPct" min="0" max="100" step="5">
         <div class="help" id="windshieldSurfaceNow">Surface under the wheels: — (drive with this menu open to see what the game reports)</div>
+        <div style="margin-top:6px"><button id="windshieldPreviewDust" type="button" style="width:100%">Preview dust (20 s, the last 5 s fade)</button></div>
+      </fieldset>
+      <fieldset><legend>Visual Effects — Windshield: Wipers &amp; Sun Strip</legend>
         <label class="line"><input type="checkbox" id="windshieldWiperEnabled"> Wiper marks (static arcs)</label>
         <div class="space"><label for="windshieldWiperPct">Wiper marks intensity</label><span class="value" id="windshieldWiperPctValue">0%</span></div>
         <input type="range" id="windshieldWiperPct" min="0" max="100" step="5">
@@ -4307,19 +4392,24 @@
         <input type="range" id="windshieldSunPct" min="0" max="100" step="5">
         <div class="space"><label for="windshieldSunColor">Sun strip color (custom)</label><input id="windshieldSunColor" type="color"></div>
         <div style="margin-top:6px"><button id="windshieldSunColorReset" type="button" style="width:100%">Reset sun strip color (blue)</button></div>
+      </fieldset>
+      <fieldset><legend>Visual Effects — Windshield: Cracks &amp; Limp Mode</legend>
+        <label class="line"><input type="checkbox" id="windshieldImpactCracksEnabled"> Enable cracks on normal impacts</label>
+        <div class="help">Optional visual cracks on individual impacts; independent of Limp Mode.</div>
         <div class="space"><label for="windshieldCracksPct">Impact cracks intensity</label><span class="value" id="windshieldCracksPctValue">25%</span></div>
         <input type="range" id="windshieldCracksPct" min="0" max="100" step="5">
         <div class="space"><label for="windshieldHitDv">Crack on impacts from</label><span class="value" id="windshieldHitDvValue">3.0 m/s</span></div>
         <input type="range" id="windshieldHitDv" min="3" max="20" step="0.5">
         <div class="space"><label for="windshieldFadeSeconds">Cracks fade away after (no new hit)</label><span class="value" id="windshieldFadeSecondsValue">120 s</span></div>
         <input type="range" id="windshieldFadeSeconds" min="20" max="600" step="10">
+        <label class="line"><input type="checkbox" id="windshieldLimpGlassEnabled"> Enable shattered glass during Limp Mode</label>
+        <div class="help">Uses the existing Driving → Limp Mode hit count and repair timer. Does not change damage rules.</div>
         <div class="space"><label for="windshieldLimpPct">Limp Mode shattered glass intensity</label><span class="value" id="windshieldLimpPctValue">80%</span></div>
         <input type="range" id="windshieldLimpPct" min="0" max="100" step="5">
         <div class="space"><label for="windshieldClearZonePct">Visibility protection (clear centre)</label><span class="value" id="windshieldClearZonePctValue">80%</span></div>
         <input type="range" id="windshieldClearZonePct" min="0" max="100" step="5">
         <label class="line" title="Cracks appear on the side the car was hit (the game sends the direction). If a hit on the LEFT cracks the RIGHT side of your glass, tick this."><input type="checkbox" id="windshieldImpactFlip"> Flip left / right impact side</label>
-        <div style="margin-top:9px;display:flex;gap:6px"><button id="windshieldPreviewHit" type="button" style="flex:1">Preview crack</button><button id="windshieldPreviewLimp" type="button" style="flex:1">Preview Limp</button><button id="windshieldClear" type="button" style="flex:1">Clear cracks</button></div>
-        <div style="margin-top:6px"><button id="windshieldPreviewDust" type="button" style="width:100%">Preview dust (20 s, the last 5 s fade)</button></div>
+        <div style="margin-top:9px;display:flex;gap:6px"><button id="windshieldPreviewHit" type="button" style="flex:1">Preview crack</button><button id="windshieldPreviewLimp" type="button" style="flex:1">Preview Limp</button><button id="windshieldClear" type="button" style="flex:1">Clear impact cracks</button></div>
         <div class="help">Cracks use their own impact-strength threshold, independent of Impact Feedback speed and velocity filters. Medium cracks start at 2× the selected threshold; large cracks at 4×. A conservative sudden-speed-loss fallback is used when impact telemetry is missing. Up to 5 cracks at once; the clear centre zone is protected.</div>
       </fieldset>
       <fieldset><legend>Visual Effects — Impact Feedback</legend>
@@ -4875,18 +4965,50 @@
     if(title.includes('colors')||title.includes('customization')||title.includes('phone menu')||title.includes('wallpaper'))return 'color';
     return 'main';
   }
+  const sectionPanel=menuShadow.getElementById('settingsPanel');
+  const sectionNav=menuShadow.getElementById('menuSectionNav'),sectionPick=menuShadow.getElementById('menuSectionPick'),sectionBack=menuShadow.getElementById('menuSectionBack'),sectionList=menuShadow.getElementById('menuSectionList');
+  let sectionScope='',sectionSelected='',sectionSignature='';
+  const sectionLabel=f=>String(f.querySelector('legend')?.textContent||'Settings').replace(/^Visual Effects — /,'');
+  const sectionKey=f=>String(menuFieldsets.indexOf(f));
+  function sectionArea(f){const t=(f.querySelector('legend')?.textContent||'').toLowerCase();if(t.includes('visual effects'))return 'Visual Effects';if(t.includes('phone menu'))return 'Phone';if(t.includes('wallpaper'))return 'Wallpaper';if(t.includes('pin markers'))return 'Markers';if(t.includes('independent 2026')||t.includes('pedals hud'))return 'Status HUD';if(t.includes('keyboard'))return 'Shortcuts';if(t.includes('engine damage')||t.includes('telemetry'))return 'Driving';if(t.includes('profiles')||t.includes('odometer'))return 'Profiles';if(t.includes('colors')||t.includes('customization')||t.includes('glass cover'))return 'Colors';return 'Cars HUD';}
+  function chooseMenuSection(value){sectionSelected=value;closeHelpPopup();filterMenuSections();sectionPanel.scrollTop=0;}
+  sectionPick.addEventListener('change',()=>chooseMenuSection(sectionPick.value));
+  sectionBack.addEventListener('click',()=>chooseMenuSection(''));
   function filterMenuSections(){
     const cat=menuShadow.getElementById('menuCategory')?.value||'all';
     const query=(menuShadow.getElementById('menuSearch')?.value||'').trim().toLowerCase();
-    let count=0;
+    const scope=(phoneActive?sectionPanel.dataset.app||'settings':'classic')+'|'+cat+'|'+query;
+    if(sectionScope!==scope){sectionScope=scope;sectionSelected='';}
+    const choices=[];
     for(const f of menuFieldsets){
       const matched=(cat==='all'||menuGroup(f)===cat) && (!query||f.textContent.toLowerCase().includes(query)) && (!phoneActive||!fvMatch||fvMatch(f));
       f.classList.toggle('menu-filtered',!matched);
-      if(matched&&!f.hidden)count++;
+      if(matched&&!f.hidden)choices.push(f);
     }
+    if(sectionSelected&&!choices.some(f=>sectionKey(f)===sectionSelected))sectionSelected='';
+    if(choices.length===1)sectionSelected=sectionKey(choices[0]);
+    const signature=scope+'|'+choices.map(f=>sectionKey(f)+':'+sectionLabel(f)).join('|');
+    if(signature!==sectionSignature){
+      sectionSignature=signature;sectionPick.replaceChildren();sectionList.replaceChildren();
+      const overview=document.createElement('option');overview.value='';overview.textContent='Choose a section…';sectionPick.append(overview);
+      const groups=new Map();
+      for(const f of choices){const group=sectionArea(f);if(!groups.has(group)){const g=document.createElement('optgroup');g.label=group;groups.set(group,g);sectionPick.append(g);}const opt=document.createElement('option');opt.value=sectionKey(f);opt.textContent=sectionLabel(f);groups.get(group).append(opt);}
+      if(choices.length<=16){for(const f of choices){const b=document.createElement('button');b.type='button';b.textContent=sectionLabel(f);const arrow=document.createElement('span');arrow.textContent='›';arrow.setAttribute('aria-hidden','true');b.append(arrow);b.addEventListener('click',()=>chooseMenuSection(sectionKey(f)));sectionList.append(b);}}
+      else{const p=document.createElement('p');p.textContent='Choose an app / section from the list above. Use search or Category to narrow the choices.';sectionList.append(p);}
+      if(!choices.length){const p=document.createElement('p');p.textContent='No available sections match this search.';sectionList.append(p);}
+    }
+    sectionPick.value=sectionSelected;
+    sectionNav.hidden=choices.length<=1;
+    sectionBack.disabled=!sectionSelected;
+    sectionList.hidden=!!sectionSelected;
+    sectionPanel.classList.toggle('menu-single-page',!!sectionSelected);
+    for(const f of menuFieldsets)f.classList.toggle('menu-page-hidden',!sectionSelected||sectionKey(f)!==sectionSelected);
     const meter=menuShadow.getElementById('menuFilterCount');
-    if(meter)meter.textContent=phoneActive?`${count} section${count===1?'':'s'}`:`${count} sections shown · resize the window to display more columns`;
+    if(meter)meter.textContent=choices.length+' section'+(choices.length===1?'':'s')+' available · choose one';
   }
+  // HUD style and phone mode can hide a section independently of navigation.
+  const sectionObserver=new MutationObserver(()=>filterMenuSections());
+  for(const f of menuFieldsets)sectionObserver.observe(f,{attributes:true,attributeFilter:['hidden']});
   menuShadow.getElementById('menuCategory').addEventListener('change',filterMenuSections);
   menuShadow.getElementById('menuSearch').addEventListener('input',filterMenuSections);
   menuShadow.getElementById('menuClearSearch').addEventListener('click',()=>{
@@ -7435,14 +7557,30 @@
   wshRoot.insertBefore(wshCracksCv,wshLimpGrp);
   wshLimpGrp.insertBefore(wshLimpCv,wshFrost);
   (document.documentElement||document.body).append(wshHost);
+  let dynamicWsh=null, dynamicMask=null, lastGlassClip="", lastGlassTransform="", lastDynamicMode=null;
+  function applyDynamicGlassMask(frame){
+    dynamicMask=frame;
+    if(!settings.windshieldDynamic){wshHost.style.visibility="";wshHost.style.clipPath="";wshRoot.style.transform="";return;}
+    if(!frame){wshHost.style.visibility="hidden";return;}
+    const wasHidden=wshHost.style.visibility==="hidden";
+    const {r,p}=frame, W=Math.max(1,wsh.W||innerWidth),H=Math.max(1,wsh.H||innerHeight), xs=p.map(q=>r.x+q[0]*r.w),ys=p.map(q=>r.y+q[1]*r.h);
+    const l=Math.min(...xs),t=Math.min(...ys),right=Math.max(...xs),bottom=Math.max(...ys),bw=right-l,bh=bottom-t;
+    if(!Number.isFinite(bw+bh)||bw<10||bh<10){wshHost.style.visibility="hidden";return;}
+    const margin=clamp(settings.windshieldRainMargin,0,20),cx=(l+right)/2,cy=(t+bottom)/2;
+    // Contract conservatively toward the mask centre. Glass art follows the moving bounds, with a dense contour clip.
+    const kx=Math.max(.01,1-2*margin/bw),ky=Math.max(.01,1-2*margin/bh);
+    const clip="polygon("+xs.map((x,i)=>`${(cx+(x-cx)*kx).toFixed(2)}px ${(cy+(ys[i]-cy)*ky).toFixed(2)}px`).join(",")+")";
+    const transform=`translate(${l.toFixed(1)}px,${t.toFixed(1)}px) scale(${(bw/W).toFixed(4)},${(bh/H).toFixed(4)})`;if(clip!==lastGlassClip||!wshHost.style.clipPath){wshHost.style.clipPath=clip;lastGlassClip=clip;}if(transform!==lastGlassTransform||!wshRoot.style.transform){wshRoot.style.transformOrigin="0 0";wshRoot.style.transform=transform;lastGlassTransform=transform;}if(wshHost.style.visibility!=="visible")wshHost.style.visibility="visible";if(wasHidden){wshDustApply(true);wshRedrawCracks();}
+  }
+  function syncDynamicGlass(){const changed=lastDynamicMode!==settings.windshieldDynamic;lastDynamicMode=settings.windshieldDynamic;dynamicWsh?.sync();if(!settings.windshieldDynamic){applyDynamicGlassMask(null);if(changed){wshDustApply(true);wshRedrawCracks();}}else if(!dynamicMask)wshHost.style.visibility="hidden";}
   const wsh={W:0,H:0,rs:1,ss:.75,cracks:[],limp:false,limpList:[],fadeTimer:null,hideTimer:null,previewUntil:0,previewTimer:null,lastHitAt:-Infinity,
     shown:false,animCracks:null,animCracksClearing:false,animLimp:null,sig:"",dust:{lvl:0,on:false,leaveAt:-Infinity,leaveLvl:0,lastAt:0,applied:-1,timer:0}};
   const wshRng=seed=>{let s=seed>>>0;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};};
   const wshPct=v=>clamp(Number(v)||0,0,100)/100;
   function wshSize(){
     const W=Math.max(1,window.innerWidth||document.documentElement.clientWidth||1280),H=Math.max(1,window.innerHeight||document.documentElement.clientHeight||720);
-    const rs=Math.min(window.devicePixelRatio||1,Math.sqrt(2.6e6/(W*H)),2); // crack layers: at most ~2.6 Mpx per canvas
-    const ss=Math.min(rs,.75);                                             // wipers / dust are soft: lower resolution is enough
+    const rs=Math.min(window.devicePixelRatio||1,Math.sqrt(850000/(W*H)),1); // crack layers: at most ~2.6 Mpx per canvas
+    const ss=Math.min(rs,.55);                                             // wipers / dust are soft: lower resolution is enough
     wsh.W=W;wsh.H=H;wsh.rs=rs;wsh.ss=ss;
     for(const [cv,k] of [[wshCracksCv,rs],[wshLimpCv,rs],[wshStaticCv,ss],[wshDustCv,ss]]){
       const w=Math.max(1,Math.round(W*k)),h=Math.max(1,Math.round(H*k));
@@ -7549,7 +7687,7 @@
       const x=nx*W,y=ny*H,r=wshRng(seed),{lines,rings,chip}=wshBuildCrack(kind||"web",x,y,stage,r,u);
       const stroke=(col,w,ox,oy)=>{
         c.strokeStyle=col;c.lineWidth=w;
-        for(const l of lines.concat(rings)){c.beginPath();l.forEach((p,i)=>i?c.lineTo(p[0]+ox,p[1]+oy):c.moveTo(p[0]+ox,p[1]+oy));c.stroke();}
+        c.beginPath();for(const l of lines.concat(rings)){l.forEach((p,i)=>i?c.lineTo(p[0]+ox,p[1]+oy):c.moveTo(p[0]+ox,p[1]+oy));}c.stroke();
       };
       stroke("rgba(0,0,0,.35)",lw*2,lw*1.2,lw*1.2);
       stroke("rgba(235,245,255,.85)",lw,0,0);
@@ -7563,7 +7701,7 @@
       c.translate(W/2,H*WSH_CLEAR_CY);c.scale((W/H)/1.657,1);
       const g=c.createRadialGradient(0,0,H*.05,0,0,H*.5);
       g.addColorStop(0,`rgba(0,0,0,${guard.toFixed(3)})`);g.addColorStop(.65,`rgba(0,0,0,${(guard*.5).toFixed(3)})`);g.addColorStop(1,"rgba(0,0,0,0)");
-      c.fillStyle=g;c.fillRect(-W*4,-H*4,W*8,H*8);c.restore();
+      c.fillStyle=g;c.fillRect(-W,-H,W*2,H*2);c.restore();
     }
   }
   function wshPickKind(stage){
@@ -7572,12 +7710,18 @@
     if(stage===2)return q<.3?"line":q<.6?"star":"web";
     return q<.2?"line":q<.4?"star":"web";
   }
+  let wshCrackDrawQueued=false, wshCrackSig="", wshLimpSig="";
   function wshRedrawCracks(){
-    if(!wsh.W)wshSize();
-    const guard=wshPct(settings.windshieldClearZonePct);
-    wshDrawCrackList(wshCracksCv,wsh.cracks,guard);
-    wshDrawCrackList(wshLimpCv,wsh.limp?wsh.limpList:[],guard);
-    wshLimpGrp.style.display=wsh.limp?"block":"none";
+    if(settings.windshieldDynamic&&!dynamicMask)return;
+    if(wshCrackDrawQueued)return;wshCrackDrawQueued=true;
+    requestAnimationFrame(()=>{wshCrackDrawQueued=false;if(settings.windshieldDynamic&&!dynamicMask)return;if(!wsh.W)wshSize();
+      const guard=wshPct(settings.windshieldClearZonePct),base=[wsh.W,wsh.H,wsh.rs,guard].join("|");
+      const impactList=settings.windshieldImpactCracksEnabled?wsh.cracks:[],limpList=settings.windshieldLimpGlassEnabled?wsh.limpList:[];
+      const cs=base+JSON.stringify(impactList),ls=base+JSON.stringify(limpList);
+      if(cs!==wshCrackSig){wshDrawCrackList(wshCracksCv,impactList,guard);wshCrackSig=cs;}
+      if(ls!==wshLimpSig){wshDrawCrackList(wshLimpCv,limpList,guard);wshLimpSig=ls;}
+      wshLimpGrp.style.display=settings.windshieldLimpGlassEnabled&&(wsh.limp||limpList.length)?"block":"none";
+    });
   }
   function wshMakeLimpList(){
     const sd=(Math.random()*1e9)|0,j=()=>(Math.random()-.5)*.06;
@@ -7613,17 +7757,17 @@
   }
   function wshScheduleFade(){
     clearTimeout(wsh.fadeTimer);wsh.fadeTimer=null;
-    if(wsh.limp||!wsh.cracks.length)return;
+    if(!settings.windshieldImpactCracksEnabled||!wsh.cracks.length)return;
     wsh.fadeTimer=setTimeout(()=>{
       wsh.fadeTimer=null;
-      if(wsh.limp||!wsh.cracks.length)return;
+      if(!settings.windshieldImpactCracksEnabled||!wsh.cracks.length)return;
       wsh.animCracks=wshFadeOut(wshCracksCv,wshPct(settings.windshieldCracksPct),4000,()=>{  // a NEW hit during this fade brings the cracks back (animCracksClearing stays false)
         wsh.animCracks=null;wsh.cracks.length=0;wshRedrawCracks();
       });
     },clamp(Number(settings.windshieldFadeSeconds)||120,20,600)*1000);
   }
   function wshAddCrack(stage,dir){
-    if(!settings.windshieldEnabled||wsh.limp)return; // Limp Mode: the shattered pattern already covers the screen
+    if(!settings.windshieldEnabled||!settings.windshieldImpactCracksEnabled)return;
     wshCancelCracksAnim();
     const [nx,ny]=wshSpotForDir(dir)||wshPickSpot();
     const st=clamp(stage,1,3);
@@ -7631,17 +7775,19 @@
     while(wsh.cracks.length>WSH_MAX_CRACKS)wsh.cracks.shift();
     wshRedrawCracks();wshScheduleFade();wshUpdateVisibility();
   }
-  function wshClearAll(ms){
+  function wshClearImpactCracks(ms=0){
     clearTimeout(wsh.fadeTimer);wsh.fadeTimer=null;
-    wshCancelCracksAnim();wshCancelLimpAnim();
-    if(wsh.cracks.length){
+    wshCancelCracksAnim();
+    if(ms>0&&wsh.cracks.length){
       wsh.animCracksClearing=true;
       wsh.animCracks=wshFadeOut(wshCracksCv,wshPct(settings.windshieldCracksPct),ms,()=>{wsh.animCracks=null;wsh.animCracksClearing=false;wsh.cracks.length=0;wshRedrawCracks();});
-    }
-    if(wsh.limpList.length||wsh.limp){
-      wsh.limp=false;
-      wsh.animLimp=wshFadeOut(wshLimpGrp,1,ms,()=>{wsh.animLimp=null;wsh.limpList=[];wshRedrawCracks();});
-    }
+    }else{wsh.cracks.length=0;wshRedrawCracks();}
+  }
+  function wshClearLimpGlass(ms=0){
+    wshCancelLimpAnim();wsh.limp=false;
+    if(ms>0&&wsh.limpList.length){
+      wsh.animLimp=wshFadeOut(wshLimpGrp,1,ms,()=>{wsh.animLimp=null;wsh.limpList=[];wshLimpGrp.style.display="none";wshRedrawCracks();});
+    }else{wsh.limpList=[];wshLimpGrp.style.display="none";wshRedrawCracks();}
   }
   function wshHardClear(){
     clearTimeout(wsh.fadeTimer);wsh.fadeTimer=null;
@@ -7651,14 +7797,14 @@
   }
   function wshSetLimp(on){
     if(on){
-      if(wsh.limp||!settings.windshieldEnabled)return;
-      clearTimeout(wsh.fadeTimer);wsh.fadeTimer=null;wshCancelCracksAnim();wshCancelLimpAnim();
+      if(wsh.limp||!settings.windshieldEnabled||!settings.windshieldLimpGlassEnabled)return;
+      wshCancelLimpAnim();
       wsh.limp=true;wsh.limpList=wshMakeLimpList();
       wshRedrawCracks();
       if(typeof wshLimpGrp.animate==="function")wsh.animLimp=wshLimpGrp.animate([{opacity:0},{opacity:1}],{duration:220,easing:"ease-out"});
       wshUpdateVisibility();
-    } else if(wsh.limp||wsh.cracks.length||wsh.limpList.length){
-      wshClearAll(2500);   // the limp is over: ALL cracks go away, smoothly
+    } else if(wsh.limp){
+      wshClearLimpGlass(2500);   // repair only clears the Limp overlay; normal cracks retain their timer
     }
   }
   function wshLive(){
@@ -7674,11 +7820,12 @@
     if(show){
       wshHost.style.display="block";
       if(!wsh.W||window.innerWidth!==wsh.W||window.innerHeight!==wsh.H){wshSize();wshDrawStatic();wshDrawDust();wshRedrawCracks();}
-      void wshHost.offsetWidth;wshRoot.classList.add("on");
+      wshRoot.classList.add("on");
     }
     else{wshRoot.classList.remove("on");wsh.hideTimer=setTimeout(()=>{if(!wsh.shown)wshHost.style.display="none";},500);}
   }
   function wshApplyIfChanged(){
+    syncDynamicGlass();
     const sig=WSH_KEYS.map(k=>settings[k]).join("|");
     if(sig===wsh.sig)return;
     wsh.sig=sig;
@@ -7686,13 +7833,16 @@
     wshRefl.style.opacity=settings.windshieldReflEnabled?String(wshPct(settings.windshieldReflPct)):"0";
     wshSun.style.opacity=settings.windshieldSunEnabled?String(wshPct(settings.windshieldSunPct)):"0";
     {const hx=validColor(settings.windshieldSunColor)?settings.windshieldSunColor:"#184A96";wshSun.style.setProperty("--sun",`${parseInt(hx.slice(1,3),16)},${parseInt(hx.slice(3,5),16)},${parseInt(hx.slice(5,7),16)}`);}
+    wshCracksCv.style.display=settings.windshieldImpactCracksEnabled?"block":"none";
     wshCracksCv.style.opacity=String(wshPct(settings.windshieldCracksPct));
     wshLimpCv.style.opacity=String(wshPct(settings.windshieldLimpPct));
     wshFrost.style.opacity=String(wshPct(settings.windshieldLimpPct));
     wshDrawStatic();wshDrawDust();
     if(!settings.windshieldEnabled){wshHardClear();wshDustReset();}
     else{
-      if(damageIsActive()&&!wsh.limp){wsh.limp=true;wsh.limpList=wshMakeLimpList();}
+      if(!settings.windshieldImpactCracksEnabled&&(wsh.cracks.length||wsh.fadeTimer||wsh.animCracks))wshClearImpactCracks();
+      if(!settings.windshieldLimpGlassEnabled){if(wsh.limp||wsh.limpList.length||wsh.animLimp)wshClearLimpGlass();}
+      else if(damageIsActive()&&!wsh.limp)wshSetLimp(true);
       wshRedrawCracks();
     }
     wshUpdateVisibility();
@@ -7706,7 +7856,7 @@
     return n>=2&&Number.isFinite(d.speed)&&Math.abs(d.speed)>=1.4;      // two or more wheels on dirt and the car really moves (>= 5 km/h)
   }
   function wshDustApply(force){
-    const u=wsh.dust;
+    const u=wsh.dust;if(settings.windshieldDynamic&&!dynamicMask)return;
     if(!force&&Math.abs(u.lvl-u.applied)<.004)return;
     u.applied=u.lvl;wshDustCv.style.opacity=u.lvl.toFixed(3);
   }
@@ -7778,20 +7928,20 @@
     return dv<threshold?0:dv>=threshold*4?3:dv>=threshold*2?2:1;
   }
   function processWindshieldHit(d,now){
-    if(!settings.windshieldEnabled||d?.state?.driving===false||d?.state?.paused===true||document.visibilityState==="hidden"){
+    if(!settings.windshieldEnabled||!settings.windshieldImpactCracksEnabled||d?.state?.driving===false||d?.state?.paused===true||document.visibilityState==="hidden"){
       wshImpactPrevious=null;return;
     }
     const sample=windshieldImpactSample(wshImpactPrevious,d,now);
     wshImpactPrevious=sample.next;
     const stage=windshieldCrackStage(sample.dv,settings.windshieldHitDv);
-    if(!stage||wsh.limp||now-wsh.lastHitAt<650)return;
+    if(!stage||now-wsh.lastHitAt<650)return;
     wsh.lastHitAt=now;
     wshAddCrack(stage,sample.fresh?d?.events?.impactDir:null);
   }
   function wshStartPreview(ms){
     wsh.previewUntil=performance.now()+ms;wshUpdateVisibility();
     clearTimeout(wsh.previewTimer);
-    wsh.previewTimer=setTimeout(()=>{wsh.previewTimer=null;wshUpdateVisibility();if(!wshLive()&&!damageIsActive())wshClearAll(700);},ms+60);
+    wsh.previewTimer=setTimeout(()=>{wsh.previewTimer=null;wshUpdateVisibility();},ms+60);
   }
   mget("windshieldPreviewDust").addEventListener("click",()=>{
     if(!settings.windshieldEnabled){saveStatus("Enable Windshield Glass first.");return;}
@@ -7805,16 +7955,18 @@
   });
   mget("windshieldPreviewHit").addEventListener("click",()=>{
     if(!settings.windshieldEnabled){saveStatus("Enable Windshield Glass first.");return;}
+    if(!settings.windshieldImpactCracksEnabled){saveStatus("Enable cracks on normal impacts first.");return;}
     wshStartPreview(7000);wshAddCrack(2+Math.floor(Math.random()*2));
     saveStatus("Windshield preview: one impact crack. It follows the normal rules (use 'Clear cracks' to remove it now).");
   });
   mget("windshieldPreviewLimp").addEventListener("click",()=>{
     if(!settings.windshieldEnabled){saveStatus("Enable Windshield Glass first.");return;}
+    if(!settings.windshieldLimpGlassEnabled){saveStatus("Enable shattered glass during Limp Mode first.");return;}
     wshStartPreview(7000);wshSetLimp(true);
     setTimeout(()=>{if(!damageIsActive())wshSetLimp(false);},6500);
-    saveStatus("Windshield preview: Limp Mode shattered glass (6 s), then everything is cleaned like after a real repair.");
+    saveStatus("Windshield preview: Limp Mode shattered glass (6 s), then only the Limp glass overlay fades if real Limp Mode is inactive.");
   });
-  mget("windshieldClear").addEventListener("click",()=>{wshClearAll(600);saveStatus("Windshield cracks cleared.");});
+  mget("windshieldClear").addEventListener("click",()=>{wshClearImpactCracks(600);saveStatus("Normal impact cracks cleared. Limp glass remains until repair.");});
   mget("windshieldSunColorReset").addEventListener("click",()=>{changeSetting("windshieldSunColor",DEFAULTS.windshieldSunColor);saveStatus("Sun strip color reset to blue.");});
   let wshResizeTimer=null;
   window.addEventListener("resize",()=>{clearTimeout(wshResizeTimer);wshResizeTimer=setTimeout(()=>{wshSize();wshDrawStatic();wshDrawDust();wshRedrawCracks();},150);});
@@ -8780,7 +8932,7 @@
     ui.damageAlert.classList.remove("show");ui.engineIcon.classList.remove("damage-critical");analogUi.engine.classList.remove("damage-critical");
     if(settings.showEngineIcon) {currentIndicators.engine="?";setIndicator("engine","","ENGINE");}
     updateDamageStatus();
-    if(wshWasLimp)wshSetLimp(false); // v0.11.0: the limp is over -> the shattered glass and every crack fade out
+    if(wshWasLimp)wshSetLimp(false); // Limp glass only; ordinary cracks have an independent timer
   }
   function activateDamage(now) {
     if (damageUntil>0)return;
@@ -9057,6 +9209,7 @@
     }
   }
   function syncMenu() {
+    mget("windshieldVersion").value=settings.windshieldDynamic?"latest":"previous";
     phoneSyncMenu();
     pmSyncMenu();
     syncCarIdentityMenu();
@@ -9116,6 +9269,7 @@
     mget("speedSensationFogPercentValue").textContent = `${settings.speedSensationFogPercent}%`;
     mget("speedSensationVignetteValue").textContent = `${settings.speedSensationVignette}%`;
     for(const k of WSH_PCT_KEYS)mget(k+"Value").textContent=`${settings[k]}%`;
+    for(const k of Object.keys(WSH_RAIN_RANGES))if(mget(k+"Value"))mget(k+"Value").textContent=`${settings[k]}${k.endsWith("Margin")?" px":k.endsWith("Fps")?" FPS":"%"}`;
     for(const k of ["helmetOpacityPct","helmetSizePct","helmetShakePct","cigaretteSizePct","cigaretteSmokePct"])mget(k+"Value").textContent=`${settings[k]}%`;
     mget("drinkSipSecondsValue").textContent=`${Number(settings.drinkSipSeconds).toFixed(1)} s`;
     mget("drinkFreeDrinksValue").textContent=String(settings.drinkFreeDrinks);
@@ -10560,7 +10714,7 @@ void main(){
     }else if(!home){
       mget("menuSearch").value=query||"";mget("menuCategory").value="all";
       filterMenuSections();
-      settingsPanel.scrollTop=query?0:(fvScroll[view]||0);
+      settingsPanel.scrollTop=0;
     }else fvRepage();
     fvNavState();
     phoneClock();
@@ -12186,7 +12340,7 @@ void main(){
       processTelemetry(m,now);
     }
     if(settings.damageEnabled)updateDamageHud(now);
-    if (!lastHudWorldDriving) {lastHudWorldDriving=true;applyVisibility();}
+    if (!lastHudWorldDriving) {lastHudWorldDriving=true;applyVisibility();wshUpdateVisibility();}
     if (now >= nextEligibleAt) scheduleRender();
   });
 
@@ -12431,6 +12585,25 @@ void main(){
       syncThrottleGuard();
     });
   } catch (error) { console.warn("[NFSU2 Modern HUD] Settings unavailable", error); }
+  dynamicWsh=globalThis.FrontvexDynamicWindshield?.mount({
+    settings:()=>({active:settings.windshieldEnabled&&settings.windshieldDynamic,persistent:settings.windshieldPersistent,gradual:settings.windshieldGradualDrying,speedDry:settings.windshieldSpeedDrying,dryingSpeed:settings.windshieldDryingSpeed,rain:settings.windshieldRainEnabled,intensity:settings.windshieldRainIntensity,size:settings.windshieldRainSize,opacity:settings.windshieldRainOpacity,flow:settings.windshieldRainFlow,life:settings.windshieldRainLife,margin:settings.windshieldRainMargin,fps:settings.windshieldRainFps,search:3,merge:settings.windshieldRainMerge,trails:settings.windshieldRainTrails,refraction:true,debug:false,damageArt:wsh.cracks.length>0||wsh.limp}),
+    onMask:applyDynamicGlassMask,onStatus:t=>setText(mget("windshieldAutoStatus"),t),onNeedsCapture:need=>{mget("windshieldVisualAccess").hidden=!need;},feedOwner:on=>vfSet("windshield",on),menuRect:()=>menuOpen?mget("settingsPanel").getBoundingClientRect():null
+  });
+  const interiorRainAudio=globalThis.FrontvexInteriorRainAudio?.mount({
+    settings:()=>({enabled:settings.interiorRainAudioEnabled,volume:settings.interiorRainAudioVolume,dynamic:settings.interiorRainAudioDynamic,cockpit:settings.interiorRainAudioCockpit,fade:settings.interiorRainAudioFade}),
+    storage:hudStorage,feedOwner:on=>vfSet("interior-rain-audio",on),status:t=>setText(mget("interiorRainAudioStatus"),t)
+  });
+  mget("interiorRainAudioImport").onclick=()=>mget("interiorRainAudioFile").click();
+  mget("interiorRainAudioFile").onchange=async e=>{const f=e.target.files?.[0];if(f)await interiorRainAudio?.load(f);e.target.value="";};
+  mget("interiorRainAudioPreview").onclick=()=>interiorRainAudio?.preview();
+  mget("interiorRainAudioStop").onclick=()=>interiorRainAudio?.stopPreview();
+  mget("windshieldRainPreview").onclick=()=>{if(!settings.windshieldEnabled||!settings.windshieldDynamic||!settings.windshieldRainEnabled||!settings.windshieldRainIntensity){saveStatus("Enable Windshield Glass, automatic cockpit and rain intensity above 0% first.");return;}dynamicWsh?.preview();saveStatus("Rain preview: 20 s starts after cockpit is confirmed.");};
+  mget("windshieldVersion").onchange=e=>changeSetting("windshieldDynamic",e.target.value==="latest");
+  mget("windshieldRainIntensityNormal").onclick=()=>changeSetting("windshieldRainIntensity",100);
+  mget("windshieldRainIntensityBoost").onclick=()=>changeSetting("windshieldRainIntensity",150);
+  mget("windshieldRainSizeNormal").onclick=()=>{changeSetting("windshieldRainSize",100);syncMenu();};
+  mget("windshieldRainSizeLarge").onclick=()=>{changeSetting("windshieldRainSize",150);syncMenu();};
+  mget("windshieldCapture").onclick=()=>{if(!settings.windshieldEnabled||!settings.windshieldDynamic){saveStatus("Enable automatic windshield first.");return;}dynamicWsh?.capture();};
   applyAppearance();
   syncMenu();
   document.addEventListener("visibilitychange",()=>{
