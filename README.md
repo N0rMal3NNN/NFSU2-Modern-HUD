@@ -36,6 +36,12 @@ Turn your Frontvex phone into a vehicle performance testing tool. Run multiple t
 
 **Example:** Test your car with Engine Stage 2, install Stage 3 in the game, update Car Setup and repeat the test under comparable conditions. Compare the two results to see whether the new setup accelerates faster, achieves a higher speed or improves other measured metrics. Repeat with other parts to decide which upgrades suit your driving style.
 
+### Share Performance Test & Friend Comparison — v0.11.69 (upcoming)
+
+Share saved performance tests directly with online Frontvex friends, including all nine upgrade categories, Unique flags, measured results, test conditions and speed graphs. Recipients can accept or decline, store up to 50 shared tests separately, and compare a received result against any of their saved tests, including different car models. Positive/negative differences highlight measured gains or losses; results are not server-verified.
+
+Open **My Car → Test History → Share Performance Test**, select a friend, then use **Shared Tests → Compare With My Setup** on the receiving side. The friend's name appears above their car; table headers reveal their name on hover without shifting columns. The public FVX ID is hidden by default for screenshot privacy.
+
 [Full Performance Lab guide, comparison example and test instructions](RELEASE_NOTES_v0.11.68.md)
 
 | Acceleration results | Driving telemetry |
