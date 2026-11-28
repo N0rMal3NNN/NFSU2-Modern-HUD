@@ -1,12 +1,12 @@
-v0.11.68 — Performance Lab & HUD Settings
+v0.11.68.2 — Performance HUD Settings (TEST BUILD)
 My Car → HUD Settings: X/Y offsets, size, opacity, Live + Results / Results Only / Hidden. Final results display for 10 seconds. Preview and reset; preferences saved locally across cars.
 
-v0.11.68 — My Car Performance Lab
+v0.11.68 — My Car Performance Lab (TEST BUILD)
 - Car Setup: nine upgrade categories, Stock / Stage 1–3 / Custom / Unknown, unique per part, manual 0–2 nitro bottle capacity, per-car local setup.
 - Performance Test: Manual Finish (Ctrl+Alt+F default, configurable), Auto Finish, live HUD, existing and additional speed intervals, mile distances, braking, G forces, slip, suspension, nitro depletion/refill estimates.
 - Compare Results: snapshots of all parts, measured differences, approximate route and test-condition warnings, speed graph. No actual turbo PSI, nitro pressure, HP or torque in feed.
 - Test History: latest 50 per car, legacy latest/PB migrated without inventing setup, capped setup-specific PB categories, confirmation for deletion. Graph sampled and compacted for local storage.
-- All test types use available telemetry; selected type is a comparison tag. No new network requests or server changes. Live game result recording confirmed; other test modes may still need live verification.
+- All test types use available telemetry; selected type is a comparison tag. No new network requests or server changes. Real game test pending.
 
 v0.11.67 — Software Update: supports three- and four-part version numbers. Racing and My Car unchanged.
 
