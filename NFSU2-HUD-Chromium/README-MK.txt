@@ -1,3 +1,6 @@
+v0.11.79 — Public BETA
+Rain Volume factory default 70%; saved settings retained. Audio gain +10% relative, peak-limited to prevent clipping. Smooth 1.35 s fade-in and 2.4 s fade-out with continuity on rapid changes. Cockpit-only and dynamic rain intensity remain default ON. Gradual drying preserves the opacity/size at the start of drying; no new droplets while dry. Existing glass state, damage timers, and settings retained. Bridge/tunnel detection is not included: no verified shelter signal.
+
 v0.11.68.2 — Performance HUD Settings (TEST BUILD)
 My Car → HUD Settings: X/Y offsets, size, opacity, Live + Results / Results Only / Hidden. Final results display for 10 seconds. Preview and reset; preferences saved locally across cars.
 
@@ -183,3 +186,28 @@ v0.11.58: Successful registration, verified re-registration, and renewal now not
  v0.11.60: Software Update app for the public desktop channel. GitHub version checks on launch and every 30 minutes, manual check, once-per-version notification, persistent update badge and manual download. No account required.
 
 0.11.64.1: Optional world-positioned START, FINISH and next checkpoint markers using View Feed projection. During Practice only the current checkpoint is visible in the Racing overlay and 3D layer, and the next appears after a valid pass. Saved route previews still show all checkpoints. No game or server changes.
+
+
+v0.11.72 — BETA: Dynamic Windshield Engine
+- Windshield Glass > Automatic cockpit windshield (default ON when glass is enabled); no manual calibration. Stop below 10 km/h for first scan. Reacquires when car, viewport dimensions or projection change; profiles are session-local.
+- Natural rain: fine wet speckles, larger droplets mixed with microdroplets; shape varies approximately 10%, small drops remain stationary at rest. Intensity 0–100%, size, opacity, airflow, lifetime, merge, trails, refraction, safety margin, FPS limit, preview and debug controls.
+- Existing reflection, dust, wiper marks, sun strip, impact cracks and Limp Mode glass use the shared contour mask; existing damage rules, repair times, settings and existing features retained. Impact flash/shake and speed effects remain independent. Full-screen legacy glass available by unchecking Automatic cockpit windshield (rain then off).
+- Mirror/mount exclusion not implemented in this build; drops and other glass effects can overlap interior objects in the detected contour. Automatic cockpit detection is experimental, based on a camera heuristic and image processing, not an official game cockpit flag. Effects hide when detection/feeds are unreliable. If direct WebGPU canvas is blank, choose Use tab capture and share only the game tab (local processing, no upload). Stop capture available. Disable previous separate debug/rain extension to avoid duplicate effects. Live game/FPS not tested; only local harness and syntax checks.
+
+
+v0.11.73 BETA — Windshield stability fix
+- Confirmed car-local geometry retained while driving; FOV changes no longer invalidate the profile.
+- Geometry fallback if visual tracking is temporarily lost; cockpit and vehicle gates remain.
+- Preview starts after confirmed detection.
+- Rain intensity 0–150%, size 40–200% retained.
+- Reduced crack canvas pixel budget, batched paths, coalesced redraws, spatial grid merging.
+- Mirror exclusion remains disabled.
+
+
+v0.11.74 BETA — Persistent Windshield State
+Latest version: Dynamic cockpit effects; outside cockpit rain state updates at 4 Hz without drawing or vision. Previous version: original full-screen glass effects, no dynamic rain. Existing crash/Limp timers retained. Rain drying and density 150% shortcut. No mirror exclusion in this beta.
+
+
+v0.11.75 BETA — App Section Navigation
+Секоја апликација со поставки има избор на една секција; другите се скриени. Windshield, Phone и Markers се поделени на помали страници. Постојните поставки, ефекти, профили и тајмери се непроменети. My Car, Racing и Contacts ги задржуваат постојните табови.
+

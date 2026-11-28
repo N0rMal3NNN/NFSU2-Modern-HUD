@@ -1,11 +1,11 @@
 # NFSU2.xyz Modern HUD
 
-> **Desktop v0.11.69 BETA — My Car Performance Lab & Shared Performance Tests are available.** [Feature overview, screenshots and quick start](RELEASE_NOTES_v0.11.68.md).
+> **Desktop v0.11.79 BETA — Dynamic Windshield & Interior Rain Audio is available.** [Features, known limitations and quick start](RELEASE_NOTES_v0.11.79.md).
 
 > **Frontvex Phone, GPS & Automatic Speedometer — Desktop BETA.** [Read the full release notes](RELEASE_NOTES_v0.11.58.md). Includes a customizable 2D/3D in-game phone, automatic HUD selection, GPS markers and optional Frontvex communication. The new mobile build is not ready; Userscript BETA 5 remains available.
 > Special thanks to [OBD Gaming](https://www.facebook.com/overbudgetgg) for the idea behind the Frontvex in-game phone. Frontvex online services are still in a limited server beta.
 
-**Current desktop version: v0.11.69 BETA (Chromium) · Mobile: Userscript BETA 5 (iPhone & Android, based on v0.11.26)**
+**Current desktop version: v0.11.79 BETA (Chromium) · Mobile: Userscript BETA 5 (iPhone & Android, based on v0.11.26)**
 
 A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz). Build a custom dashboard around the game's **read-only Car Feed** without editing game files or changing the game's physics.
 
@@ -13,7 +13,7 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ## Download
 
-**Latest desktop version: v0.11.69 BETA.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
+**Latest desktop version: v0.11.79 BETA.** The desktop release ZIP contains only the `NFSU2-HUD-Chromium/` extension folder.
 
 - **[Download Latest — Chromium ZIP](https://github.com/N0rMal3NNN/NFSU2-Modern-HUD/raw/refs/heads/main/downloads/NFSU2_Modern_HUD_LATEST_Chromium.zip)** — permanent link to the newest release.
 - **[Choose Version — Version Archive](DOWNLOADS.md)** — numbered builds, including older releases.
@@ -21,6 +21,22 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 - **📱 [Download Userscript BETA 5 — phones & tablets](downloads/NFSU2_Userscripts_BETA_5.zip)** — iPhone: Safari + Userscripts (move the `.js` file into the Userscripts folder) · Android: Edge + Tampermonkey (import the ZIP). One universal file. See [Phone install](INSTALLATION.md#phones-and-tablets-userscript-beta-5).
 
 **Do not use the green GitHub `Code → Download ZIP` button** to install the extension: it downloads the whole repository, including multiple old release packages. Use **Download Latest** above.
+
+---
+
+## v0.11.79 BETA — Dynamic Windshield & Interior Rain Audio
+
+A cumulative desktop update since v0.11.69.
+
+- **Dynamic glass:** automatic cockpit contour detection, natural microdroplets, density 0–150%, independent size, opacity, movement, lifetime, merging and trails. Shared glass mask for dust, reflection, wipers, sun strip, impact cracks and Limp glass; legacy full-screen rendering remains selectable.
+- **Persistence and drying:** rain state is retained across camera changes without external-view rendering; gradual speed-dependent drying after rain stops. Existing crack and Limp Mode timers are retained.
+- **Independent damage controls:** ordinary impact cracks and Limp Mode shattered glass can be enabled separately.
+- **Interior rain audio:** bundled Nox_Sound roof loop (CC0), 70% factory volume, +10% gain, dynamic intensity and smooth camera/weather fades; independent of visual rain. Optional custom sound and preview.
+- **Navigation and stability:** app section selectors, simplified windshield controls, automatic tracking recovery and reduced rendering work.
+
+Known limitations: mirror exclusion and bridge/tunnel shelter detection are not implemented; tracking is experimental. Mobile Userscript BETA 5 is unchanged.
+
+[Release notes and quick start](RELEASE_NOTES_v0.11.79.md).
 
 ---
 
@@ -73,7 +89,7 @@ Create custom Free Roam tracks, share them with friends and race in Solo Test or
 
 ### How to start a PvP 1v1 race
 
-1. **Register and connect:** Both players need the latest public desktop extension (v0.11.69 for the current release), a registered Frontvex account/number and enabled communication. Enter Free Roam and make sure both players are online and can connect directly.
+1. **Register and connect:** Both players need the latest public desktop extension (v0.11.79 for the current release), a registered Frontvex account/number and enabled communication. Enter Free Roam and make sure both players are online and can connect directly.
 2. **Add a friend:** Open the Frontvex phone → **Contacts**, find your friend by their Frontvex number, send a friend request and have them accept it.
 3. **Create a track:** Open **Racing → Create Track**, enter a track name, choose **Set START & Record**, drive the route, choose **Set FINISH**, and press **Save Track**.
 4. **Share the track:** In **My Tracks**, select the saved track, select your online friend and send it using **Share Race Track**.

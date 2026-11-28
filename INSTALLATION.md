@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Installation & Update Guide
 
-**Release: v0.11.69 BETA — Chromium-based desktop browsers · Userscript BETA 5 for phones and tablets (based on v0.11.26)**
+**Release: v0.11.79 BETA — Chromium-based desktop browsers · Userscript BETA 5 for phones and tablets (based on v0.11.26)**
 
 Unofficial NFSU2.xyz community browser HUD. The release ZIP contains one **`NFSU2-HUD-Chromium/`** folder for supported Chromium-based desktop browsers.
 
@@ -44,6 +44,17 @@ A different extension ID may not have access to the previous extension's locally
 5. Open your browser's extension manager, press **Reload** for the existing extension, then reopen/refresh NFSU2.xyz. Verify the installed version in Software Update and check that saved settings and mileage are present.
 
 The app notifies you about new public releases; it does not install them automatically. No Frontvex registration is required for the update check.
+
+## Dynamic Windshield & Interior Rain Audio (desktop v0.11.79)
+
+1. Disable any separate Windshield Debug/Rain prototype extension.
+2. Enter cockpit view, then open HUD Settings → **Visual Effects → Windshield: General & Drying**. Enable Windshield Glass and choose **Latest version — Dynamic cockpit**. Previous version retains legacy full-screen glass without dynamic rain.
+3. Select **Windshield: Rain Drops**, enable Rain droplets, set intensity above 0%, and use **Preview rain 20 s**. Use the 150% shortcut for 50% more drops, independently of drop size.
+4. If the browser prompts for visual access, choose **Enable visual access** and select only the game tab. Processing is local. Allow the automatic detector to acquire the windshield; it may temporarily hide effects if tracking is unreliable.
+5. Select **Interior Rain Audio** and use **Preview sound 10 s**. The bundled sound is independent of visual rain; factory volume is 70%. Existing saved volume settings may differ.
+6. Select **Windshield: Cracks & Limp Mode** to control ordinary-impact cracks and Limp Mode shattered glass separately. Existing damage rules are unchanged.
+
+Latest mode preserves effects across camera changes and dries remaining drops gradually after rain stops. This is a BETA: mirror/mount exclusion and tunnel/bridge shelter detection are not implemented. See [full release notes](RELEASE_NOTES_v0.11.79.md).
 
 ## Frontvex Racing
 
