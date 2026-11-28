@@ -3641,7 +3641,8 @@
       .panel.menu-single-page .sections-grid{column-count:1;column-width:auto;}
       .panel.menu-single-page .sections-grid > fieldset{display:block;max-width:660px;}
       .panel.in-phone.menu-single-page .sections-grid > fieldset{max-width:none;}
-      .fv-sub .mc-tabs,.fv-sub .fc-nav{position:sticky;top:calc(var(--sbh) + var(--barh) + 6px);z-index:5;background:#0d1820;padding:5px 0;}
+      /* Phone app navigation stays directly under the title; the scrollport starts below the title. */
+      .fv-sub .mc-tabs,.fv-sub .fc-nav{position:sticky;top:0;z-index:5;background:#0d1820;padding:8px 0 6px;margin:0 0 6px;flex-shrink:0;box-shadow:0 3px 0 #0d1820;}
 
 
       input:disabled {opacity:.4;cursor:not-allowed;}
@@ -3927,9 +3928,12 @@
       .fc-chat-actions{border:1px solid #375460;border-radius:9px;padding:8px;background:#11232e;}.fc-chat-actions summary{cursor:pointer;font-weight:650;font-size:12px;color:#d8eef4;}
       .fc-chat-action-list{display:flex;flex-direction:column;gap:7px;margin-top:8px;}.fc-chat-action-row{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;}.fc-chat-action-row span{min-width:0;overflow-wrap:anywhere;}.fc-chat-action-row button{flex:none;}.fc-chat-action-row button:disabled{opacity:.65;cursor:default;}
       .ph-rig[data-theme="frontvex"] .fc-card{background:linear-gradient(145deg,#182a33,#091a23);border-color:#346775;}
-      .fv-sub{position:absolute;inset:0;z-index:1;overflow-x:hidden;overflow-y:auto;padding:calc(var(--sbh) + var(--barh) + 10px) 18px calc(var(--navh) + 14px);color:#eef7fa;scrollbar-width:thin;scrollbar-color:#3d6070 transparent;
+      .fv-sub{position:absolute;inset:calc(var(--sbh) + var(--barh)) 0 var(--navh) 0;z-index:1;overflow-x:hidden;overflow-y:auto;padding:0 18px 14px;color:#eef7fa;scrollbar-width:thin;scrollbar-color:#3d6070 transparent;
         font:13px/1.35 system-ui,-apple-system,'Segoe UI',Arial,sans-serif;background:radial-gradient(120% 50% at 50% 0,var(--accW),transparent 72%),linear-gradient(180deg,#101e29,#09111a);}
       .fv-sub[hidden],.fv-sec[hidden]{display:none;}
+      .fv-sub > .fv-sec:not(.fv-mycar):not(.fc-root){padding-top:10px;}
+      .fv-sub .fv-mycar > .mc-tabs{margin:0 0 6px;}
+      .panel.in-phone .menu-section-nav{top:0;}
       .ck-face{display:block;width:196px;height:196px;margin:4px auto 12px;filter:drop-shadow(0 8px 16px rgba(0,0,0,.45));}
       .ck-digital{text-align:center;font:300 42px/1 system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.5px;}
       .ck-date{margin-top:8px;text-align:center;font:700 15px/1.2 system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color:#d8eef4;}
@@ -4752,8 +4756,8 @@
                 </div>
                 <div class="fv-sub" id="fvSub" hidden>
                   <section class="fv-sec fv-mycar" data-sub="mycar" id="fvMyCar" hidden>
-                    <h3 data-mycar="car">No vehicle feed</h3><div class="line"><span>Odometer (per model)</span><b data-mycar="odo">—</b></div>
                     <div class="mc-tabs" role="tablist" aria-label="My Car menus"><button type="button" role="tab" aria-selected="true" aria-controls="fvMyCarPerformance" data-mycar="tab-performance">Performance Monitor</button><button type="button" role="tab" aria-selected="false" aria-controls="fvMyCarStats" data-mycar="tab-stats">Driving Statistics</button></div>
+                    <h3 data-mycar="car">No vehicle feed</h3><div class="line"><span>Odometer (per model)</span><b data-mycar="odo">—</b></div>
                     <div id="fvMyCarPerformance" role="tabpanel" data-mycar="page-performance"><h3>Performance Monitor</h3><p data-mycar="status" role="status">Waiting for driving feed.</p><p>Stop, press Start, then drive forward. Stop for 1 second to complete the test. Results appear for 10 seconds and are saved locally. No registration required.</p>
                     <label>Turbo installed (manual selection)<select data-mycar="turbo-choice" aria-label="Turbo installed"><option value="">Select turbo setup</option><option value="yes">With Turbo</option><option value="no">Without Turbo</option></select></label><p>The official Car Feed does not report turbo upgrades. Check the selection before each test; the last saved setup is suggested.</p><button type="button" class="fc-btn" data-mycar="start" disabled>Start</button><button type="button" class="fc-btn" data-mycar="cancel" hidden>Cancel Test</button><button type="button" class="fc-btn" data-mycar="retry" hidden>Retry Save</button>
                     <h3>Latest Result</h3><div data-mycar="latest"></div><h3>Personal Best</h3><select data-mycar="mode" aria-label="Performance category"><option value="noNitroTurbo">Turbo / No Nitro</option><option value="nitroTurbo">Turbo / Nitro</option><option value="noNitroNoTurbo">No Turbo / No Nitro</option><option value="nitroNoTurbo">No Turbo / Nitro</option><option value="noNitro">Unknown Turbo / No Nitro (legacy)</option><option value="nitro">Unknown Turbo / Nitro (legacy)</option></select><div data-mycar="best"></div><p>Unreached targets show —. Braking distance is measured from 100 km/h to near zero with the brake applied. Stock cars share results by model.</p></div>

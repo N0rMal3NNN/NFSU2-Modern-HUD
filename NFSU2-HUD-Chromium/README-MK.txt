@@ -1,5 +1,4 @@
-v0.11.79 — Public BETA
-Rain Volume factory default 70%; saved settings retained. Audio gain +10% relative, peak-limited to prevent clipping. Smooth 1.35 s fade-in and 2.4 s fade-out with continuity on rapid changes. Cockpit-only and dynamic rain intensity remain default ON. Gradual drying preserves the opacity/size at the start of drying; no new droplets while dry. Existing glass state, damage timers, and settings retained. Bridge/tunnel detection is not included: no verified shelter signal.
+v0.11.82 — Public BETA
 
 v0.11.68.2 — Performance HUD Settings (TEST BUILD)
 My Car → HUD Settings: X/Y offsets, size, opacity, Live + Results / Results Only / Hidden. Final results display for 10 seconds. Preview and reset; preferences saved locally across cars.
@@ -210,4 +209,5 @@ Latest version: Dynamic cockpit effects; outside cockpit rain state updates at 4
 
 v0.11.75 BETA — App Section Navigation
 Секоја апликација со поставки има избор на една секција; другите се скриени. Windshield, Phone и Markers се поделени на помали страници. Постојните поставки, ефекти, профили и тајмери се непроменети. My Car, Racing и Contacts ги задржуваат постојните табови.
+
 
