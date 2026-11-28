@@ -26,6 +26,24 @@ A free, unofficial community browser extension for [NFSU2.xyz](https://nfsu2.xyz
 
 ---
 
+## v0.11.68 BETA — My Car Performance Lab
+
+Turn your Frontvex phone into a vehicle performance testing tool. Run multiple tests, compare two saved results at a time and find out which upgrades or complete setups deliver the best measured performance for your car.
+
+- **Car Setup:** manually record all nine performance upgrade categories (Engine, ECU, Transmission, Turbo, Nitrous, Suspension, Tyres, Brakes and Weight Reduction), including Stock, Stage 1–3, Custom and Unique parts.
+- **Performance Test:** measure acceleration, braking, maximum and average speed, distance, G-forces, tyre slip, suspension travel and nitrous usage. Recording continues beyond 300 km/h until you finish manually or stop for one second.
+- **Compare Results:** view the full before/after setup, measured improvements or regressions and acceleration graphs. Each test saves its own upgrade configuration so previous results remain intact.
+- **Test History:** keep up to 50 detailed runs per vehicle identity and choose two for comparison.
+- **Performance HUD:** customize X/Y position, scale and opacity. Choose Live Test + Results, Results Only (10 seconds), or Hidden.
+
+**Example:** Test your car with Engine Stage 2, install Stage 3 in the game, update Car Setup and repeat the test under comparable conditions. Compare the two results to see whether the new setup accelerates faster, achieves a higher speed or improves other measured metrics. Repeat with other parts to decide which upgrades suit your driving style.
+
+[Full Performance Lab guide, comparison example and test instructions](RELEASE_NOTES_v0.11.68.md)
+
+All measurements and setup history are stored locally; no additional Frontvex server requests are required. The app records upgrades manually and reads the official Car Feed; it does not install upgrades or change game physics.
+
+---
+
 ## v0.11.67 BETA — Software Update
 
 The public desktop update checker now supports version numbers with three or four numeric components, including development builds. Version checks, update notifications and the official download link remain available in the Frontvex phone. Older development builds with the previous checker may require one manual upgrade. [Installation & Update Guide](INSTALLATION.md#how-to-check-for-and-install-an-update).
