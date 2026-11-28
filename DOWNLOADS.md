@@ -4,6 +4,8 @@
 
 **Phones and tablets:** Userscript BETA 5 (based on v0.11.26) — iPhone: Safari + Userscripts; Android: Microsoft Edge + Tampermonkey — see [Phones and tablets](#phones-and-tablets-userscript-beta-5) below.
 
+> **Upcoming PC v0.11.68 BETA — My Car Performance Lab.** [Feature overview](RELEASE_NOTES_v0.11.68.md). Package upload pending.
+
 > **PC v0.11.67 BETA — Software Update is available.** [What's new](CHANGELOG.md#v01167-beta--software-update). Mobile BETA 5 remains available.
 
 ## Download Latest
