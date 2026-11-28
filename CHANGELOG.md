@@ -6,7 +6,7 @@ This cumulative changelog describes the updates **since the first public GitHub 
 
 ## v0.11.68 BETA — My Car Performance Lab (package upload pending)
 
-Named per-car setups with all nine upgrade categories and Unique flags, extended performance telemetry, dynamic maximum-speed intervals, manual/automatic finish, setup comparison, speed graphs, test history and customizable performance HUD with 10-second results. [Feature overview and quick start](RELEASE_NOTES_v0.11.68.md).
+Named per-car setups with all nine upgrade categories and Unique flags, extended performance telemetry, dynamic maximum-speed intervals, manual/automatic finish, side-by-side comparison of any two saved tests to evaluate upgrade and setup improvements, speed graphs, test history and customizable performance HUD with 10-second results. [Feature overview and quick start](RELEASE_NOTES_v0.11.68.md).
 
 ## v0.11.67 BETA — Software Update
 
