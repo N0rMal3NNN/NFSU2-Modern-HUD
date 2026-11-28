@@ -71,11 +71,25 @@ Independent of the main speedometer: X/Y position, size (20–250%), opacity, pr
 
 A recorded run reached **312.2 km/h**, with 0–100 km/h in **1.954 s**, 0–200 in **4.141 s**, 0–300 in **16.266 s**, and 0–312.2 in **23.067 s**. It recorded 2,102.1 m over 32.037 s. This example used nitrous and includes two impacts; it is a demonstration of recording, not a controlled upgrade benchmark. Impact-related acceleration spikes can affect peak G readings.
 
-Four screenshots from the tested v0.11.68.2 development build are included in the upload package:
-- Acceleration and distance results: `assets/frontvex-performance-acceleration-v0.11.68.webp`
-- Braking and driving telemetry: `assets/frontvex-performance-telemetry-v0.11.68.webp`
-- Nitro and dynamic peak-speed intervals: `assets/frontvex-performance-peak-nitro-v0.11.68.webp`
-- Saved upgrade configuration: `assets/frontvex-performance-setup-v0.11.68.webp`
+### Screenshots
+
+Four screenshots from the tested v0.11.68.2 development build:
+#### Acceleration and distance results
+
+![Acceleration and distance results](assets/frontvex-performance-acceleration-v0.11.68.webp)
+
+#### Braking and driving telemetry
+
+![Braking and driving telemetry](assets/frontvex-performance-telemetry-v0.11.68.webp)
+
+#### Nitro and dynamic peak-speed intervals
+
+![Nitro and dynamic peak-speed intervals](assets/frontvex-performance-peak-nitro-v0.11.68.webp)
+
+#### Saved upgrade configuration
+
+![Saved upgrade configuration](assets/frontvex-performance-setup-v0.11.68.webp)
+
 
 ## Compatibility and privacy
 
