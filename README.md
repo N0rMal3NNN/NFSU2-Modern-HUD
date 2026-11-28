@@ -31,7 +31,7 @@ A cumulative desktop update since v0.11.69.
 - **Dynamic glass:** automatic cockpit contour detection, natural microdroplets, density 0–150%, independent size, opacity, movement, lifetime, merging and trails. Shared glass mask for dust, reflection, wipers, sun strip, impact cracks and Limp glass; legacy full-screen rendering remains selectable.
 - **Persistence and drying:** rain state is retained across camera changes without external-view rendering; gradual speed-dependent drying after rain stops. Existing crack and Limp Mode timers are retained.
 - **Independent damage controls:** ordinary impact cracks and Limp Mode shattered glass can be enabled separately.
-- **Interior rain audio:** bundled Nox_Sound roof loop (CC0), 70% factory volume, +10% gain, dynamic intensity and smooth camera/weather fades; independent of visual rain. Optional custom sound and preview.
+- **Interior rain audio:** bundled Nox_Sound roof loop (CC0), adjustable volume, dynamic intensity and smooth camera/weather fades; independent of visual rain. Optional custom sound and preview.
 - **Navigation and stability:** app section selectors, simplified windshield controls, automatic tracking recovery and reduced rendering work.
 
 Known limitations: mirror exclusion and bridge/tunnel shelter detection are not implemented; tracking is experimental. Mobile Userscript BETA 5 is unchanged.

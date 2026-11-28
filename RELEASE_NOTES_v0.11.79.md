@@ -23,12 +23,12 @@ Built-in, local stereo roof rain loop, independent of visual glass/droplet setti
 | Setting | Factory default |
 |---|---|
 | Enable Interior Rain Audio | On |
-| Rain volume | 70% |
+| Rain volume | Adjustable |
 | Dynamic rain intensity | On |
 | Cockpit view only | On |
 | Smooth audio fade | On |
 
-Playback gain is increased by 10% with output protection. Nominal fade-in is 1.35 seconds and fade-out 2.4 seconds; fast camera changes smoothly retarget the current level. The sound fades out when rain stops or the player leaves cockpit view and returns when appropriate. A 10-second preview and optional local custom sound are included. Existing saved volume choices are not intended to be overwritten by the new factory default.
+Smooth transitions follow changes in camera and rain intensity. The sound fades out when rain stops or the player leaves cockpit view and returns when appropriate. A 10-second preview and optional local custom sound are included.
 
 Audio: **Rain Inside Car — Roof** by Nox_Sound, [Freesound #535869](https://freesound.org/people/Nox_Sound/sounds/535869/), [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/). Converted to Ogg Vorbis; credit is included in the extension.
 

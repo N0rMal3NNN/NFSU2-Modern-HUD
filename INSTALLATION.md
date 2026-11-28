@@ -51,7 +51,7 @@ The app notifies you about new public releases; it does not install them automat
 2. Enter cockpit view, then open HUD Settings → **Visual Effects → Windshield: General & Drying**. Enable Windshield Glass and choose **Latest version — Dynamic cockpit**. Previous version retains legacy full-screen glass without dynamic rain.
 3. Select **Windshield: Rain Drops**, enable Rain droplets, set intensity above 0%, and use **Preview rain 20 s**. Use the 150% shortcut for 50% more drops, independently of drop size.
 4. If the browser prompts for visual access, choose **Enable visual access** and select only the game tab. Processing is local. Allow the automatic detector to acquire the windshield; it may temporarily hide effects if tracking is unreliable.
-5. Select **Interior Rain Audio** and use **Preview sound 10 s**. The bundled sound is independent of visual rain; factory volume is 70%. Existing saved volume settings may differ.
+5. Select **Interior Rain Audio** and use **Preview sound 10 s**. The bundled sound is independent of visual rain; adjust the volume to your preference.
 6. Select **Windshield: Cracks & Limp Mode** to control ordinary-impact cracks and Limp Mode shattered glass separately. Existing damage rules are unchanged.
 
 Latest mode preserves effects across camera changes and dries remaining drops gradually after rain stops. This is a BETA: mirror/mount exclusion and tunnel/bridge shelter detection are not implemented. See [full release notes](RELEASE_NOTES_v0.11.79.md).
