@@ -1,6 +1,6 @@
 # NFSU2 Modern HUD — Changelog
 
-All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.79 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
+All notable changes to the unofficial NFSU2.xyz Modern HUD browser extension. **Latest: v0.11.82 BETA (desktop extension). Userscript BETA 5 (phones and tablets, v0.11.26.5) is based on v0.11.26.**
 
 This cumulative changelog describes the updates **since the first public GitHub release, v0.9.9**, including additions, adjustments and regression fixes. Versions not listed here were not distributed as separate ZIP milestones.
 
