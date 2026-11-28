@@ -1,4 +1,4 @@
-# v0.11.68 BETA — My Car Performance Lab
+# v0.11.68–v0.11.69 BETA — My Car Performance Lab
 
 A cumulative desktop update since v0.11.67. Configure your current car, measure its performance using the official read-only Car Feed, then compare tests before and after installing upgrades.
 
@@ -50,7 +50,7 @@ For a fair comparison, use the same car, route, direction, transmission mode, we
 
 ## Shared Performance Tests & Friend Comparison (v0.11.69)
 
-**Prepared for the next public desktop release.** Both players need v0.11.69 or newer and an active Frontvex connection.
+**Available in the public v0.11.69 desktop release.** Both players need v0.11.69 or newer and an active Frontvex connection.
 
 Share saved performance tests directly with online Frontvex friends, including all nine upgrade categories, Unique flags, measured results, test conditions and speed graphs. Recipients can accept or decline, store up to 50 shared tests separately, and compare a received result against any of their saved tests, including different car models. Positive/negative differences highlight measured gains or losses; results are not server-verified.
 
